@@ -167,11 +167,15 @@ export class InstructionsManager {
 			return result;
 		}
 
-		for (const file of getFiles(mod).filter((el) => el.name.endsWith(".js"))) {
-			const imported = require(file.name) as {
-				default: new (compiler: Compiler) => Instruction;
-			};
-			this.add(new imported.default(compiler));
+		for (const file of getFiles(mod).filter(
+			(el) => el.name.endsWith(".js") || el.name.endsWith(".ts")
+		)) {
+			const imported = require(file.name);
+			if ("default" in imported) {
+				if (imported.default instanceof Instruction) {
+					this.add(new imported.default(compiler));
+				}
+			}
 		}
 	}
 }

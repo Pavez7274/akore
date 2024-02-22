@@ -8,7 +8,11 @@ export default class IfInstruction extends Instruction {
 		this.buildConditionArgument(task.arguments[0]?.value);
 		this.processNestedArguments(task);
 
-		const [condition, whenTrue, whenFalse] = task.argValues() as [string, string, string | undefined];
+		const [condition, whenTrue, whenFalse] = task.argValues() as [
+			string,
+			string,
+			string | undefined
+		];
 		return `if (${condition}) {${whenTrue}}${whenFalse ? `else {${whenFalse}}` : ""}`;
 	}
 }

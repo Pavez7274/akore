@@ -11,38 +11,34 @@ export class Logger {
 
 	static error(message: string, path: string = ""): never {
 		console.error(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace(
-				"${PATH}",
-				path
-			)} ${Logger.getTag(MessageType.ERROR)} ${message}`
+			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+				MessageType.ERROR
+			)} ${message}`
 		);
 		throw new Error(message);
 	}
 
 	static warn(message: string, path: string = "") {
 		console.warn(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace(
-				"${PATH}",
-				path
-			)} ${Logger.getTag(MessageType.WARN)} ${message}`
+			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+				MessageType.WARN
+			)} ${message}`
 		);
 	}
 
 	static debug(message: string, path: string = "") {
 		console.debug(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace(
-				"${PATH}",
-				path
-			)} ${Logger.getTag(MessageType.DEBUG)} ${message}`
+			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+				MessageType.DEBUG
+			)} ${message}`
 		);
 	}
 
 	static info(message: string, path: string = "") {
 		console.info(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace(
-				"${PATH}",
-				path
-			)} ${Logger.getTag(MessageType.INFO)} ${message}`
+			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+				MessageType.INFO
+			)} ${message}`
 		);
 	}
 
