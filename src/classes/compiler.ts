@@ -120,30 +120,3 @@ export class Compiler {
 		return minify(this.#output).code;
 	}
 }
-
-const compiler = new Compiler(
-	`
-$var[n]
-$function[fibonacci;n;
-	$var[i;0]
-	$var[a;0]
-	$var[b;1]
-	$while[
-		$var[i] < $get[n];
-		$print[$var[a]]
-		$var[a;$var[b]]
-		$var[b;$sum[$var[b];$var[a]]]
-	]
-]
-`.trim()
-);
-compiler.instructionsManager.load(
-	"C:\\Users\\mateo\\projects\\AKITA\\dist\\instructions\\",
-	compiler
-);
-const start = Date.now();
-console.log("\n");
-Logger.debug(`INPUT:\n${compiler.input}\n`, "Test");
-Logger.debug(`COMPILED:\n${compiler.compile()}\n`, "Test");
-Logger.debug(`TIME: ${Date.now() - start}ms`, "Test");
-console.log("\n");

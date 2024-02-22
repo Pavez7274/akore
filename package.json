@@ -1,5 +1,5 @@
 {
-  "name": "@kodeko/kore",
+  "name": "akore",
   "version": "1.0.0",
   "description": "The core of akita.ts",
   "main": "dist/index.js",
