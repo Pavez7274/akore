@@ -1,0 +1,8 @@
+tsconfig.json
+akconfig.json
+.prettierrc
+.gitignore
+bun.lockb
+.history/
+test/
+src/

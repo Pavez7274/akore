@@ -2,6 +2,9 @@
   "name": "akore",
   "version": "1.0.0",
   "description": "The core of akita.ts",
+  "bin": {
+    "akore": "./dist/cli.js"
+  },
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,6 +18,7 @@
     "ts-node": "10.9.2"
   },
   "dependencies": {
+    "commander": "12.0.0",
     "lodash": "4.17.21",
     "tslib": "2.6.2",
     "uglify-js": "3.17.4"

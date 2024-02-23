@@ -7,7 +7,7 @@ class PrintInstruction extends instruction_1.Instruction {
     compile(task) {
         this.buildStringArguments(task.arguments);
         this.processNestedArguments(task);
-        return `console.log(${task.arguments.map((a) => a.value.value)})`;
+        return `console.log(${task.argValues().join(",")})`;
     }
 }
 exports.default = PrintInstruction;

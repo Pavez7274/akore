@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InstructionsManager = exports.Instruction = exports.InstructionStatus = void 0;
-const fs_1 = require("fs");
+const get_files_1 = require("../helpers/get_files");
 var InstructionStatus;
 (function (InstructionStatus) {
     InstructionStatus["Enabled"] = "ENABLED";
     InstructionStatus["Disabled"] = "DISABLED";
 })(InstructionStatus = exports.InstructionStatus || (exports.InstructionStatus = {}));
 function isOperator(input, index) {
-    const operators = ["!==", "!=", "===", "&&", "||", "==", ">=", "<=", "<", ">"];
+    const operators = new Set(["!==", "!=", "===", "&&", "||", "==", ">=", "<=", "<", ">"]);
     for (const op of operators) {
         if (input.startsWith(op, index)) {
             return true;
@@ -41,13 +41,13 @@ class Instruction {
             else if (char === " " && !depth) {
                 // ignore spaces
             }
-            else if (isOperator(arg.value, i)) {
+            else if (depth > 0 && isOperator(arg.value, i)) {
                 result += this.buildString(current.trim(), arg);
                 result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
                 current = "";
                 i += arg.value[i + 1] === "=" ? 2 : 1;
             }
-            else if (char === "(" || char === ")" || char === "!") {
+            else if (depth > 0 && char === "(" || char === ")" || char === "!") {
                 result += this.buildString(current.trim(), arg) + char;
                 current = "";
             }
@@ -151,17 +151,9 @@ class InstructionsManager {
     add(...instructions) {
         this.#instructions.push(...instructions);
     }
-    load(mod, compiler) {
-        function getFiles(mod, result = []) {
-            const files = (0, fs_1.readdirSync)(mod, { withFileTypes: true });
-            for (const file of files) {
-                file.name = `${mod}/${file.name}`;
-                file.isDirectory() ? getFiles(file.name, result) : result.push(file);
-            }
-            return result;
-        }
-        for (const file of getFiles(mod).filter((el) => el.name.endsWith(".js") || el.name.endsWith(".ts"))) {
-            const imported = require(file.name);
+    loaddir(mod, compiler) {
+        for (const file of (0, get_files_1.getFiles)(mod).filter((el) => el.endsWith(".js"))) {
+            const imported = require(file);
             if ("default" in imported) {
                 if (imported.default instanceof Instruction) {
                     this.add(new imported.default(compiler));

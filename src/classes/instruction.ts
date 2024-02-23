@@ -1,5 +1,5 @@
 import { Compiler, Task, TaskArgument } from "./compiler";
-import { Dirent, readdirSync } from "fs";
+import { getFiles } from "../helpers/get_files";
 import { TokenArgument } from "./lexer";
 
 export const enum InstructionStatus {
@@ -8,7 +8,7 @@ export const enum InstructionStatus {
 }
 
 function isOperator(input: string, index: number): boolean {
-	const operators = ["!==", "!=", "===", "&&", "||", "==", ">=", "<=", "<", ">"];
+	const operators = new Set(["!==", "!=", "===", "&&", "||", "==", ">=", "<=", "<", ">"]);
 	for (const op of operators) {
 		if (input.startsWith(op, index)) {
 			return true;
@@ -44,12 +44,12 @@ export abstract class Instruction {
 				depth--;
 			} else if (char === " " && !depth) {
 				// ignore spaces
-			} else if (isOperator(arg.value, i)) {
+			} else if (depth > 0 && isOperator(arg.value, i)) {
 				result += this.buildString(current.trim(), arg);
 				result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
 				current = "";
 				i += arg.value[i + 1] === "=" ? 2 : 1;
-			} else if (char === "(" || char === ")" || char === "!") {
+			} else if (depth > 0 && char === "(" || char === ")" || char === "!") {
 				result += this.buildString(current.trim(), arg) + char;
 				current = "";
 			} else {
@@ -157,20 +157,9 @@ export class InstructionsManager {
 		this.#instructions.push(...instructions);
 	}
 
-	public load(mod: string, compiler: Compiler) {
-		function getFiles(mod: string, result: Dirent[] = []) {
-			const files = readdirSync(mod, { withFileTypes: true });
-			for (const file of files) {
-				file.name = `${mod}/${file.name}`;
-				file.isDirectory() ? getFiles(file.name, result) : result.push(file);
-			}
-			return result;
-		}
-
-		for (const file of getFiles(mod).filter(
-			(el) => el.name.endsWith(".js") || el.name.endsWith(".ts")
-		)) {
-			const imported = require(file.name);
+	public loaddir(mod: string, compiler: Compiler) {
+		for (const file of getFiles(mod).filter((el) => el.endsWith(".js"))) {
+			const imported = require(file);
 			if ("default" in imported) {
 				if (imported.default instanceof Instruction) {
 					this.add(new imported.default(compiler));

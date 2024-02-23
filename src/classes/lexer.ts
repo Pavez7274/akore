@@ -30,6 +30,7 @@ export class Lexer {
 	}
 
 	public tokenize(): Token[] {
+		this.#tokens = [];
 		while (this.#position < this.#input.length) {
 			const currentChar = this.getCurrentChar();
 			if (currentChar === "$") {

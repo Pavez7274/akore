@@ -44,9 +44,10 @@ class Compiler {
     instructionsManager;
     lexer = new lexer_1.Lexer("");
     busy = false;
+    vars = [];
     #output = "";
     #input = "";
-    constructor(input, instructionsManager = new instruction_1.InstructionsManager()) {
+    constructor(input = "", instructionsManager = new instruction_1.InstructionsManager()) {
         this.instructionsManager = instructionsManager;
         this.lexer.setInput(input);
         this.#input = input;
@@ -56,6 +57,15 @@ class Compiler {
     }
     get input() {
         return this.#input;
+    }
+    setInput(input) {
+        if (this.busy) {
+            logger_1.Logger.warn("The compiler is already busy!", "Compiler.setInput");
+        }
+        else {
+            this.lexer.setInput((this.#input = input));
+        }
+        return this;
     }
     createTasksFromTokens(tokens) {
         const tasks = [];
@@ -88,18 +98,50 @@ class Compiler {
             this.#output = this.#output.slice(0, position) + value + this.#output.slice(position);
         }
     }
-    compile() {
+    async compile(debug = false) {
         if (this.busy) {
-            logger_1.Logger.warn("The compiler is busy!", "Compiler");
+            logger_1.Logger.warn("The compiler is already busy!", "Compiler");
             return;
         }
+        const start = Date.now();
         this.busy = true;
-        const tasks = this.createTasksFromTokens(this.lexer.tokenize());
-        // console.log(require("util").inspect(tasks, { depth: null }));
-        for (const task of tasks) {
-            this.appendToOutput(task.compile() + ";\n");
+        if (debug) {
+            logger_1.Logger.debug("Compiler set to busy", "Compiler");
         }
-        return (0, uglify_js_1.minify)(this.#output).code;
+        const tasks = this.createTasksFromTokens(this.lexer.tokenize());
+        if (debug) {
+            logger_1.Logger.debug(`Tasks created: ${tasks.length}`, "Compiler.compile");
+        }
+        for (let i = 0; i < tasks.length; i++) {
+            const task = tasks[i];
+            if (debug) {
+                logger_1.Logger.debug(`Compiling task ${i + 1} of ${tasks.length}: ${task.token.total}`, "Compiler.compile");
+            }
+            try {
+                const compiled = task.compile();
+                if (debug) {
+                    logger_1.Logger.debug(`Task ${i + 1} compiled successfully: ${compiled}`, "Compiler.compile");
+                }
+                this.appendToOutput(compiled + ";\n");
+            }
+            catch (error) {
+                logger_1.Logger.error(`Error compiling task ${i + 1}: ${error.message}`, "Compiler.compile");
+            }
+        }
+        const minified = (0, uglify_js_1.minify)(this.vars.join("") + this.#output).code;
+        if (debug) {
+            logger_1.Logger.debug(`Compilation completed in ${Date.now() - start} miliseconds.\nInput code:\n${this.#input}\nOutput code:\n${minified}`, "Compiler.compile");
+        }
+        this.vars = [];
+        this.#output = "";
+        if (debug) {
+            logger_1.Logger.debug("Data was cleared", "Compiler.compile");
+        }
+        this.busy = false;
+        if (debug) {
+            logger_1.Logger.debug("Compiler set to idle", "Compiler.compile");
+        }
+        return minified;
     }
 }
 exports.Compiler = Compiler;

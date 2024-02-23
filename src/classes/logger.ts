@@ -26,7 +26,7 @@ export class Logger {
 		);
 	}
 
-	static debug(message: string, path: string = "") {
+	static debug(message: unknown, path: string = "") {
 		console.debug(
 			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
 				MessageType.DEBUG

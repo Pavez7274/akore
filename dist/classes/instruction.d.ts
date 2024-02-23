@@ -24,5 +24,5 @@ export declare class InstructionsManager {
     #private;
     get instructions(): Instruction[];
     add(...instructions: Instruction[]): void;
-    load(mod: string, compiler: Compiler): void;
+    loaddir(mod: string, compiler: Compiler): void;
 }

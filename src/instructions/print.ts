@@ -7,6 +7,6 @@ export default class PrintInstruction extends Instruction {
 	public override compile(task: Task): `console.log(${string})` {
 		this.buildStringArguments(task.arguments);
 		this.processNestedArguments(task);
-		return `console.log(${task.arguments.map((a) => a.value.value)})`;
+		return `console.log(${task.argValues().join(",")})`;
 	}
 }
