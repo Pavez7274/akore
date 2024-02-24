@@ -7,6 +7,6 @@ export default class ExportInstruction extends Instruction {
 	public override compile(task: Task): string {
 		this.processNestedArguments(task);
 		const [name, value] = task.argValues<[string, string]>();
-		return `exports.${name} = ${value}`;
+		return `exports${name ? `.${name}` : ""} = ${value}`;
 	}
 }

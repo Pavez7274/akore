@@ -1,5 +1,5 @@
-import { Instruction } from "../classes/instruction";
-import { Task } from "../classes/compiler";
+import { Instruction } from "../../classes/instruction";
+import { Task } from "../../classes/compiler";
 
 export default class FunctionInstruction extends Instruction {
 	override name = "$function" as const;

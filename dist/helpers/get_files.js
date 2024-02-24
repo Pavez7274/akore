@@ -4,8 +4,8 @@ exports.getFiles = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 function getFiles(mod) {
-    let result = [];
     const entries = (0, fs_1.readdirSync)(mod, { withFileTypes: true });
+    let result = [];
     for (const entry of entries) {
         const fullPath = (0, path_1.join)(mod, entry.name);
         if (entry.isDirectory()) {

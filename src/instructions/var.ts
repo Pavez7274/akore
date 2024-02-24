@@ -6,7 +6,7 @@ export default class VarInstruction extends Instruction {
 	override id = "$akitaVar" as const;
 
 	public override compile(task: Task): string {
-		this.buildStringArgument(task.arguments[1]?.value);
+		this.buildStringArgument(task.arguments[1]?.token);
 		this.processNestedArguments(task);
 
 		let [name, value] = task.argValues() as [string, string];

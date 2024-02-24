@@ -41,13 +41,18 @@ class Instruction {
             else if (char === " " && !depth) {
                 // ignore spaces
             }
-            else if (depth > 0 && isOperator(arg.value, i)) {
+            else if (depth == 0 && isOperator(arg.value, i)) {
                 result += this.buildString(current.trim(), arg);
-                result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
+                if ((char === ">" || char === "<") && arg.value[i + 1] !== "=") {
+                    result += char;
+                }
+                else {
+                    result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
+                    i += arg.value[i + 1] === "=" ? 1 : 0;
+                }
                 current = "";
-                i += arg.value[i + 1] === "=" ? 2 : 1;
             }
-            else if (depth > 0 && char === "(" || char === ")" || char === "!") {
+            else if ((depth == 0 && char === "(") || char === ")" || char === "!") {
                 result += this.buildString(current.trim(), arg) + char;
                 current = "";
             }
@@ -82,24 +87,34 @@ class Instruction {
         }
         return (arg.value = "`" + result + "`");
     }
-    buildStringArguments(taskArgument) {
-        for (const arg of taskArgument) {
-            this.buildStringArgument(arg.value);
+    buildStringArguments(args) {
+        for (const arg of args) {
+            this.buildStringArgument(arg.token);
+        }
+    }
+    buildNumberArgument(arg) {
+        if (!arg)
+            return "NaN";
+        return isNaN(Number(arg.value)) ? (arg.value = "NaN") : arg.value;
+    }
+    buildNumberArguments(args) {
+        for (const arg of args) {
+            this.buildNumberArgument(arg.token);
         }
     }
     processNestedArgument(arg) {
         if (arg) {
-            let value = arg.value.value;
+            let value = arg.token.value;
             for (const nested of arg.nested) {
                 if (nested) {
                     value = value.replace(nested.token.total, nested.compile());
                 }
-                if (value !== arg.value.value) {
-                    arg.value.value = value;
+                if (value !== arg.token.value) {
+                    arg.token.value = value;
                 }
             }
         }
-        return arg.value.value;
+        return arg.token.value;
     }
     processNestedArguments(task) {
         for (const arg of task.arguments) {
@@ -152,14 +167,14 @@ class InstructionsManager {
         this.#instructions.push(...instructions);
     }
     loaddir(mod, compiler) {
+        const copy = [...this.#instructions];
         for (const file of (0, get_files_1.getFiles)(mod).filter((el) => el.endsWith(".js"))) {
             const imported = require(file);
-            if ("default" in imported) {
-                if (imported.default instanceof Instruction) {
-                    this.add(new imported.default(compiler));
-                }
+            if ("default" in imported && imported.default?.prototype instanceof Instruction) {
+                this.add(new imported.default(compiler));
             }
         }
+        return this.#instructions !== copy;
     }
 }
 exports.InstructionsManager = InstructionsManager;

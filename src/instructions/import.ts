@@ -10,7 +10,11 @@ export default class ImportInstruction extends Instruction {
 
 		let [module, name = module] = task.argValues() as [string, string | undefined];
 
-		name = name.trim().replace(/[^A-z_]/g, "_");
+		try {
+			if (typeof JSON.parse(name) !== "object") name = name.trim().replace(/[^A-z_]/g, "_");
+		} catch {
+			name = name.trim().replace(/[^A-z_]/g, "_");
+		}
 
 		if (!this.compiler.vars.includes(`var ${name} = require("${module}");`)) {
 			this.compiler.vars.push(`var ${name} = require("${module}");`);

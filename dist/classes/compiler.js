@@ -5,11 +5,20 @@ const uglify_js_1 = require("uglify-js");
 const instruction_1 = require("./instruction");
 const lexer_1 = require("./lexer");
 const logger_1 = require("./logger");
+/**
+ * Represents a compilation task.
+ */
 class Task {
     token;
     instruction;
     compiler;
     arguments = [];
+    /**
+     * Creates an instance of Task.
+     * @param token The token associated with the task.
+     * @param instruction The instruction associated with the task.
+     * @param compiler The compiler instance.
+     */
     constructor(token, instruction, compiler) {
         this.token = token;
         this.instruction = instruction;
@@ -19,22 +28,30 @@ class Task {
             if (arg) {
                 if (arg.nested.length > 0) {
                     this.arguments[i] = {
-                        value: arg,
+                        token: arg,
                         nested: compiler.createTasksFromTokens(arg.nested),
                     };
                 }
                 else {
                     this.arguments[i] = {
-                        value: arg,
+                        token: arg,
                         nested: [],
                     };
                 }
             }
         }
     }
+    /**
+     * Retrieves the values of the arguments in the task.
+     * @returns An array of argument values.
+     */
     argValues() {
-        return this.arguments.map((arg) => arg.value.value);
+        return this.arguments.map((arg) => arg.token.value);
     }
+    /**
+     * Compiles the task.
+     * @returns The compiled code for the task.
+     */
     compile() {
         return this.instruction.compile(this);
     }
@@ -47,17 +64,33 @@ class Compiler {
     vars = [];
     #output = "";
     #input = "";
+    /**
+     * Creates an instance of Compiler.
+     * @param input The input code to compile.
+     * @param instructionsManager The instructions manager instance.
+     */
     constructor(input = "", instructionsManager = new instruction_1.InstructionsManager()) {
         this.instructionsManager = instructionsManager;
         this.lexer.setInput(input);
         this.#input = input;
     }
+    /**
+     * Retrieves the compiled output.
+     */
     get output() {
         return this.#output;
     }
+    /**
+     * Retrieves the input code.
+     */
     get input() {
         return this.#input;
     }
+    /**
+     * Sets the input code for compilation.
+     * @param input The input code to set.
+     * @returns The Compiler instance for method chaining.
+     */
     setInput(input) {
         if (this.busy) {
             logger_1.Logger.warn("The compiler is already busy!", "Compiler.setInput");
@@ -98,9 +131,14 @@ class Compiler {
             this.#output = this.#output.slice(0, position) + value + this.#output.slice(position);
         }
     }
+    /**
+     * Compiles the input code.
+     * @param debug Indicates whether debug mode is enabled.
+     * @returns The compiled code, or void if an error occurred.
+     */
     async compile(debug = false) {
         if (this.busy) {
-            logger_1.Logger.warn("The compiler is already busy!", "Compiler");
+            logger_1.Logger.warn("The compiler is already busy!", "Compiler.compile");
             return;
         }
         const start = Date.now();
@@ -108,10 +146,12 @@ class Compiler {
         if (debug) {
             logger_1.Logger.debug("Compiler set to busy", "Compiler");
         }
+        // Create tasks from tokens
         const tasks = this.createTasksFromTokens(this.lexer.tokenize());
         if (debug) {
             logger_1.Logger.debug(`Tasks created: ${tasks.length}`, "Compiler.compile");
         }
+        // Compile tasks
         for (let i = 0; i < tasks.length; i++) {
             const task = tasks[i];
             if (debug) {
@@ -120,7 +160,7 @@ class Compiler {
             try {
                 const compiled = task.compile();
                 if (debug) {
-                    logger_1.Logger.debug(`Task ${i + 1} compiled successfully: ${compiled}`, "Compiler.compile");
+                    logger_1.Logger.debug(`Task ${i + 1} compiled successfully:\n${compiled}`, "Compiler.compile");
                 }
                 this.appendToOutput(compiled + ";\n");
             }
@@ -128,10 +168,12 @@ class Compiler {
                 logger_1.Logger.error(`Error compiling task ${i + 1}: ${error.message}`, "Compiler.compile");
             }
         }
+        // Minify the output
         const minified = (0, uglify_js_1.minify)(this.vars.join("") + this.#output).code;
         if (debug) {
             logger_1.Logger.debug(`Compilation completed in ${Date.now() - start} miliseconds.\nInput code:\n${this.#input}\nOutput code:\n${minified}`, "Compiler.compile");
         }
+        // Clear data
         this.vars = [];
         this.#output = "";
         if (debug) {
@@ -142,6 +184,17 @@ class Compiler {
             logger_1.Logger.debug("Compiler set to idle", "Compiler.compile");
         }
         return minified;
+    }
+    addInstruction(...instructions) {
+        this.instructionsManager.add(...instructions);
+    }
+    /**
+     * Loads instructions from the specified directory.
+     * @param path The directory path containing instruction files.
+     * @returns True if the instructions were loaded successfully, otherwise false.
+     */
+    loaddir(path) {
+        return this.instructionsManager.loaddir(path, this);
     }
 }
 exports.Compiler = Compiler;

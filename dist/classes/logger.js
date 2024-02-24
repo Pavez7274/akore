@@ -9,8 +9,8 @@ var MessageType;
     MessageType["INFO"] = "INFO";
 })(MessageType || (MessageType = {}));
 class Logger {
-    static AKITA_TAG = "\x1b[34m[AKITA]\x1b[0m";
-    static PATH_TAG = "\x1b[90m[${PATH}]\x1b[0m";
+    static AKITA_TAG = "\x1b[94m[AKORE]\x1b[0m";
+    static PATH_TAG = "\x1b[93m[${PATH}]\x1b[0m";
     static error(message, path = "") {
         console.error(`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.ERROR)} ${message}`);
         throw new Error(message);

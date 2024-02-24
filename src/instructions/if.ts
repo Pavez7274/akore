@@ -5,7 +5,7 @@ export default class IfInstruction extends Instruction {
 	override name = "$if" as const;
 	override id = "$akitaIf" as const;
 	public override compile(task: Task): string {
-		this.buildConditionArgument(task.arguments[0]?.value);
+		this.buildConditionArgument(task.arguments[0]?.token);
 		this.processNestedArguments(task);
 
 		const [condition, whenTrue, whenFalse] = task.argValues() as [

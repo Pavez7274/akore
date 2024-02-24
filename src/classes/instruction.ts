@@ -44,12 +44,16 @@ export abstract class Instruction {
 				depth--;
 			} else if (char === " " && !depth) {
 				// ignore spaces
-			} else if (depth > 0 && isOperator(arg.value, i)) {
+			} else if (depth == 0 && isOperator(arg.value, i)) {
 				result += this.buildString(current.trim(), arg);
-				result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
+				if ((char === ">" || char === "<") && arg.value[i + 1] !== "=") {
+					result += char;
+				} else {
+					result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
+					i += arg.value[i + 1] === "=" ? 1 : 0;
+				}
 				current = "";
-				i += arg.value[i + 1] === "=" ? 2 : 1;
-			} else if (depth > 0 && char === "(" || char === ")" || char === "!") {
+			} else if ((depth == 0 && char === "(") || char === ")" || char === "!") {
 				result += this.buildString(current.trim(), arg) + char;
 				current = "";
 			} else {
@@ -81,25 +85,36 @@ export abstract class Instruction {
 		return (arg.value = "`" + result + "`");
 	}
 
-	public buildStringArguments(taskArgument: TaskArgument[]) {
-		for (const arg of taskArgument) {
-			this.buildStringArgument(arg.value);
+	public buildStringArguments(args: TaskArgument[]) {
+		for (const arg of args) {
+			this.buildStringArgument(arg.token);
+		}
+	}
+
+	public buildNumberArgument(arg: TokenArgument | undefined): string {
+		if (!arg) return "NaN";
+		return isNaN(Number(arg.value)) ? (arg.value = "NaN") : arg.value;
+	}
+
+	public buildNumberArguments(args: TaskArgument[]) {
+		for (const arg of args) {
+			this.buildNumberArgument(arg.token);
 		}
 	}
 
 	public processNestedArgument(arg: TaskArgument): string {
 		if (arg) {
-			let value = arg.value.value;
+			let value = arg.token.value;
 			for (const nested of arg.nested) {
 				if (nested) {
 					value = value.replace(nested.token.total, nested.compile());
 				}
-				if (value !== arg.value.value) {
-					arg.value.value = value;
+				if (value !== arg.token.value) {
+					arg.token.value = value;
 				}
 			}
 		}
-		return arg.value.value;
+		return arg.token.value;
 	}
 
 	public processNestedArguments(task: Task): void {
@@ -157,14 +172,15 @@ export class InstructionsManager {
 		this.#instructions.push(...instructions);
 	}
 
-	public loaddir(mod: string, compiler: Compiler) {
+	public loaddir(mod: string, compiler: Compiler): boolean {
+		const copy = [...this.#instructions];
 		for (const file of getFiles(mod).filter((el) => el.endsWith(".js"))) {
 			const imported = require(file);
-			if ("default" in imported) {
-				if (imported.default instanceof Instruction) {
-					this.add(new imported.default(compiler));
-				}
+			if ("default" in imported && imported.default?.prototype instanceof Instruction) {
+				this.add(new imported.default(compiler));
 			}
 		}
+
+		return this.#instructions !== copy;
 	}
 }

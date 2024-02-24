@@ -13,7 +13,9 @@ export declare abstract class Instruction {
     abstract compile(task: Task): string;
     buildConditionArgument(arg: TokenArgument | undefined): string;
     buildStringArgument(arg: TokenArgument | undefined): string;
-    buildStringArguments(taskArgument: TaskArgument[]): void;
+    buildStringArguments(args: TaskArgument[]): void;
+    buildNumberArgument(arg: TokenArgument | undefined): string;
+    buildNumberArguments(args: TaskArgument[]): void;
     processNestedArgument(arg: TaskArgument): string;
     processNestedArguments(task: Task): void;
     buildString(input: string, arg: TokenArgument): string;
@@ -24,5 +26,5 @@ export declare class InstructionsManager {
     #private;
     get instructions(): Instruction[];
     add(...instructions: Instruction[]): void;
-    loaddir(mod: string, compiler: Compiler): void;
+    loaddir(mod: string, compiler: Compiler): boolean;
 }

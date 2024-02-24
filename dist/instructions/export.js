@@ -7,7 +7,7 @@ class ExportInstruction extends instruction_1.Instruction {
     compile(task) {
         this.processNestedArguments(task);
         const [name, value] = task.argValues();
-        return `exports.${name} = ${value}`;
+        return `exports${name ? `.${name}` : ""} = ${value}`;
     }
 }
 exports.default = ExportInstruction;

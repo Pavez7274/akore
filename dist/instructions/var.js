@@ -5,7 +5,7 @@ class VarInstruction extends instruction_1.Instruction {
     name = "$var";
     id = "$akitaVar";
     compile(task) {
-        this.buildStringArgument(task.arguments[1]?.value);
+        this.buildStringArgument(task.arguments[1]?.token);
         this.processNestedArguments(task);
         let [name, value] = task.argValues();
         if ((value && value?.startsWith("+")) || value?.startsWith("-")) {

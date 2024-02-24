@@ -3,13 +3,25 @@ import { Instruction, InstructionsManager } from "./instruction";
 import { TokenArgument, Lexer, Token } from "./lexer";
 import { Logger } from "./logger";
 
+/**
+ * Represents an argument in a compilation task.
+ */
 export interface TaskArgument {
-	value: TokenArgument;
+	token: TokenArgument;
 	nested: Task[];
 }
 
+/**
+ * Represents a compilation task.
+ */
 export class Task {
 	public arguments: TaskArgument[] = [];
+	/**
+	 * Creates an instance of Task.
+	 * @param token The token associated with the task.
+	 * @param instruction The instruction associated with the task.
+	 * @param compiler The compiler instance.
+	 */
 	constructor(
 		public readonly token: Token,
 		public readonly instruction: Instruction,
@@ -20,12 +32,12 @@ export class Task {
 			if (arg) {
 				if (arg.nested.length > 0) {
 					this.arguments[i] = {
-						value: arg,
+						token: arg,
 						nested: compiler.createTasksFromTokens(arg.nested),
 					};
 				} else {
 					this.arguments[i] = {
-						value: arg,
+						token: arg,
 						nested: [],
 					};
 				}
@@ -33,10 +45,18 @@ export class Task {
 		}
 	}
 
+	/**
+	 * Retrieves the values of the arguments in the task.
+	 * @returns An array of argument values.
+	 */
 	public argValues<T extends string[]>(): T {
-		return this.arguments.map((arg) => arg.value.value) as T;
+		return this.arguments.map((arg) => arg.token.value) as T;
 	}
 
+	/**
+	 * Compiles the task.
+	 * @returns The compiled code for the task.
+	 */
 	public compile(): string {
 		return this.instruction.compile(this);
 	}
@@ -49,6 +69,11 @@ export class Compiler {
 	#output: string = "";
 	#input: string = "";
 
+	/**
+	 * Creates an instance of Compiler.
+	 * @param input The input code to compile.
+	 * @param instructionsManager The instructions manager instance.
+	 */
 	constructor(
 		input: string = "",
 		public instructionsManager: InstructionsManager = new InstructionsManager()
@@ -57,14 +82,25 @@ export class Compiler {
 		this.#input = input;
 	}
 
+	/**
+	 * Retrieves the compiled output.
+	 */
 	public get output(): string {
 		return this.#output;
 	}
 
+	/**
+	 * Retrieves the input code.
+	 */
 	public get input(): string {
 		return this.#input;
 	}
 
+	/**
+	 * Sets the input code for compilation.
+	 * @param input The input code to set.
+	 * @returns The Compiler instance for method chaining.
+	 */
 	public setInput(input: string): this {
 		if (this.busy) {
 			Logger.warn("The compiler is already busy!", "Compiler.setInput");
@@ -113,23 +149,32 @@ export class Compiler {
 		}
 	}
 
+	/**
+	 * Compiles the input code.
+	 * @param debug Indicates whether debug mode is enabled.
+	 * @returns The compiled code, or void if an error occurred.
+	 */
 	public async compile(debug: boolean = false): Promise<string | void> {
 		if (this.busy) {
-			Logger.warn("The compiler is already busy!", "Compiler");
+			Logger.warn("The compiler is already busy!", "Compiler.compile");
 			return;
 		}
-		const start = Date.now();
 
+		const start = Date.now();
 		this.busy = true;
+
 		if (debug) {
 			Logger.debug("Compiler set to busy", "Compiler");
 		}
 
+		// Create tasks from tokens
 		const tasks: Task[] = this.createTasksFromTokens(this.lexer.tokenize());
+
 		if (debug) {
 			Logger.debug(`Tasks created: ${tasks.length}`, "Compiler.compile");
 		}
 
+		// Compile tasks
 		for (let i = 0; i < tasks.length; i++) {
 			const task = tasks[i]!;
 			if (debug) {
@@ -142,7 +187,7 @@ export class Compiler {
 			try {
 				const compiled = task.compile();
 				if (debug) {
-					Logger.debug(`Task ${i + 1} compiled successfully: ${compiled}`, "Compiler.compile");
+					Logger.debug(`Task ${i + 1} compiled successfully:\n${compiled}`, "Compiler.compile");
 				}
 				this.appendToOutput(compiled + ";\n");
 			} catch (error) {
@@ -153,7 +198,9 @@ export class Compiler {
 			}
 		}
 
+		// Minify the output
 		const minified = minify(this.vars.join("") + this.#output).code;
+
 		if (debug) {
 			Logger.debug(
 				`Compilation completed in ${Date.now() - start} miliseconds.\nInput code:\n${
@@ -163,16 +210,33 @@ export class Compiler {
 			);
 		}
 
+		// Clear data
 		this.vars = [];
 		this.#output = "";
+
 		if (debug) {
 			Logger.debug("Data was cleared", "Compiler.compile");
 		}
+
 		this.busy = false;
+
 		if (debug) {
 			Logger.debug("Compiler set to idle", "Compiler.compile");
 		}
 
 		return minified;
+	}
+
+	public addInstruction(...instructions: Instruction[]): void {
+		this.instructionsManager.add(...instructions);
+	}
+
+	/**
+	 * Loads instructions from the specified directory.
+	 * @param path The directory path containing instruction files.
+	 * @returns True if the instructions were loaded successfully, otherwise false.
+	 */
+	public loaddir(path: string): boolean {
+		return this.instructionsManager.loaddir(path, this);
 	}
 }

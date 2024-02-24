@@ -4,57 +4,85 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require("./");
 const fs_1 = require("fs");
 const get_files_1 = require("./helpers/get_files");
-const commander_1 = require("commander");
 const path_1 = require("path");
+const commander_1 = require("commander");
+// Path to the global configuration file
 const configPath = (0, path_1.join)(process.cwd(), "akconfig.json");
+const { version } = require("../package.json");
+const cwd = process.cwd();
+// Load global configuration if it exists
 let globalConfig = {};
 if ((0, fs_1.existsSync)(configPath)) {
     globalConfig = JSON.parse((0, fs_1.readFileSync)(configPath, "utf-8"));
 }
+// Set up the command line interface
 commander_1.program
-    .arguments("[path]") // Ahora path es opcional
+    .version(version, "-v, --version", "Output the current version")
+    .usage("akore [path] [options]")
+    .arguments("[path]") // Optional argument for the path
     .option("-d, --debug", "Enable debug mode")
     .option("-r, --rootDir <rootDir>", "Set the root directory for compilation")
     .option("-o, --outDir <outDir>", "Set the output directory for compiled files")
-    .action(async (path = globalConfig.rootDir, options) => {
-    path = path ? (0, path_1.join)(process.cwd(), path) : process.cwd();
-    if ((0, fs_1.existsSync)(path)) {
+    .action(async (rootDir = globalConfig.rootDir || "./", options) => {
+    // If a path is provided, resolve it relative to the current working directory
+    rootDir = rootDir ? (0, path_1.join)(cwd, rootDir) : cwd;
+    if ((0, fs_1.existsSync)(rootDir)) {
+        // Use the provided output directory or the global configuration's output directory
         options.outDir ||= globalConfig.outDir;
-        const outDir = options.outDir ? (0, path_1.join)(process.cwd(), options.outDir) : process.cwd();
+        const outDir = options.outDir ? (0, path_1.join)(cwd, options.outDir) : cwd;
         if (outDir && !(0, fs_1.existsSync)(outDir)) {
+            // Create the output directory if it doesn't exist
             (0, fs_1.mkdirSync)(outDir, { recursive: true });
         }
         const compiler = new _1.Compiler();
+        // Add basic instructions to the compiler
         for (const i of Object.values(_1.BasicInstructions)) {
-            compiler.instructionsManager.add(new i(compiler));
+            compiler.addInstruction(new i(compiler));
         }
-        for (const file of (0, get_files_1.getFiles)(path)) {
+        if ("instructions" in globalConfig && Array.isArray(globalConfig.instructions)) {
+            for (let mod of globalConfig.instructions) {
+                let path = (0, path_1.join)(cwd, mod);
+                if (!(0, fs_1.existsSync)(path)) {
+                    _1.Logger.warn(`No such file or directory "${mod}"!`, "globalConfig.instructions");
+                    continue;
+                }
+                if (compiler.loaddir(path))
+                    _1.Logger.info(`${mod} instructions loaded successfully!`, "Compiler.loaddir");
+                else
+                    _1.Logger.warn(`${mod} instructions did not load!`, "Compiler.loaddir");
+            }
+        }
+        // Process files in the specified path
+        for (const file of (0, get_files_1.getFiles)(rootDir)) {
+            const start = Date.now();
             if (file.endsWith(".kita")) {
-                console.log(compiler.output, compiler.vars);
+                // If the file is a .kita file, compile it
                 const compiled = await compiler
                     .setInput((0, fs_1.readFileSync)(file, "utf-8"))
                     .compile(options.debug);
-                const destPath = file.slice(0, -5).concat(".js").replace(path, outDir);
+                const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
                 const dir = (0, path_1.dirname)(destPath);
                 if (!(0, fs_1.existsSync)(dir)) {
                     (0, fs_1.mkdirSync)(dir, { recursive: true });
                 }
-                _1.Logger.debug(`Compiled ${file} to ${destPath}`, "Compiler");
                 (0, fs_1.writeFileSync)(destPath, compiled ?? "'COMPILATION ERROR';", "utf-8");
+                _1.Logger.info(`Compiled \x1b[94m${file.replace(cwd, ".")}\x1b[0m to \x1b[92m${destPath.replace(cwd, ".")}\x1b[0m in \x1b[97m${Date.now() - start}ms\x1b[0m`, "Compiler");
             }
             else {
-                const destPath = file.replace(path, outDir);
+                // If it's not a .kita file, copy it to the output directory
+                const destPath = file.replace(rootDir, outDir);
                 const dir = (0, path_1.dirname)(destPath);
                 if (!(0, fs_1.existsSync)(dir)) {
                     (0, fs_1.mkdirSync)(dir, { recursive: true });
                 }
-                _1.Logger.debug(`Copied ${file} to ${destPath}`, "Compiler");
                 (0, fs_1.copyFileSync)(file, destPath);
+                _1.Logger.info(`Copied \x1b[94m${file.replace(cwd, ".")}\x1b[0m to \x1b[92m${destPath.replace(cwd, ".")}\x1b[0m in \x1b[97m${Date.now() - start}ms\x1b[0m`, "Compiler");
             }
         }
     }
     else {
-        _1.Logger.error(`No such file or directory "${path}"`);
+        _1.Logger.error(`No such file or directory "${rootDir}"`);
     }
 });
+// Parse the command line arguments
 commander_1.program.parse(process.argv);
