@@ -1,5 +1,5 @@
 import { minify } from "uglify-js";
-import { Instruction, InstructionsManager } from "./instruction";
+import { Instruction, InstructionStatus, InstructionsManager } from "./instruction";
 import { TokenArgument, Lexer, Token } from "./lexer";
 import { Logger } from "./logger";
 
@@ -114,7 +114,7 @@ export class Compiler {
 		const tasks: Task[] = [];
 		for (const token of tokens) {
 			const instruction = this.findInstructionForToken(token);
-			if (instruction) {
+			if (instruction && instruction.status === InstructionStatus.Enabled) {
 				tasks.push(new Task(token, instruction, this));
 			}
 		}
@@ -123,7 +123,7 @@ export class Compiler {
 
 	public findInstructionForToken(token: Token): Instruction | undefined {
 		return this.instructionsManager.instructions.find(
-			(instruction) => instruction.name === token.name
+			(instruction) => instruction.id === token.name || instruction.name === token.name
 		);
 	}
 
@@ -238,5 +238,27 @@ export class Compiler {
 	 */
 	public loaddir(path: string): boolean {
 		return this.instructionsManager.loaddir(path, this);
+	}
+
+	public disableInstructions(...names: string[]) {
+		for (const name of names) {
+			const index = this.instructionsManager.instructions.findIndex(
+				(instruction) => instruction.id === name || instruction.name === name
+			);
+			if (index !== -1) {
+				this.instructionsManager.instructions[index]?.disable();
+			}
+		}
+	}
+
+	public enableInstructions(...names: string[]) {
+		for (const name of names) {
+			const index = this.instructionsManager.instructions.findIndex(
+				(instruction) => instruction.id === name || instruction.name === name
+			);
+			if (index !== -1) {
+				this.instructionsManager.instructions[index]?.enable();
+			}
+		}
 	}
 }

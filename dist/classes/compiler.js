@@ -104,14 +104,14 @@ class Compiler {
         const tasks = [];
         for (const token of tokens) {
             const instruction = this.findInstructionForToken(token);
-            if (instruction) {
+            if (instruction && instruction.status === "ENABLED" /* InstructionStatus.Enabled */) {
                 tasks.push(new Task(token, instruction, this));
             }
         }
         return tasks;
     }
     findInstructionForToken(token) {
-        return this.instructionsManager.instructions.find((instruction) => instruction.name === token.name);
+        return this.instructionsManager.instructions.find((instruction) => instruction.id === token.name || instruction.name === token.name);
     }
     appendToOutput(value) {
         this.#output += value;
@@ -195,6 +195,22 @@ class Compiler {
      */
     loaddir(path) {
         return this.instructionsManager.loaddir(path, this);
+    }
+    disableInstructions(...names) {
+        for (const name of names) {
+            const index = this.instructionsManager.instructions.findIndex((instruction) => instruction.id === name || instruction.name === name);
+            if (index !== -1) {
+                this.instructionsManager.instructions[index]?.disable();
+            }
+        }
+    }
+    enableInstructions(...names) {
+        for (const name of names) {
+            const index = this.instructionsManager.instructions.findIndex((instruction) => instruction.id === name || instruction.name === name);
+            if (index !== -1) {
+                this.instructionsManager.instructions[index]?.enable();
+            }
+        }
     }
 }
 exports.Compiler = Compiler;

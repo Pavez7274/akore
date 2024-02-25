@@ -78,4 +78,6 @@ export declare class Compiler {
      * @returns True if the instructions were loaded successfully, otherwise false.
      */
     loaddir(path: string): boolean;
+    disableInstructions(...names: string[]): void;
+    enableInstructions(...names: string[]): void;
 }

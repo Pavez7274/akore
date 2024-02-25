@@ -25,6 +25,7 @@ program
 	.option("-d, --debug", "Enable debug mode")
 	.option("-r, --rootDir <rootDir>", "Set the root directory for compilation")
 	.option("-o, --outDir <outDir>", "Set the output directory for compiled files")
+	.option("-di, --disableInstructions <instructions>", "Disable specific instructions")
 	.action(async (rootDir: string = globalConfig.rootDir || "./", options) => {
 		// If a path is provided, resolve it relative to the current working directory
 		rootDir = rootDir ? join(cwd, rootDir) : cwd;
@@ -54,6 +55,12 @@ program
 						Logger.info(`${mod} instructions loaded successfully!`, "Compiler.loaddir");
 					else Logger.warn(`${mod} instructions did not load!`, "Compiler.loaddir");
 				}
+			}
+
+			if ("disableInstructions" in options && typeof options.disableInstructions === "string") {
+				compiler.disableInstructions(
+					...options.disableInstructions.split(",").map((name: string) => name.trim())
+				);
 			}
 
 			// Process files in the specified path
