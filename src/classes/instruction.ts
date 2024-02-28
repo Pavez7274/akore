@@ -45,44 +45,87 @@ export abstract class Instruction {
 			} else if (char === " " && !depth) {
 				// ignore spaces
 			} else if (depth == 0 && isOperator(arg.value, i)) {
-				result += this.buildString(current.trim(), arg);
+				result += this.buildStringArgument(arg, current.trim());
+				console.log(char);
 				if ((char === ">" || char === "<") && arg.value[i + 1] !== "=") {
 					result += char;
 				} else {
+					console.log(char, arg.value[i + 1]);
 					result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
 					i += arg.value[i + 1] === "=" ? 1 : 0;
 				}
 				current = "";
 			} else if ((depth == 0 && char === "(") || char === ")" || char === "!") {
-				result += this.buildString(current.trim(), arg) + char;
+				result += this.buildStringArgument(arg, current.trim()) + char;
 				current = "";
 			} else {
 				current += char;
 			}
 		}
-		result += this.buildString(current.trim(), arg);
+		result += this.buildStringArgument(arg, current.trim());
 
 		return (arg.value = result);
 	}
 
-	public buildStringArgument(arg: TokenArgument | undefined): string {
-		if (!arg) return "";
-		if (!isNaN(Number(arg.value))) return arg.value;
-		if (arg.nested.length === 1 && arg.nested[0]?.total === arg.value) return arg.value;
-		if (arg.nested.length === 0) return (arg.value = '"' + arg.value + '"');
+	/**
+	 * Builds a string argument with support for nested tokens and escape characters.
+	 * @param arg The token argument to build.
+	 * @param input Optional input string to use for building.
+	 * @returns The built string argument.
+	 */
+	public buildStringArgument(arg: TokenArgument, input?: string): string {
+		// Determine the value to use for building.
+		const value = input || arg.value;
+
+		// Return early if the value is empty or numeric.
+		if (!value) return "";
+		if (!isNaN(Number(value))) return value;
+
+		// Check if the value is a single nested token and return it directly if so.
+		if (arg.nested.length === 1 && arg.nested[0]?.total === value) return value;
+
+		// Find nested tokens within the value.
+		const nesteds = arg.nested
+			.filter((nested) => value.includes(nested.total))
+			.map((nested) => ({
+				...nested,
+				start: value.indexOf(nested.total),
+				end: value.indexOf(nested.total) + nested.total.length,
+			}));
+
+		// Initialize the result string.
+		let result = "`";
+
+		// Initialize variables for tracking the current nested token.
 		let nestedIndex = 0;
-		let result = "";
-		for (let i = 0; i < arg.value.length; i++) {
-			const nested = arg.nested[nestedIndex];
-			if (nested && nested.start === i) {
-				result += "${" + nested.total + "}";
-				i = nested.end - 1;
-				nestedIndex++;
-			} else {
-				result += arg.value[i];
+		let actualNested = nesteds[nestedIndex];
+
+		// Iterate over each character in the value.
+		for (let i = 0; i < value.length; i++) {
+			// Get the current character.
+			const char = value[i];
+
+			// If a nested token starts at the current index, replace it with its value.
+			if (actualNested && actualNested.start === i) {
+				result += "${" + actualNested.total + "}";
+				i = actualNested.end - 1; // Skip the nested token.
+				actualNested = nesteds[++nestedIndex]; // Move to the next nested token.
+			}
+			// If the character is a backtick or backslash, escape it.
+			else if (char === "`" || char === "\\") {
+				result += `\\${char}`;
+			}
+			// Otherwise, add the character to the result.
+			else {
+				result += char;
 			}
 		}
-		return (arg.value = "`" + result + "`");
+
+		// Add closing backtick to the result.
+		result += "`";
+
+		// Return the result or update the argument's value if no input was provided.
+		return input ? result : (arg.value = result);
 	}
 
 	public buildStringArguments(args: TaskArgument[]) {
@@ -121,35 +164,6 @@ export abstract class Instruction {
 		for (const arg of task.arguments) {
 			this.processNestedArgument(arg);
 		}
-	}
-
-	public buildString(input: string, arg: TokenArgument): string {
-		if (!isNaN(Number(input))) return input;
-
-		const nesteds = arg.nested
-			.filter((nested) => input.includes(nested.total))
-			.map((nested) => ({
-				...nested,
-				start: input.indexOf(nested.total),
-				end: input.indexOf(nested.total) + nested.total.length,
-			}));
-
-		if (nesteds.length === 1 && nesteds[0]?.total.trim() === input) return input;
-		if (nesteds.length === 0) return (input = '"' + input + '"');
-		let result = "";
-		let nestedIndex = 0;
-		for (let i = 0; i < input.length; i++) {
-			const nested = nesteds[nestedIndex];
-			if (nested && nested.start === i) {
-				result += "${" + nested.total + "}";
-				i = nested.end - 1;
-				nestedIndex++;
-			} else {
-				result += input[i];
-			}
-		}
-
-		return (input = "`" + result + "`");
 	}
 
 	public enable() {

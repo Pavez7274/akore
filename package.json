@@ -7,7 +7,7 @@
 	},
 	"main": "dist/index.js",
 	"scripts": {
-		"release": "npm version $1 && npm publish"
+		"release": "npm version patch && npm publish"
 	},
 	"author": "Kodeko Studios",
 	"license": "MIT",
