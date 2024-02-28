@@ -66,7 +66,8 @@ class Instruction {
                 // If an operator is found, process the current string as a standalone argument
                 result += this.buildStringArgument(arg, current.trim());
                 result += op;
-                i += op.length - 1; // Skip the length of the operator
+                console.log(result);
+                i += op.length - 1 || 1; // Skip the length of the operator
                 current = "";
             }
             else if (char === "[") {
@@ -79,7 +80,7 @@ class Instruction {
                 current += char;
                 depth--;
             }
-            else if (char === " " && !depth) {
+            else if (char.trim() === "" && !depth) {
                 // Ignore spaces if not within nested conditions
             }
             else {
@@ -101,7 +102,7 @@ class Instruction {
      */
     buildStringArgument(arg, input) {
         // Determine the value to use for building.
-        const value = input || arg.value;
+        const value = input ?? arg.value;
         // Return early if the value is empty or numeric.
         if (!value)
             return "";
