@@ -7,14 +7,40 @@ var InstructionStatus;
     InstructionStatus["Enabled"] = "ENABLED";
     InstructionStatus["Disabled"] = "DISABLED";
 })(InstructionStatus = exports.InstructionStatus || (exports.InstructionStatus = {}));
-function isOperator(input, index) {
-    const operators = new Set(["!==", "!=", "===", "&&", "||", "==", ">=", "<=", "<", ">"]);
+/**
+ * Finds and returns an operator from the given input string at the specified index.
+ *
+ * @param {string} input The input string to search for operators.
+ * @param {number} index The index in the input string to start searching from.
+ * @returns {string | null} The operator found at the specified index, or null if not found.
+ */
+function findOperator(input, index) {
+    // Define the set of operators
+    const operators = new Set([
+        "!==",
+        "!=",
+        "===",
+        "&&",
+        "||",
+        "==",
+        ">=",
+        "<=",
+        "<",
+        ">",
+        "(",
+        ")",
+        "!",
+    ]);
+    // Iterate over each operator in the set
     for (const op of operators) {
+        // Check if the input string starts with the current operator at the given index
         if (input.startsWith(op, index)) {
-            return true;
+            // If found, return the operator
+            return op;
         }
     }
-    return false;
+    // If no operator is found, return null
+    return null;
 }
 class Instruction {
     compiler;
@@ -22,6 +48,11 @@ class Instruction {
     constructor(compiler) {
         this.compiler = compiler;
     }
+    /**
+     * Builds a condition argument by parsing and processing tokens.
+     * @param {TokenArgument} arg The token argument to process.
+     * @returns {string} The processed condition argument.
+     */
     buildConditionArgument(arg) {
         if (!arg)
             return "";
@@ -30,43 +61,40 @@ class Instruction {
         let depth = 0;
         for (let i = 0; i < arg.value.length; i++) {
             const char = arg.value[i];
-            if (char === "[") {
+            const op = findOperator(arg.value, i);
+            if (depth == 0 && op) {
+                // If an operator is found, process the current string as a standalone argument
+                result += this.buildStringArgument(arg, current.trim());
+                result += op;
+                i += op.length - 1; // Skip the length of the operator
+                current = "";
+            }
+            else if (char === "[") {
+                // If it's the beginning of a nested condition, increment depth
                 current += char;
                 depth++;
             }
             else if (char === "]" && depth) {
+                // If it's the end of a nested condition, decrement depth
                 current += char;
                 depth--;
             }
             else if (char === " " && !depth) {
-                // ignore spaces
-            }
-            else if (depth == 0 && isOperator(arg.value, i)) {
-                result += this.buildStringArgument(arg, current.trim());
-                console.log(char);
-                if ((char === ">" || char === "<") && arg.value[i + 1] !== "=") {
-                    result += char;
-                }
-                else {
-                    console.log(char, arg.value[i + 1]);
-                    result += arg.value.substring(i, i + (arg.value[i + 1] === "=" ? 3 : 2));
-                    i += arg.value[i + 1] === "=" ? 1 : 0;
-                }
-                current = "";
-            }
-            else if ((depth == 0 && char === "(") || char === ")" || char === "!") {
-                result += this.buildStringArgument(arg, current.trim()) + char;
-                current = "";
+                // Ignore spaces if not within nested conditions
             }
             else {
+                // Otherwise, accumulate characters to form the current argument
                 current += char;
             }
         }
+        // Process the remaining string as a standalone argument
         result += this.buildStringArgument(arg, current.trim());
+        // Update the value of the original argument with the processed result
         return (arg.value = result);
     }
     /**
-     * Builds a string argument with support for nested tokens and escape characters.
+     * Builds a string argument by processing the given token argument
+     * with support for nested tokens and escape characters.
      * @param arg The token argument to build.
      * @param input Optional input string to use for building.
      * @returns The built string argument.
@@ -119,16 +147,29 @@ class Instruction {
         // Return the result or update the argument's value if no input was provided.
         return input ? result : (arg.value = result);
     }
+    /**
+     * Builds string arguments by processing each token in the given array of task arguments.
+     * @param {TaskArgument[]} args Array of task arguments containing tokens to be processed.
+     */
     buildStringArguments(args) {
         for (const arg of args) {
             this.buildStringArgument(arg.token);
         }
     }
+    /**
+     * Builds a number argument by processing the given token argument.
+     * @param {TokenArgument | undefined} arg The token argument to be processed.
+     * @returns {string} The processed number value.
+     */
     buildNumberArgument(arg) {
         if (!arg)
             return "NaN";
         return isNaN(Number(arg.value)) ? (arg.value = "NaN") : arg.value;
     }
+    /**
+     * Builds number arguments by processing each token in the given array of task arguments.
+     * @param {TaskArgument[]} args Array of task arguments containing tokens to be processed.
+     */
     buildNumberArguments(args) {
         for (const arg of args) {
             this.buildNumberArgument(arg.token);
