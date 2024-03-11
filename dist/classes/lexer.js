@@ -18,8 +18,7 @@ class Lexer {
     tokenize() {
         this.#tokens = [];
         while (this.#position < this.#input.length) {
-            const currentChar = this.getCurrentChar();
-            if (currentChar === "$") {
+            if (this.getPreviuosChar() !== "\\" && this.getCurrentChar() === "$") {
                 this.tokenizeFunction();
             }
             else {
@@ -27,6 +26,9 @@ class Lexer {
             }
         }
         return this.#tokens;
+    }
+    getPreviuosChar() {
+        return this.#input[this.#position - 1] || "";
     }
     getCurrentChar() {
         return this.#input[this.#position] || "";
@@ -80,9 +82,16 @@ class Lexer {
         }
         if (end < this.#input.length && this.#input[end] === "[") {
             const startArgs = end;
-            let depth = 0;
+            let depth = 0, escaped = false;
             while (end < this.#input.length) {
-                if (this.#input[end] === "[") {
+                if (this.#input[end] === "\\") {
+                    escaped = true;
+                }
+                else if (escaped) {
+                    escaped = false;
+                    end++;
+                }
+                else if (this.#input[end] === "[") {
                     depth++;
                 }
                 else if (this.#input[end] === "]") {

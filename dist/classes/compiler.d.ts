@@ -26,7 +26,7 @@ export declare class Task {
      * Retrieves the values of the arguments in the task.
      * @returns An array of argument values.
      */
-    argValues<T extends string[]>(): T;
+    argumentValues<T extends string[]>(): T;
     /**
      * Compiles the task.
      * @returns The compiled code for the task.
@@ -38,7 +38,10 @@ export declare class Compiler {
     instructionsManager: InstructionsManager;
     private lexer;
     busy: boolean;
-    vars: string[];
+    variables: Set<{
+        key: string;
+        value?: string | undefined;
+    }>;
     /**
      * Creates an instance of Compiler.
      * @param input The input code to compile.
@@ -70,7 +73,8 @@ export declare class Compiler {
      * @param debug Indicates whether debug mode is enabled.
      * @returns The compiled code, or void if an error occurred.
      */
-    compile(debug?: boolean): Promise<string | void>;
+    compile(debug?: boolean, minifyOutput?: boolean): Promise<string | void>;
+    addVariable(priority: boolean, key: string, value?: string): void;
     addInstruction(...instructions: Instruction[]): void;
     /**
      * Loads instructions from the specified directory.

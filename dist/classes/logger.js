@@ -9,20 +9,20 @@ var MessageType;
     MessageType["INFO"] = "INFO";
 })(MessageType || (MessageType = {}));
 class Logger {
-    static AKITA_TAG = "\x1b[94m[AKORE]\x1b[0m";
+    static AKORE_TAG = "\x1b[94m[AKORE]\x1b[0m";
     static PATH_TAG = "\x1b[93m[${PATH}]\x1b[0m";
     static error(message, path = "") {
-        console.error(`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.ERROR)} ${message}`);
-        throw new Error(message);
+        console.error(`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.ERROR)} ${message}`);
+        process.exit();
     }
     static warn(message, path = "") {
-        console.warn(`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.WARN)} ${message}`);
+        console.warn(`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.WARN)} ${message}`);
     }
     static debug(message, path = "") {
-        console.debug(`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.DEBUG)} ${message}`);
+        console.debug(`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.DEBUG)} ${message}`);
     }
     static info(message, path = "") {
-        console.info(`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.INFO)} ${message}`);
+        console.info(`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.INFO)} ${message}`);
     }
     static getTag(type) {
         switch (type) {

@@ -3,10 +3,10 @@ import { Task } from "../classes/compiler";
 
 export default class SumInstruction extends Instruction {
 	override name = "$sum" as const;
-	override id = "$akitaSum" as const;
+	override id = "$akoreSum" as const;
 	public override compile(task: Task): string {
 		this.buildStringArguments(task.arguments);
 		this.processNestedArguments(task);
-		return `${task.argValues().join("+")}`;
+		return `${task.argumentValues().join("+")}`;
 	}
 }

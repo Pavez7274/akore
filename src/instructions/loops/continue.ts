@@ -3,7 +3,7 @@ import { Task } from "../../classes/compiler";
 
 export default class ContinueInstruction extends Instruction {
 	override name = "$continue" as const;
-	override id = "$akitaContinue" as const;
+	override id = "$akoreContinue" as const;
 	public override compile(task: Task): "continue;" {
 		this.processNestedArguments(task);
 		return "continue;";

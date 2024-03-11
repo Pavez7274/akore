@@ -1,48 +1,31 @@
 import { Compiler, Task, TaskArgument } from "./compiler";
-import { getFiles } from "../helpers/get_files";
+import { bgYellow, green, red } from "colors";
 import { TokenArgument } from "./lexer";
+import { Logger } from "./logger";
+import { isNil } from "lodash";
+import {
+	EscapableCharacters,
+	BooleanMapping,
+	startsWithSome,
+	Operators,
+	getFiles,
+	Falsys,
+} from "../helpers";
 
-export const enum InstructionStatus {
-	Enabled = "ENABLED",
-	Disabled = "DISABLED",
+export enum ArgumentTypes {
+	ANY,
+	TEXT,
+	NUMBER,
+	REGEXP,
+	OBJECT,
+	ARRAY,
+	CONDITION,
+	NONE,
 }
 
-/**
- * Finds and returns an operator from the given input string at the specified index.
- *
- * @param {string} input The input string to search for operators.
- * @param {number} index The index in the input string to start searching from.
- * @returns {string | null} The operator found at the specified index, or null if not found.
- */
-function findOperator(input: string, index: number): string | null {
-	// Define the set of operators
-	const operators = new Set([
-		"!==",
-		"!=",
-		"===",
-		"&&",
-		"||",
-		"==",
-		">=",
-		"<=",
-		"<",
-		">",
-		"(",
-		")",
-		"!",
-	]);
-
-	// Iterate over each operator in the set
-	for (const op of operators) {
-		// Check if the input string starts with the current operator at the given index
-		if (input.startsWith(op, index)) {
-			// If found, return the operator
-			return op;
-		}
-	}
-
-	// If no operator is found, return null
-	return null;
+export const enum InstructionStatus {
+	Disabled = "DISABLED",
+	Enabled = "ENABLED",
 }
 
 export abstract class Instruction {
@@ -55,41 +38,96 @@ export abstract class Instruction {
 	public abstract compile(task: Task): string;
 
 	/**
+	 * Validates the number of arguments and processes each argument based on its type.
+	 * @param args - The array of arguments to be processed.
+	 * @param min - The minimum number of arguments required.
+	 * @param types - The types of arguments.
+	 */
+	public validateAndProcessArguments(
+		args: TaskArgument[],
+		min: number,
+		...types: ArgumentTypes[]
+	): void {
+		if (args.length < min) {
+			Logger.error(
+				`${bgYellow(this.name)} requires at least ${green(
+					min.toString()
+				)} arguments but receives ${red(args.length.toString())} instead!`,
+				`${this.constructor.name}.validateAndProcessArguments`
+			);
+		}
+
+		for (let i = 0, type = types[i]; i < args.length; i++, type = types[i]) {
+			switch (type) {
+				case ArgumentTypes.NUMBER:
+					this.buildNumberArgument(args[i]?.token);
+					break;
+
+				case ArgumentTypes.CONDITION:
+					this.buildConditionArgument(args[i]?.token);
+					break;
+
+				case ArgumentTypes.NONE:
+					break;
+
+				case ArgumentTypes.TEXT:
+				case ArgumentTypes.ANY:
+				default:
+					this.buildStringArgument(args[i]?.token);
+			}
+		}
+	}
+
+	/**
 	 * Builds a condition argument by parsing and processing tokens.
 	 * @param {TokenArgument} arg The token argument to process.
 	 * @returns {string} The processed condition argument.
 	 */
 	public buildConditionArgument(arg: TokenArgument | undefined): string {
-		if (!arg) return "";
+		if (isNil(arg)) return "";
 
-		let result = "";
-		let current = "";
-		let depth = 0;
+		let result = "",
+			current = "",
+			depth = 0,
+			i = 0;
 
-		for (let i = 0; i < arg.value.length; i++) {
-			const char = arg.value[i]!;
-			const op = findOperator(arg.value, i);
+		while (i < arg.value.length) {
+			const char = arg.value.charAt(i);
+			const op = startsWithSome(arg.value, i, Operators);
 
+			// If an operator is found, process the current string as a standalone argument
 			if (depth == 0 && op) {
-				// If an operator is found, process the current string as a standalone argument
-				result += this.buildStringArgument(arg, current.trim());
-				result += op;
-				console.log(result);
-				i += op.length - 1 || 1; // Skip the length of the operator
+				result += this.buildStringArgument(arg, current.trim()) + op;
+				i += op.length; // Skip the length of the operator
 				current = "";
-			} else if (char === "[") {
-				// If it's the beginning of a nested condition, increment depth
+			}
+			// If it's the beginning of a nested, increment depth
+			else if (char === "[") {
 				current += char;
 				depth++;
-			} else if (char === "]" && depth) {
-				// If it's the end of a nested condition, decrement depth
+				i++;
+			}
+			// If it's the end of a nested, decrement depth
+			else if (char === "]" && depth) {
 				current += char;
 				depth--;
-			} else if (char.trim() === "" && !depth) {
-				// Ignore spaces if not within nested conditions
-			} else {
-				// Otherwise, accumulate characters to form the current argument
+				i++;
+			}
+			// If it's backslash, escapes the next character
+			else if (char === "\\") {
+				const next = arg.value.charAt(i + 1);
+				if (typeof next === "string") {
+					current += next;
+					i += 2;
+				} else {
+					current += char;
+					i++;
+				}
+			}
+			// Otherwise, accumulate characters to form the current argument
+			else {
 				current += char;
+				i++;
 			}
 		}
 
@@ -107,12 +145,15 @@ export abstract class Instruction {
 	 * @param input Optional input string to use for building.
 	 * @returns The built string argument.
 	 */
-	public buildStringArgument(arg: TokenArgument, input?: string): string {
+	public buildStringArgument(arg: TokenArgument | undefined, input?: string): string {
+		if (isNil(arg)) return "";
+
 		// Determine the value to use for building.
 		const value = input ?? arg.value;
 
 		// Return early if the value is empty or numeric.
 		if (!value) return "";
+		if (value in BooleanMapping) return (arg.value = BooleanMapping[value]!);
 		if (!isNaN(Number(value))) return value;
 
 		// Check if the value is a single nested token and return it directly if so.
@@ -128,7 +169,7 @@ export abstract class Instruction {
 			}));
 
 		// Initialize the result string.
-		let result = "`";
+		let result = "";
 
 		// Initialize variables for tracking the current nested token.
 		let nestedIndex = 0;
@@ -138,25 +179,27 @@ export abstract class Instruction {
 		for (let i = 0; i < value.length; i++) {
 			// Get the current character.
 			const char = value[i];
+			const special = startsWithSome(value, i, EscapableCharacters);
 
+			// If the character is a backtick, backslash or interpolation, escape it.
+			if (special) result += `\\${char}`;
 			// If a nested token starts at the current index, replace it with its value.
-			if (actualNested && actualNested.start === i) {
+			else if (actualNested && actualNested.start === i) {
 				result += "${" + actualNested.total + "}";
 				i = actualNested.end - 1; // Skip the nested token.
 				actualNested = nesteds[++nestedIndex]; // Move to the next nested token.
 			}
-			// If the character is a backtick or backslash, escape it.
-			else if (char === "`" || char === "\\") {
-				result += `\\${char}`;
-			}
 			// Otherwise, add the character to the result.
-			else {
-				result += char;
-			}
+			else result += char;
 		}
 
-		// Add closing backtick to the result.
-		result += "`";
+		// Add backticks to the result.
+		if (
+			(result.startsWith("'") && result.endsWith("'")) ||
+			(result.startsWith('"') && result.endsWith('"'))
+		) {
+			result = `\`${result.slice(1, -1)}\``;
+		} else result = `\`${result}\``;
 
 		// Return the result or update the argument's value if no input was provided.
 		return input ? result : (arg.value = result);
@@ -192,7 +235,33 @@ export abstract class Instruction {
 		}
 	}
 
-	public processNestedArgument(arg: TaskArgument): string {
+	/**
+	 * Builds a boolean argument by processing the given token argument.
+	 * @param {TokenArgument | undefined} arg The token argument to be processed.
+	 * @returns {string} The processed boolean value.
+	 */
+	public buildBooleanArgument(arg: TokenArgument | undefined): "true" | "false" {
+		if (!arg) return "false";
+		return Falsys.has(arg.value) ? "false" : "true";
+	}
+
+	/**
+	 * Builds number arguments by processing each token in the given array of task arguments.
+	 * @param {TaskArgument[]} args Array of task arguments containing tokens to be processed.
+	 */
+	public buildBooleanArguments(args: TaskArgument[]) {
+		for (const arg of args) {
+			this.buildBooleanArgument(arg.token);
+		}
+	}
+
+	/**
+	 * Processes nested arguments within the given task argument, replacing nested tokens with their compiled values.
+	 *
+	 * @param {TaskArgument} arg The task argument to process.
+	 * @returns {string} The processed value of the task argument.
+	 */
+	public processNestedArgument(arg?: TaskArgument): string {
 		if (arg) {
 			let value = arg.token.value;
 			for (const nested of arg.nested) {
@@ -204,20 +273,30 @@ export abstract class Instruction {
 				}
 			}
 		}
-		return arg.token.value;
+		return arg?.token.value ?? "";
 	}
 
+	/**
+	 * Processes nested arguments within the given task, replacing nested tokens with their compiled values.
+	 * @param {Task} task The task whose arguments are to be processed.
+	 */
 	public processNestedArguments(task: Task): void {
 		for (const arg of task.arguments) {
 			this.processNestedArgument(arg);
 		}
 	}
 
-	public enable() {
+	/**
+	 * Enables the instruction
+	 */
+	public enable(): void {
 		this.status = InstructionStatus.Enabled;
 	}
 
-	public disable() {
+	/**
+	 * Disables the instruction
+	 */
+	public disable(): void {
 		this.status = InstructionStatus.Disabled;
 	}
 }

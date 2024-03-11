@@ -6,21 +6,21 @@ enum MessageType {
 }
 
 export class Logger {
-	private static readonly AKITA_TAG = "\x1b[94m[AKORE]\x1b[0m";
+	private static readonly AKORE_TAG = "\x1b[94m[AKORE]\x1b[0m";
 	private static readonly PATH_TAG = "\x1b[93m[${PATH}]\x1b[0m";
 
 	static error(message: string, path: string = ""): never {
 		console.error(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+			`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
 				MessageType.ERROR
 			)} ${message}`
 		);
-		throw new Error(message);
+		process.exit()
 	}
 
 	static warn(message: string, path: string = "") {
 		console.warn(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+			`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
 				MessageType.WARN
 			)} ${message}`
 		);
@@ -28,7 +28,7 @@ export class Logger {
 
 	static debug(message: unknown, path: string = "") {
 		console.debug(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+			`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
 				MessageType.DEBUG
 			)} ${message}`
 		);
@@ -36,7 +36,7 @@ export class Logger {
 
 	static info(message: string, path: string = "") {
 		console.info(
-			`${Logger.AKITA_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
+			`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
 				MessageType.INFO
 			)} ${message}`
 		);

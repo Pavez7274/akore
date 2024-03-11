@@ -1,18 +1,20 @@
-import { Instruction } from "../classes/instruction";
+import { ArgumentTypes, Instruction } from "../classes/instruction";
 import { Task } from "../classes/compiler";
 
 export default class IfInstruction extends Instruction {
 	override name = "$if" as const;
-	override id = "$akitaIf" as const;
+	override id = "$akoreIf" as const;
 	public override compile(task: Task): string {
-		this.buildConditionArgument(task.arguments[0]?.token);
+		this.validateAndProcessArguments(
+			task.arguments,
+			2,
+			ArgumentTypes.CONDITION,
+			ArgumentTypes.NONE,
+			ArgumentTypes.NONE
+		);
 		this.processNestedArguments(task);
 
-		const [condition, whenTrue, whenFalse] = task.argValues() as [
-			string,
-			string,
-			string | undefined
-		];
-		return `if (${condition}) {${whenTrue}}${whenFalse ? `else {${whenFalse}}` : ""}`;
+		const [condition, whenTrue, whenFalse] = task.argumentValues();
+		return `if (${condition}) {\n\t${whenTrue}\n}${whenFalse ? ` else {\n\t${whenFalse}\n}` : ""}`;
 	}
 }

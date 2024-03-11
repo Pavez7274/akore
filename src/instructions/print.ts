@@ -3,10 +3,10 @@ import { Task } from "../classes/compiler";
 
 export default class PrintInstruction extends Instruction {
 	override name = "$print" as const;
-	override id = "$akitaPrint" as const;
+	override id = "$akorePrint" as const;
 	public override compile(task: Task): `console.log(${string})` {
 		this.buildStringArguments(task.arguments);
 		this.processNestedArguments(task);
-		return `console.log(${task.argValues().join(",")})`;
+		return `console.log(${task.argumentValues().join(",")})`;
 	}
 }

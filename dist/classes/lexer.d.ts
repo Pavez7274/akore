@@ -15,6 +15,7 @@ export declare class Lexer {
     get position(): number;
     get input(): string;
     tokenize(): Token[];
+    private getPreviuosChar;
     private getCurrentChar;
     ended(): boolean;
     private parseArguments;

@@ -49,7 +49,7 @@ export class Task {
 	 * Retrieves the values of the arguments in the task.
 	 * @returns An array of argument values.
 	 */
-	public argValues<T extends string[]>(): T {
+	public argumentValues<T extends string[]>(): T {
 		return this.arguments.map((arg) => arg.token.value) as T;
 	}
 
@@ -65,7 +65,7 @@ export class Task {
 export class Compiler {
 	private lexer = new Lexer("");
 	public busy: boolean = false;
-	public vars: string[] = [];
+	public variables = new Set<{ key: string; value?: string }>();
 	#output: string = "";
 	#input: string = "";
 
@@ -154,7 +154,10 @@ export class Compiler {
 	 * @param debug Indicates whether debug mode is enabled.
 	 * @returns The compiled code, or void if an error occurred.
 	 */
-	public async compile(debug: boolean = false): Promise<string | void> {
+	public async compile(
+		debug: boolean = false,
+		minifyOutput: boolean = false
+	): Promise<string | void> {
 		if (this.busy) {
 			Logger.warn("The compiler is already busy!", "Compiler.compile");
 			return;
@@ -199,19 +202,24 @@ export class Compiler {
 		}
 
 		// Minify the output
-		const minified = minify(this.vars.join("") + this.#output).code;
+		this.#output = `var ${Array.from(this.variables)
+			.map((x) => (x.value ? `${x.key}=${x.value}` : x.key))
+			.join(", ")};${this.#output}`;
+		const code = minifyOutput
+			? minify(this.#output, { output: { beautify: true } }).code
+			: this.#output;
 
 		if (debug) {
 			Logger.debug(
 				`Compilation completed in ${Date.now() - start} miliseconds.\nInput code:\n${
 					this.#input
-				}\nOutput code:\n${minified}`,
+				}\nOutput code:\n${code}`,
 				"Compiler.compile"
 			);
 		}
 
 		// Clear data
-		this.vars = [];
+		this.variables.clear();
 		this.#output = "";
 
 		if (debug) {
@@ -224,7 +232,14 @@ export class Compiler {
 			Logger.debug("Compiler set to idle", "Compiler.compile");
 		}
 
-		return minified;
+		return code;
+	}
+
+	public addVariable(priority: boolean, key: string, value?: string): void {
+		if (priority) {
+			this.variables = new Set([...this.variables].filter((x) => x.key !== key));
+		}
+		this.variables.add({ key, value });
 	}
 
 	public addInstruction(...instructions: Instruction[]): void {

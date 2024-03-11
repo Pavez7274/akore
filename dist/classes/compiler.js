@@ -45,7 +45,7 @@ class Task {
      * Retrieves the values of the arguments in the task.
      * @returns An array of argument values.
      */
-    argValues() {
+    argumentValues() {
         return this.arguments.map((arg) => arg.token.value);
     }
     /**
@@ -61,7 +61,7 @@ class Compiler {
     instructionsManager;
     lexer = new lexer_1.Lexer("");
     busy = false;
-    vars = [];
+    variables = new Set();
     #output = "";
     #input = "";
     /**
@@ -136,7 +136,7 @@ class Compiler {
      * @param debug Indicates whether debug mode is enabled.
      * @returns The compiled code, or void if an error occurred.
      */
-    async compile(debug = false) {
+    async compile(debug = false, minifyOutput = false) {
         if (this.busy) {
             logger_1.Logger.warn("The compiler is already busy!", "Compiler.compile");
             return;
@@ -169,12 +169,17 @@ class Compiler {
             }
         }
         // Minify the output
-        const minified = (0, uglify_js_1.minify)(this.vars.join("") + this.#output).code;
+        this.#output = `var ${Array.from(this.variables)
+            .map((x) => (x.value ? `${x.key}=${x.value}` : x.key))
+            .join(", ")};${this.#output}`;
+        const code = minifyOutput
+            ? (0, uglify_js_1.minify)(this.#output, { output: { beautify: true } }).code
+            : this.#output;
         if (debug) {
-            logger_1.Logger.debug(`Compilation completed in ${Date.now() - start} miliseconds.\nInput code:\n${this.#input}\nOutput code:\n${minified}`, "Compiler.compile");
+            logger_1.Logger.debug(`Compilation completed in ${Date.now() - start} miliseconds.\nInput code:\n${this.#input}\nOutput code:\n${code}`, "Compiler.compile");
         }
         // Clear data
-        this.vars = [];
+        this.variables.clear();
         this.#output = "";
         if (debug) {
             logger_1.Logger.debug("Data was cleared", "Compiler.compile");
@@ -183,7 +188,13 @@ class Compiler {
         if (debug) {
             logger_1.Logger.debug("Compiler set to idle", "Compiler.compile");
         }
-        return minified;
+        return code;
+    }
+    addVariable(priority, key, value) {
+        if (priority) {
+            this.variables = new Set([...this.variables].filter((x) => x.key !== key));
+        }
+        this.variables.add({ key, value });
     }
     addInstruction(...instructions) {
         this.instructionsManager.add(...instructions);

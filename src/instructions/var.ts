@@ -3,33 +3,28 @@ import { Task } from "../classes/compiler";
 
 export default class VarInstruction extends Instruction {
 	override name = "$var" as const;
-	override id = "$akitaVar" as const;
+	override id = "$akoreVar" as const;
 
 	public override compile(task: Task): string {
 		this.buildStringArgument(task.arguments[1]?.token!);
 		this.processNestedArguments(task);
 
-		let [name, value] = task.argValues() as [string, string];
+		let [key, value] = task.argumentValues() as [string, string];
 
 		if ((value && value?.startsWith("+")) || value?.startsWith("-")) {
 			const operator = value.startsWith("+") ? "+" : "-";
 			const numberValue = parseInt(value.slice(1), 10);
-
-			if (!this.compiler.vars.includes(`var ${name} = 0;`)) {
-				this.compiler.vars.push(`var ${name} = 0;`);
-			}
-
 			if (!isNaN(numberValue)) {
-				return `${name} ${operator}=${numberValue}`;
+				if (![...this.compiler.variables].some((x) => x.key === key)) {
+					this.compiler.variables.add({ key: key, value: "0" });
+				}
+				return `${key}${operator}=${numberValue}`;
 			}
-
-			return `${name} ${operator}= ${value}`;
+			this.compiler.addVariable(false, key.split(".")[0]!);
+			return `${key}${operator}=${value}`;
 		} else {
-			if (!this.compiler.vars.includes(`var ${name};`)) {
-				this.compiler.vars.push(`var ${name};`);
-			}
-
-			return value ? `${name} = ${value}` : name;
+			this.compiler.addVariable(false, key.split(".")[0]!);
+			return value ? `${key}=${value}` : key;
 		}
 	}
 }

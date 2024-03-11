@@ -24,6 +24,7 @@ commander_1.program
     .option("-r, --rootDir <rootDir>", "Set the root directory for compilation")
     .option("-o, --outDir <outDir>", "Set the output directory for compiled files")
     .option("-di, --disableInstructions <instructions>", "Disable specific instructions")
+    .option("-m, --minify", "Minifys the output")
     .action(async (rootDir = globalConfig.rootDir || "./", options) => {
     // If a path is provided, resolve it relative to the current working directory
     rootDir = rootDir ? (0, path_1.join)(cwd, rootDir) : cwd;
@@ -63,7 +64,7 @@ commander_1.program
                 // If the file is a .kita file, compile it
                 const compiled = await compiler
                     .setInput((0, fs_1.readFileSync)(file, "utf-8"))
-                    .compile(options.debug);
+                    .compile(options.debug, options.minify);
                 const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
                 const dir = (0, path_1.dirname)(destPath);
                 if (!(0, fs_1.existsSync)(dir)) {

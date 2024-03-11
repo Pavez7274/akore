@@ -3,9 +3,9 @@ import { Task } from "../../classes/compiler";
 
 export default class ObjectInstruction extends Instruction {
 	override name = "$object" as const;
-	override id = "$akitaObject" as const;
-	public override compile(task: Task): string {
+	override id = "$akoreObject" as const;
+	public override compile(task: Task): "new Object()" {
 		this.processNestedArguments(task);
-		return "{" + task.argValues().join(",") + "}";
+		return "new Object()";
 	}
 }
