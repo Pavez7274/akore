@@ -7,14 +7,19 @@ import { dirname, join } from "path";
 import { program } from "commander";
 
 // Path to the global configuration file
-const configPath = join(process.cwd(), "akconfig.json");
+const configPath = join(process.cwd(), "akconfig");
 const { version } = require("../package.json");
 const cwd = process.cwd();
 
 // Load global configuration if it exists
 let globalConfig: Record<string, string> = {};
-if (existsSync(configPath)) {
-	globalConfig = JSON.parse(readFileSync(configPath, "utf-8"));
+
+if (existsSync(configPath + ".json")) {
+    globalConfig = JSON.parse(readFileSync(configPath + ".json", "utf-8"));
+} else if (existsSync(configPath + ".yaml") || existsSync(configPath + ".yml")) {
+    const ext = existsSync(configPath + ".yaml") ? ".yaml" : ".yml";
+    const configFile = readFileSync(configPath + ext, "utf-8");
+    globalConfig = yaml.load(configFile) as Record<string, string>;
 }
 
 // Set up the command line interface
