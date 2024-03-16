@@ -13,6 +13,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/hjson": "2.4.6",
+		"@types/js-yaml": "4.0.9",
 		"@types/lodash": "4.14.202",
 		"@types/node": "20.11.19",
 		"@types/uglify-js": "3.17.4",
@@ -25,6 +26,7 @@
 		"colors": "1.4.0",
 		"commander": "12.0.0",
 		"hjson": "3.2.2",
+		"js-yaml": "4.1.0",
 		"lodash": "4.17.21",
 		"ts-loader": "9.5.1",
 		"tslib": "2.6.2",

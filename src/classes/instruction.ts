@@ -97,7 +97,7 @@ export abstract class Instruction {
 
 			// If an operator is found, process the current string as a standalone argument
 			if (depth == 0 && op) {
-				result += this.buildStringArgument(arg, current.trim()) + op;
+				result += this.buildStringArgument(arg, current.trim()) + " " + op;
 				i += op.length; // Skip the length of the operator
 				current = "";
 			}
@@ -132,10 +132,10 @@ export abstract class Instruction {
 		}
 
 		// Process the remaining string as a standalone argument
-		result += this.buildStringArgument(arg, current.trim());
+		result += " " + this.buildStringArgument(arg, current.trim());
 
 		// Update the value of the original argument with the processed result
-		return (arg.value = result);
+		return (arg.value = result.trim());
 	}
 
 	/**
@@ -199,7 +199,7 @@ export abstract class Instruction {
 			(result.startsWith('"') && result.endsWith('"'))
 		) {
 			result = `\`${result.slice(1, -1)}\``;
-		} else result = `\`${result}\``;
+		} else result = /\${.*}/g.test(result) ? `\`${result}\`` : `"${result}"`;
 
 		// Return the result or update the argument's value if no input was provided.
 		return input ? result : (arg.value = result);

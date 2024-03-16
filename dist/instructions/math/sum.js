@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const instruction_1 = require("../classes/instruction");
+const instruction_1 = require("../../classes/instruction");
 class SumInstruction extends instruction_1.Instruction {
     name = "$sum";
     id = "$akoreSum";

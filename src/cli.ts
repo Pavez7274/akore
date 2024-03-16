@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-import { BasicInstructions, Compiler, Logger } from "./";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { BasicInstructions, Compiler, Logger } from "./";
 import { getFiles } from "./helpers/get_files";
 import { dirname, join } from "path";
 import { program } from "commander";
+import { load } from "js-yaml";
 
 // Path to the global configuration file
 const configPath = join(process.cwd(), "akconfig");
@@ -19,7 +20,7 @@ if (existsSync(configPath + ".json")) {
 } else if (existsSync(configPath + ".yaml") || existsSync(configPath + ".yml")) {
     const ext = existsSync(configPath + ".yaml") ? ".yaml" : ".yml";
     const configFile = readFileSync(configPath + ext, "utf-8");
-    globalConfig = yaml.load(configFile) as Record<string, string>;
+    globalConfig = load(configFile) as Record<string, string>;
 }
 
 // Set up the command line interface
@@ -31,7 +32,6 @@ program
 	.option("-r, --rootDir <rootDir>", "Set the root directory for compilation")
 	.option("-o, --outDir <outDir>", "Set the output directory for compiled files")
 	.option("-di, --disableInstructions <instructions>", "Disable specific instructions")
-	.option("-m, --minify", "Minifys the output")
 	.action(async (rootDir: string = globalConfig.rootDir || "./", options) => {
 		// If a path is provided, resolve it relative to the current working directory
 		rootDir = rootDir ? join(cwd, rootDir) : cwd;
@@ -76,7 +76,7 @@ program
 					// If the file is a .kita file, compile it
 					const compiled = await compiler
 						.setInput(readFileSync(file, "utf-8"))
-						.compile(options.debug, options.minify);
+						.compile(options.debug);
 					const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
 					const dir = dirname(destPath);
 					if (!existsSync(dir)) {

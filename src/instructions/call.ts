@@ -10,6 +10,6 @@ export default class CallInstruction extends Instruction {
 		}
 		this.processNestedArguments(task);
 		let [name, ...args] = task.argumentValues();
-		return `${name}(${args.join(",")})`;
+		return `${name}(${args.join(", ")})`;
 	}
 }

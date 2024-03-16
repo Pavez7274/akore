@@ -1,40 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const to_valid_var_name_1 = require("../../helpers/to_valid_var_name");
 const instruction_1 = require("../../classes/instruction");
-const hjson_1 = require("hjson");
-function toJSON(i) {
-    try {
-        return (0, hjson_1.parse)(i);
-    }
-    catch {
-        return null;
-    }
-}
 class ImportInstruction extends instruction_1.Instruction {
     name = "$import";
     id = "$akoreImport";
     compile(task) {
+        this.validateAndProcessArguments(task.arguments, 1, instruction_1.ArgumentTypes.NONE, instruction_1.ArgumentTypes.NONE);
         this.processNestedArguments(task);
         let [module, key = module] = task.argumentValues();
-        const parsed = toJSON(key);
-        if (parsed !== null) {
-            if (Array.isArray(parsed)) {
-                this.compiler.variables = new Set([...this.compiler.variables].filter((x) => !parsed.includes(x.key)));
-                this.compiler.addVariable(true, `{${parsed.join(",")}}`, `require("${module}")`);
+        if (key === module) {
+            this.compiler.setVariable(module);
+            this.compiler.setImport(module);
+        }
+        else if (/,/.test(key)) {
+            const keys = key.split(",");
+            for (let i = 0; i < keys.length; i++) {
+                const e = keys[i];
+                if (e) {
+                    if (/ as /.test(e)) {
+                        let [k, s] = e.split(" as ", 2);
+                        keys[i] = (0, to_valid_var_name_1.toValidVarName)(k) + ":" + (0, to_valid_var_name_1.toValidVarName)(s);
+                        this.compiler.setVariable(s);
+                    }
+                    this.compiler.setVariable(e);
+                    keys[i] = (0, to_valid_var_name_1.toValidVarName)(e);
+                }
             }
-            else {
-                this.compiler.variables = new Set([...this.compiler.variables].filter((x) => !parsed.hasOwnProperty(x.key)));
-                this.compiler.addVariable(true, `{${Object.entries(parsed)
-                    .map(([k, v]) => `${k}:${v}`)
-                    .join(",")}}`, `require("${module}")`);
-            }
+            this.compiler.setImport(module, ...keys);
             return "";
         }
         else {
-            key = key.trim().replace(/[^A-z_]/g, "_");
-            this.compiler.addVariable(true, key, `require("${module}")`);
-            return key;
+            this.compiler.setVariable(module);
         }
+        return (0, to_valid_var_name_1.toValidVarName)(module);
     }
 }
 exports.default = ImportInstruction;

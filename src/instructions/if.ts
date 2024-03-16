@@ -14,7 +14,9 @@ export default class IfInstruction extends Instruction {
 		);
 		this.processNestedArguments(task);
 
-		const [condition, whenTrue, whenFalse] = task.argumentValues();
+		const [condition, whenTrue, whenFalse] = task
+			.argumentValues()
+			.map((el) => el.trim().replace(/\n/g, "\n\t"));
 		return `if (${condition}) {\n\t${whenTrue}\n}${whenFalse ? ` else {\n\t${whenFalse}\n}` : ""}`;
 	}
 }

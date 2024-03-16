@@ -10,7 +10,7 @@ class CallInstruction extends instruction_1.Instruction {
         }
         this.processNestedArguments(task);
         let [name, ...args] = task.argumentValues();
-        return `${name}(${args.join(",")})`;
+        return `${name}(${args.join(", ")})`;
     }
 }
 exports.default = CallInstruction;

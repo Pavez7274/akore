@@ -38,10 +38,8 @@ export declare class Compiler {
     instructionsManager: InstructionsManager;
     private lexer;
     busy: boolean;
-    variables: Set<{
-        key: string;
-        value?: string | undefined;
-    }>;
+    variables: Set<string>;
+    imports: Map<string, void | Set<string>>;
     /**
      * Creates an instance of Compiler.
      * @param input The input code to compile.
@@ -73,15 +71,35 @@ export declare class Compiler {
      * @param debug Indicates whether debug mode is enabled.
      * @returns The compiled code, or void if an error occurred.
      */
-    compile(debug?: boolean, minifyOutput?: boolean): Promise<string | void>;
-    addVariable(priority: boolean, key: string, value?: string): void;
-    addInstruction(...instructions: Instruction[]): void;
+    compile(debug?: boolean): Promise<string | void>;
+    /**
+     * Sets a variable in the module's variables set.
+     * @param name The name of the variable.
+     */
+    setVariable(name: string): void;
+    /**
+     * Converts the variables to string format.
+     * @returns A string containing variable statements.
+     */
+    variablesToString(): `var ${string};\n`;
+    /**
+     * Adds import statements to the module's imports.
+     * @param module The module path to import from.
+     * @param keys The keys to import from the module.
+     */
+    setImport(module: string, ...keys: string[]): void;
+    /**
+     * Converts the module's imports to string format.
+     * @returns A string containing import statements.
+     */
+    importsToString(): string;
     /**
      * Loads instructions from the specified directory.
      * @param path The directory path containing instruction files.
      * @returns True if the instructions were loaded successfully, otherwise false.
      */
     loaddir(path: string): boolean;
+    addInstruction(...instructions: Instruction[]): void;
     disableInstructions(...names: string[]): void;
     enableInstructions(...names: string[]): void;
 }

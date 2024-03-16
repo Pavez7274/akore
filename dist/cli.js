@@ -1,19 +1,25 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require("./");
 const fs_1 = require("fs");
+const _1 = require("./");
 const get_files_1 = require("./helpers/get_files");
 const path_1 = require("path");
 const commander_1 = require("commander");
+const js_yaml_1 = require("js-yaml");
 // Path to the global configuration file
-const configPath = (0, path_1.join)(process.cwd(), "akconfig.json");
+const configPath = (0, path_1.join)(process.cwd(), "akconfig");
 const { version } = require("../package.json");
 const cwd = process.cwd();
 // Load global configuration if it exists
 let globalConfig = {};
-if ((0, fs_1.existsSync)(configPath)) {
-    globalConfig = JSON.parse((0, fs_1.readFileSync)(configPath, "utf-8"));
+if ((0, fs_1.existsSync)(configPath + ".json")) {
+    globalConfig = JSON.parse((0, fs_1.readFileSync)(configPath + ".json", "utf-8"));
+}
+else if ((0, fs_1.existsSync)(configPath + ".yaml") || (0, fs_1.existsSync)(configPath + ".yml")) {
+    const ext = (0, fs_1.existsSync)(configPath + ".yaml") ? ".yaml" : ".yml";
+    const configFile = (0, fs_1.readFileSync)(configPath + ext, "utf-8");
+    globalConfig = (0, js_yaml_1.load)(configFile);
 }
 // Set up the command line interface
 commander_1.program
@@ -24,7 +30,6 @@ commander_1.program
     .option("-r, --rootDir <rootDir>", "Set the root directory for compilation")
     .option("-o, --outDir <outDir>", "Set the output directory for compiled files")
     .option("-di, --disableInstructions <instructions>", "Disable specific instructions")
-    .option("-m, --minify", "Minifys the output")
     .action(async (rootDir = globalConfig.rootDir || "./", options) => {
     // If a path is provided, resolve it relative to the current working directory
     rootDir = rootDir ? (0, path_1.join)(cwd, rootDir) : cwd;
@@ -64,7 +69,7 @@ commander_1.program
                 // If the file is a .kita file, compile it
                 const compiled = await compiler
                     .setInput((0, fs_1.readFileSync)(file, "utf-8"))
-                    .compile(options.debug, options.minify);
+                    .compile(options.debug);
                 const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
                 const dir = (0, path_1.dirname)(destPath);
                 if (!(0, fs_1.existsSync)(dir)) {

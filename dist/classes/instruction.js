@@ -68,7 +68,7 @@ class Instruction {
             const op = (0, helpers_1.startsWithSome)(arg.value, i, helpers_1.Operators);
             // If an operator is found, process the current string as a standalone argument
             if (depth == 0 && op) {
-                result += this.buildStringArgument(arg, current.trim()) + op;
+                result += this.buildStringArgument(arg, current.trim()) + " " + op;
                 i += op.length; // Skip the length of the operator
                 current = "";
             }
@@ -103,9 +103,9 @@ class Instruction {
             }
         }
         // Process the remaining string as a standalone argument
-        result += this.buildStringArgument(arg, current.trim());
+        result += " " + this.buildStringArgument(arg, current.trim());
         // Update the value of the original argument with the processed result
-        return (arg.value = result);
+        return (arg.value = result.trim());
     }
     /**
      * Builds a string argument by processing the given token argument
@@ -166,7 +166,7 @@ class Instruction {
             result = `\`${result.slice(1, -1)}\``;
         }
         else
-            result = `\`${result}\``;
+            result = /\${.*}/g.test(result) ? `\`${result}\`` : `"${result}"`;
         // Return the result or update the argument's value if no input was provided.
         return input ? result : (arg.value = result);
     }
