@@ -12,8 +12,7 @@ class Logger {
     static AKORE_TAG = "\x1b[94m[AKORE]\x1b[0m";
     static PATH_TAG = "\x1b[93m[${PATH}]\x1b[0m";
     static error(message, path = "") {
-        console.error(`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.ERROR)} ${message}`);
-        process.exit();
+        throw new Error(`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.ERROR)} ${message}`);
     }
     static warn(message, path = "") {
         console.warn(`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(MessageType.WARN)} ${message}`);

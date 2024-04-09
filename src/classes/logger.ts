@@ -10,12 +10,11 @@ export class Logger {
 	private static readonly PATH_TAG = "\x1b[93m[${PATH}]\x1b[0m";
 
 	static error(message: string, path: string = ""): never {
-		console.error(
+		throw new Error(
 			`${Logger.AKORE_TAG} ${Logger.PATH_TAG.replace("${PATH}", path)} ${Logger.getTag(
 				MessageType.ERROR
 			)} ${message}`
 		);
-		process.exit();
 	}
 
 	static warn(message: string, path: string = "") {
