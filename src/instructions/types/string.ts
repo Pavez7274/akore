@@ -1,12 +1,28 @@
+import { NodeFactory, Nodes, Token } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
+import { isEmpty } from "lodash";
 
-export default class StringInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $string
+ * $string[hi]
+ *
+ * // Compiled JavaScript:
+ * "";
+ * "hi";
+ */
+export default class $string extends Instruction {
 	override name = "$string" as const;
 	override id = "$akoreString" as const;
-	public override compile(task: Task): string {
-		this.buildStringArguments(task.arguments);
-		this.processNestedArguments(task);
-		return task.argumentValues().join(" ");
+
+	public override async parse({
+		parameters,
+	}: Token): Promise<Nodes.StringLiteral | Nodes.InterpolatedString> {
+		return isEmpty(parameters)
+			? NodeFactory.stringLiteral("")
+			: NodeFactory.interpolatedString(
+					await Promise.all(parameters.map(this.compiler.resolveStringTypeNode)),
+				);
 	}
 }

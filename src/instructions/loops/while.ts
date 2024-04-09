@@ -1,14 +1,17 @@
+import {  NodeFactory, Token, Nodes } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
 
-export default class WhileInstruction extends Instruction {
+export default class $while extends Instruction {
 	override name = "$while" as const;
 	override id = "$akoreWhile" as const;
-	public override compile(task: Task): string {
-		this.buildConditionArgument(task.arguments[0]?.token);
-		this.processNestedArguments(task);
 
-		const [condition, code] = task.argumentValues() as [string, string];
-		return `while (${condition}) {${code}}`;
+	public override async parse({ parameters }: Token): Promise<Nodes.ControlFlow> {
+		return NodeFactory.controlFlow([
+			{
+				keyword: "while",
+				condition: await this.compiler.resolveConditionTypeNode(parameters[0]!),
+				body: await this.compiler.resolveProgramTypeNode(parameters[1]!),
+			},
+		]);
 	}
 }

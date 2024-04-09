@@ -1,12 +1,23 @@
+import { NodeFactory, Nodes, Token } from "../classes";
 import { Instruction } from "../classes/instruction";
-import { Task } from "../classes/compiler";
 
-export default class PrintInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $print[Hello world]
+ *
+ * // Compiled JavaScript:
+ * console.log("Hello world");
+ */
+export default class $print extends Instruction {
 	override name = "$print" as const;
 	override id = "$akorePrint" as const;
-	public override compile(task: Task): `console.log(${string})` {
-		this.buildStringArguments(task.arguments);
-		this.processNestedArguments(task);
-		return `console.log(${task.argumentValues().join(",")})`;
+
+	public override async parse({ parameters }: Token): Promise<Nodes.CallExpression> {
+		return NodeFactory.callExpression(NodeFactory.identifier("console.log"), [
+			NodeFactory.expressionStatement(
+				await Promise.all(parameters.map(p => this.compiler.resolveAnyOrStringNode(p))),
+			),
+		]);
 	}
 }

@@ -1,7 +1,15 @@
+import { Nodes, Token } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
-export default class ArrayInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $array[1;2;three]
+ *
+ * // Compiled JavaScript:
+ * [1, 2, "three"]
+ */
+export default class $array extends Instruction {
     name: "$array";
     id: "$akoreArray";
-    compile(task: Task): "new Array()";
+    parse({ parameters }: Token): Promise<Nodes.Array>;
 }

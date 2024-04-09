@@ -15,7 +15,7 @@ export class Logger {
 				MessageType.ERROR
 			)} ${message}`
 		);
-		process.exit()
+		process.exit();
 	}
 
 	static warn(message: string, path: string = "") {

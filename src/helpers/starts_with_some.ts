@@ -1,7 +1,7 @@
 export function startsWithSome<T extends string>(
 	input: string,
 	index: number,
-	searchStrings: Set<T>
+	searchStrings: Set<T>,
 ) {
 	// Iterate over each search string in the set
 	for (const op of searchStrings) {

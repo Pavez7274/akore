@@ -1,7 +1,7 @@
+import { Nodes, Token } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
-export default class ForInstruction extends Instruction {
+export default class $for extends Instruction {
     name: "$for";
     id: "$akoreFor";
-    compile(task: Task): string;
+    parse({ parameters }: Token): Promise<Nodes.ControlFlow>;
 }

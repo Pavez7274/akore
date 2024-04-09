@@ -1,13 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const classes_1 = require("../../classes");
 const instruction_1 = require("../../classes/instruction");
-class StringInstruction extends instruction_1.Instruction {
+const lodash_1 = require("lodash");
+/**
+ * @example
+ * // Akore code:
+ * $string
+ * $string[hi]
+ *
+ * // Compiled JavaScript:
+ * "";
+ * "hi";
+ */
+class $string extends instruction_1.Instruction {
     name = "$string";
     id = "$akoreString";
-    compile(task) {
-        this.buildStringArguments(task.arguments);
-        this.processNestedArguments(task);
-        return task.argumentValues().join(" ");
+    async parse({ parameters, }) {
+        return (0, lodash_1.isEmpty)(parameters)
+            ? classes_1.NodeFactory.stringLiteral("")
+            : classes_1.NodeFactory.interpolatedString(await Promise.all(parameters.map(this.compiler.resolveStringTypeNode)));
     }
 }
-exports.default = StringInstruction;
+exports.default = $string;

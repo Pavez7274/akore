@@ -7,6 +7,7 @@ const get_files_1 = require("./helpers/get_files");
 const path_1 = require("path");
 const commander_1 = require("commander");
 const js_yaml_1 = require("js-yaml");
+const uglify_js_1 = require("uglify-js");
 // Path to the global configuration file
 const configPath = (0, path_1.join)(process.cwd(), "akconfig");
 const { version } = require("../package.json");
@@ -30,6 +31,7 @@ commander_1.program
     .option("-r, --rootDir <rootDir>", "Set the root directory for compilation")
     .option("-o, --outDir <outDir>", "Set the output directory for compiled files")
     .option("-di, --disableInstructions <instructions>", "Disable specific instructions")
+    .option("-m, --minify", "Minify the output")
     .action(async (rootDir = globalConfig.rootDir || "./", options) => {
     // If a path is provided, resolve it relative to the current working directory
     rootDir = rootDir ? (0, path_1.join)(cwd, rootDir) : cwd;
@@ -44,7 +46,7 @@ commander_1.program
         const compiler = new _1.Compiler();
         // Add basic instructions to the compiler
         for (const i of Object.values(_1.BasicInstructions)) {
-            compiler.addInstruction(new i(compiler));
+            compiler.manager.add(new i(compiler));
         }
         if ("instructions" in globalConfig && Array.isArray(globalConfig.instructions)) {
             for (let mod of globalConfig.instructions) {
@@ -53,29 +55,27 @@ commander_1.program
                     _1.Logger.warn(`No such file or directory "${mod}"!`, "globalConfig.instructions");
                     continue;
                 }
-                if (compiler.loaddir(path))
+                if (compiler.manager.loaddir(path, compiler))
                     _1.Logger.info(`${mod} instructions loaded successfully!`, "Compiler.loaddir");
                 else
                     _1.Logger.warn(`${mod} instructions did not load!`, "Compiler.loaddir");
             }
         }
         if ("disableInstructions" in options && typeof options.disableInstructions === "string") {
-            compiler.disableInstructions(...options.disableInstructions.split(",").map((name) => name.trim()));
+            compiler.manager.disable(...options.disableInstructions.split(",").map((name) => name.trim()));
         }
         // Process files in the specified path
         for (const file of (0, get_files_1.getFiles)(rootDir)) {
             const start = Date.now();
             if (file.endsWith(".kita")) {
                 // If the file is a .kita file, compile it
-                const compiled = await compiler
-                    .setInput((0, fs_1.readFileSync)(file, "utf-8"))
-                    .compile(options.debug);
+                const compiled = (await compiler.setInput((0, fs_1.readFileSync)(file, "utf-8")).compile(options.debug)) ?? "'COMPILATION ERROR';";
                 const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
                 const dir = (0, path_1.dirname)(destPath);
                 if (!(0, fs_1.existsSync)(dir)) {
                     (0, fs_1.mkdirSync)(dir, { recursive: true });
                 }
-                (0, fs_1.writeFileSync)(destPath, compiled ?? "'COMPILATION ERROR';", "utf-8");
+                (0, fs_1.writeFileSync)(destPath, options.minify ? (0, uglify_js_1.minify)(compiled, { output: { beautify: true } }).code : compiled, "utf-8");
                 _1.Logger.info(`Compiled \x1b[94m${file.replace(cwd, ".")}\x1b[0m to \x1b[92m${destPath.replace(cwd, ".")}\x1b[0m in \x1b[97m${Date.now() - start}ms\x1b[0m`, "Compiler");
             }
             else {

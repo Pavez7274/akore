@@ -3,27 +3,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lexer = void 0;
 const logger_1 = require("./logger");
 class Lexer {
+    manager;
     #position = 0;
     #tokens = [];
+    #path = [];
     #input = "";
-    constructor(input) {
+    constructor(input, path = [], manager) {
+        this.manager = manager;
         this.setInput(input);
+        this.#path.push(...path);
     }
     get position() {
         return this.#position;
+    }
+    get path() {
+        return this.#path.join(".");
     }
     get input() {
         return this.#input;
     }
     tokenize() {
         this.#tokens = [];
-        while (this.#position < this.#input.length) {
-            if (this.getPreviuosChar() !== "\\" && this.getCurrentChar() === "$") {
+        while (!this.ended()) {
+            if (this.getPreviuosChar() !== "\\" && this.getCurrentChar() === "$")
                 this.tokenizeFunction();
-            }
-            else {
+            else
                 this.advance(1);
-            }
         }
         return this.#tokens;
     }
@@ -36,39 +41,35 @@ class Lexer {
     ended() {
         return this.#position >= this.#input.length;
     }
-    parseArguments(argumentString) {
-        let args = [];
-        let currentArgument = "";
-        let depth = 0;
-        for (let i = 1; i < argumentString.length - 1; i++) {
-            const char = argumentString[i];
+    parseParameters(paramString) {
+        let params = [], current = "", depth = 0;
+        for (let i = 1; i < paramString.length - 1; i++) {
+            const char = paramString[i];
             if (char === "[") {
-                currentArgument += char;
+                current += char;
                 depth++;
             }
             else if (char === "]") {
-                currentArgument += char;
+                current += char;
                 depth--;
             }
             else if (char === ";" && depth === 0) {
-                args.push({ value: currentArgument, nested: [] });
-                currentArgument = "";
+                params.push({ value: current, nested: [] });
+                current = "";
             }
-            else {
-                currentArgument += char;
-            }
+            else
+                current += char;
         }
-        if (currentArgument.trim() !== "") {
-            args.push({ value: currentArgument, nested: [] });
-        }
-        args = args.map((arg) => {
-            if (arg.value.includes("$")) {
-                const lexer = new Lexer(arg.value);
-                arg.nested = lexer.tokenize();
+        if (current.trim() !== "")
+            params.push({ value: current, nested: [] });
+        params = params.map(param => {
+            if (param.value.includes("$")) {
+                const lexer = new Lexer(param.value, this.#path, this.manager);
+                param.nested = lexer.tokenize();
             }
-            return arg;
+            return param;
         });
-        return args;
+        return params;
     }
     tokenizeFunction() {
         const start = this.#position;
@@ -77,40 +78,40 @@ class Lexer {
             end++;
         }
         const name = this.#input.substring(start, end);
+        if (!this.manager.instructions.some(i => i.id === name || i.name === name))
+            return this.advance(1);
+        this.#path.push(name);
         while (end < this.#input.length && this.#input[end]?.trim() === "") {
             end++;
         }
         if (end < this.#input.length && this.#input[end] === "[") {
-            const startArgs = end;
+            const startParams = end;
             let depth = 0, escaped = false;
             while (end < this.#input.length) {
-                if (this.#input[end] === "\\") {
+                if (this.#input[end] === "\\")
                     escaped = true;
-                }
                 else if (escaped) {
                     escaped = false;
                     end++;
                 }
-                else if (this.#input[end] === "[") {
+                else if (this.#input[end] === "[")
                     depth++;
-                }
                 else if (this.#input[end] === "]") {
                     depth--;
-                    if (depth === 0) {
+                    if (depth === 0)
                         break;
-                    }
                 }
                 end++;
             }
             if (depth === 0) {
-                const argsString = this.#input.substring(startArgs, end + 1);
-                const args = this.parseArguments(argsString);
+                const paramsString = this.substring(startParams, end + 1), parameters = this.parseParameters(paramsString);
                 this.#tokens.push({
                     name,
-                    total: this.#input.substring(start, end + 1).trim(),
+                    total: this.substring(start, end + 1).trim(),
                     start,
                     end,
-                    arguments: args,
+                    parameters,
+                    path: this.path,
                 });
                 this.advance(end - this.#position + 1);
             }
@@ -121,13 +122,15 @@ class Lexer {
         else {
             this.#tokens.push({
                 name,
-                total: this.#input.substring(start, end).trim(),
+                total: this.substring(start, end).trim(),
                 start,
                 end,
-                arguments: [],
+                parameters: [],
+                path: this.path,
             });
             this.advance(end - this.#position);
         }
+        this.#path.pop();
     }
     setInput(input) {
         this.#input = input;
@@ -145,6 +148,6 @@ class Lexer {
 }
 exports.Lexer = Lexer;
 // ? TEST
-// const lexer = new Lexer("$testing[$this;$get[something;second;$unreal]");
+// const lexer = new Lexer("$testing[$this;$get[something;second;$unreal]]");
 // const tokens = lexer.tokenize();
 // console.log(require("util").inspect(tokens, { depth: null }));

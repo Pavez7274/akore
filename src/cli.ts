@@ -6,6 +6,7 @@ import { getFiles } from "./helpers/get_files";
 import { dirname, join } from "path";
 import { program } from "commander";
 import { load } from "js-yaml";
+import { minify } from "uglify-js";
 
 // Path to the global configuration file
 const configPath = join(process.cwd(), "akconfig");
@@ -16,11 +17,11 @@ const cwd = process.cwd();
 let globalConfig: Record<string, string> = {};
 
 if (existsSync(configPath + ".json")) {
-    globalConfig = JSON.parse(readFileSync(configPath + ".json", "utf-8"));
+	globalConfig = JSON.parse(readFileSync(configPath + ".json", "utf-8"));
 } else if (existsSync(configPath + ".yaml") || existsSync(configPath + ".yml")) {
-    const ext = existsSync(configPath + ".yaml") ? ".yaml" : ".yml";
-    const configFile = readFileSync(configPath + ext, "utf-8");
-    globalConfig = load(configFile) as Record<string, string>;
+	const ext = existsSync(configPath + ".yaml") ? ".yaml" : ".yml";
+	const configFile = readFileSync(configPath + ext, "utf-8");
+	globalConfig = load(configFile) as Record<string, string>;
 }
 
 // Set up the command line interface
@@ -32,6 +33,7 @@ program
 	.option("-r, --rootDir <rootDir>", "Set the root directory for compilation")
 	.option("-o, --outDir <outDir>", "Set the output directory for compiled files")
 	.option("-di, --disableInstructions <instructions>", "Disable specific instructions")
+	.option("-m, --minify", "Minify the output")
 	.action(async (rootDir: string = globalConfig.rootDir || "./", options) => {
 		// If a path is provided, resolve it relative to the current working directory
 		rootDir = rootDir ? join(cwd, rootDir) : cwd;
@@ -47,7 +49,7 @@ program
 			const compiler = new Compiler();
 			// Add basic instructions to the compiler
 			for (const i of Object.values(BasicInstructions)) {
-				compiler.addInstruction(new i(compiler));
+				compiler.manager.add(new i(compiler));
 			}
 
 			if ("instructions" in globalConfig && Array.isArray(globalConfig.instructions)) {
@@ -57,16 +59,13 @@ program
 						Logger.warn(`No such file or directory "${mod}"!`, "globalConfig.instructions");
 						continue;
 					}
-					if (compiler.loaddir(path))
-						Logger.info(`${mod} instructions loaded successfully!`, "Compiler.loaddir");
+					if (compiler.manager.loaddir(path, compiler)) Logger.info(`${mod} instructions loaded successfully!`, "Compiler.loaddir");
 					else Logger.warn(`${mod} instructions did not load!`, "Compiler.loaddir");
 				}
 			}
 
 			if ("disableInstructions" in options && typeof options.disableInstructions === "string") {
-				compiler.disableInstructions(
-					...options.disableInstructions.split(",").map((name: string) => name.trim())
-				);
+				compiler.manager.disable(...options.disableInstructions.split(",").map((name: string) => name.trim()));
 			}
 
 			// Process files in the specified path
@@ -74,21 +73,19 @@ program
 				const start = Date.now();
 				if (file.endsWith(".kita")) {
 					// If the file is a .kita file, compile it
-					const compiled = await compiler
-						.setInput(readFileSync(file, "utf-8"))
-						.compile(options.debug);
+					const compiled = (await compiler.setInput(readFileSync(file, "utf-8")).compile(options.debug)) ?? "'COMPILATION ERROR';";
 					const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
 					const dir = dirname(destPath);
 					if (!existsSync(dir)) {
 						mkdirSync(dir, { recursive: true });
 					}
-					writeFileSync(destPath, compiled ?? "'COMPILATION ERROR';", "utf-8");
+					writeFileSync(destPath, options.minify ? minify(compiled, { output: { beautify: true } }).code : compiled, "utf-8");
 					Logger.info(
 						`Compiled \x1b[94m${file.replace(cwd, ".")}\x1b[0m to \x1b[92m${destPath.replace(
 							cwd,
-							"."
+							".",
 						)}\x1b[0m in \x1b[97m${Date.now() - start}ms\x1b[0m`,
-						"Compiler"
+						"Compiler",
 					);
 				} else {
 					// If it's not a .kita file, copy it to the output directory
@@ -101,9 +98,9 @@ program
 					Logger.info(
 						`Copied \x1b[94m${file.replace(cwd, ".")}\x1b[0m to \x1b[92m${destPath.replace(
 							cwd,
-							"."
+							".",
 						)}\x1b[0m in \x1b[97m${Date.now() - start}ms\x1b[0m`,
-						"Compiler"
+						"Compiler",
 					);
 				}
 			}

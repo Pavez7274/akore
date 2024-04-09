@@ -1,13 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const classes_1 = require("../../classes");
 const instruction_1 = require("../../classes/instruction");
-class FunctionInstruction extends instruction_1.Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $function[logInRed;msg;$print[\\x1b[34m$get[msg]]]
+ * $call[logInRed;hiii :3]
+ *
+ * // Compiled JavaScript:
+ * function logInRed (msg) {
+ * 	console.log(`\x1b[34m${msg}`);
+ * }
+ * logInRed("hiii :3");
+ */
+class $function extends instruction_1.Instruction {
     name = "$function";
     id = "$akoreFunction";
-    compile(task) {
-        this.processNestedArguments(task);
-        const [name, args, code] = task.argumentValues();
-        return `function ${name}(${args}) {${code}}`;
+    async parse({ parameters: [name, params, body] }) {
+        if (!name || !params || !body)
+            classes_1.Logger.error("At least three arguments are required!", this.name);
+        const keyword = await this.compiler.resolveIdentifierNode(name);
+        return classes_1.NodeFactory.controlFlow([
+            {
+                keyword: keyword.name === "" ? "function" : `function ${keyword.name}`,
+                condition: await this.compiler.resolveExpressionTypeNode(params),
+                body: await this.compiler.resolveProgramTypeNode(body),
+            },
+        ]);
     }
 }
-exports.default = FunctionInstruction;
+exports.default = $function;

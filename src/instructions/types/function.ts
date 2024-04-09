@@ -1,12 +1,33 @@
+import { Logger, NodeFactory, Nodes, Token } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
 
-export default class FunctionInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $function[logInRed;msg;$print[\\x1b[34m$get[msg]]]
+ * $call[logInRed;hiii :3]
+ *
+ * // Compiled JavaScript:
+ * function logInRed (msg) {
+ * 	console.log(`\x1b[34m${msg}`);
+ * }
+ * logInRed("hiii :3");
+ */
+export default class $function extends Instruction {
 	override name = "$function" as const;
 	override id = "$akoreFunction" as const;
-	public override compile(task: Task): string {
-		this.processNestedArguments(task);
-		const [name, args, code] = task.argumentValues() as [string, string, string | undefined];
-		return `function ${name}(${args}) {${code}}`;
+
+	public override async parse({ parameters: [name, params, body] }: Token): Promise<Nodes.ControlFlow> {
+		if (!name || !params || !body) Logger.error("At least three arguments are required!", this.name);
+
+		const keyword = await this.compiler.resolveIdentifierNode(name);
+
+		return NodeFactory.controlFlow([
+			{
+				keyword: keyword.name === "" ? "function" : `function ${keyword.name}`,
+				condition: await this.compiler.resolveExpressionTypeNode(params),
+				body: await this.compiler.resolveProgramTypeNode(body),
+			},
+		]);
 	}
 }

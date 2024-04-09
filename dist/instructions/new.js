@@ -1,16 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const classes_1 = require("../classes");
 const instruction_1 = require("../classes/instruction");
-class NewInstruction extends instruction_1.Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $new[Set;$array[value 1;value 2;value 3]]
+ *
+ * // Compiled JavaScript:
+ * new Set(["value 1", "value 2", "value 3"]);
+ */
+class $new extends instruction_1.Instruction {
     name = "$new";
     id = "$akoreNew";
-    compile(task) {
-        for (let index = 1; index < task.arguments.length; index++) {
-            this.buildConditionArgument(task.arguments[index]?.token);
-        }
-        this.processNestedArguments(task);
-        let [name, ...args] = task.argumentValues();
-        return `new ${name}(${args.join(",")})`;
+    async parse({ parameters }) {
+        return classes_1.NodeFactory.callExpression(classes_1.NodeFactory.line([
+            classes_1.NodeFactory.identifier("new"),
+            await this.compiler.resolveIdentifierNode(parameters.shift()),
+        ]), [
+            classes_1.NodeFactory.expressionStatement(await Promise.all(parameters.map(p => this.compiler.resolveAnyOrStringNode(p)))),
+        ]);
     }
 }
-exports.default = NewInstruction;
+exports.default = $new;

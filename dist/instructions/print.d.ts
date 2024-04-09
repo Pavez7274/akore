@@ -1,7 +1,15 @@
+import { Nodes, Token } from "../classes";
 import { Instruction } from "../classes/instruction";
-import { Task } from "../classes/compiler";
-export default class PrintInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $print[Hello world]
+ *
+ * // Compiled JavaScript:
+ * console.log("Hello world");
+ */
+export default class $print extends Instruction {
     name: "$print";
     id: "$akorePrint";
-    compile(task: Task): `console.log(${string})`;
+    parse({ parameters }: Token): Promise<Nodes.CallExpression>;
 }

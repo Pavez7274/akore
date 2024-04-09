@@ -1,8 +1,10 @@
 tsconfig.json
 akconfig.json
+.eslintrc.js
 .prettierrc
 .gitignore
 bun.lockb
 .history/
+.vscode/
 test/
 src/

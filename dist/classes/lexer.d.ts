@@ -1,24 +1,28 @@
-export interface TokenArgument {
+import { Manager } from "./instruction";
+export interface TokenParameter {
     value: string;
     nested: Token[];
 }
 export interface Token {
+    path: string;
     name: string;
     total: string;
     start: number;
     end: number;
-    arguments: TokenArgument[];
+    parameters: TokenParameter[];
 }
 export declare class Lexer {
     #private;
-    constructor(input: string);
+    manager: Manager;
+    constructor(input: string, path: string[] | undefined, manager: Manager);
     get position(): number;
+    get path(): string;
     get input(): string;
     tokenize(): Token[];
     private getPreviuosChar;
     private getCurrentChar;
     ended(): boolean;
-    private parseArguments;
+    private parseParameters;
     private tokenizeFunction;
     setInput(input: string): void;
     advance(steps: number): void;

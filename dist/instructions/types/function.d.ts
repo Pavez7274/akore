@@ -1,7 +1,19 @@
+import { Nodes, Token } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
-export default class FunctionInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $function[logInRed;msg;$print[\\x1b[34m$get[msg]]]
+ * $call[logInRed;hiii :3]
+ *
+ * // Compiled JavaScript:
+ * function logInRed (msg) {
+ * 	console.log(`\x1b[34m${msg}`);
+ * }
+ * logInRed("hiii :3");
+ */
+export default class $function extends Instruction {
     name: "$function";
     id: "$akoreFunction";
-    compile(task: Task): string;
+    parse({ parameters: [name, params, body] }: Token): Promise<Nodes.ControlFlow>;
 }

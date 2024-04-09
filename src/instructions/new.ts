@@ -1,15 +1,29 @@
+import { NodeFactory, Nodes, Token } from "../classes";
 import { Instruction } from "../classes/instruction";
-import { Task } from "../classes/compiler";
 
-export default class NewInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $new[Set;$array[value 1;value 2;value 3]]
+ *
+ * // Compiled JavaScript:
+ * new Set(["value 1", "value 2", "value 3"]);
+ */
+export default class $new extends Instruction {
 	override name = "$new" as const;
 	override id = "$akoreNew" as const;
-	public override compile(task: Task): string {
-		for (let index = 1; index < task.arguments.length; index++) {
-			this.buildConditionArgument(task.arguments[index]?.token);
-		}
-		this.processNestedArguments(task);
-		let [name, ...args] = task.argumentValues();
-		return `new ${name}(${args.join(",")})`;
+
+	public override async parse({ parameters }: Token): Promise<Nodes.CallExpression> {
+		return NodeFactory.callExpression(
+			NodeFactory.line([
+				NodeFactory.identifier("new"),
+				await this.compiler.resolveIdentifierNode(parameters.shift()!),
+			]),
+			[
+				NodeFactory.expressionStatement(
+					await Promise.all(parameters.map(p => this.compiler.resolveAnyOrStringNode(p))),
+				),
+			],
+		);
 	}
 }

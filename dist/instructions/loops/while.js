@@ -1,14 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const classes_1 = require("../../classes");
 const instruction_1 = require("../../classes/instruction");
-class WhileInstruction extends instruction_1.Instruction {
+class $while extends instruction_1.Instruction {
     name = "$while";
     id = "$akoreWhile";
-    compile(task) {
-        this.buildConditionArgument(task.arguments[0]?.token);
-        this.processNestedArguments(task);
-        const [condition, code] = task.argumentValues();
-        return `while (${condition}) {${code}}`;
+    async parse({ parameters }) {
+        return classes_1.NodeFactory.controlFlow([
+            {
+                keyword: "while",
+                condition: await this.compiler.resolveConditionTypeNode(parameters[0]),
+                body: await this.compiler.resolveProgramTypeNode(parameters[1]),
+            },
+        ]);
     }
 }
-exports.default = WhileInstruction;
+exports.default = $while;

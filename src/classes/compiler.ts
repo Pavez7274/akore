@@ -1,101 +1,29 @@
-import { Instruction, InstructionStatus, InstructionsManager } from "./instruction";
+import { Instruction, InstructionStatus, Manager } from "./instruction";
 import { toValidVarName } from "../helpers/to_valid_var_name";
-import { TokenArgument, Lexer, Token } from "./lexer";
-import { minify } from "uglify-js";
+import { Lexer, Token, TokenParameter } from "./lexer";
+import { Operators, startsWithSome } from "../helpers";
+import { Nodes, compileNode } from "./nodes";
+import { NodeFactory } from "./node_factory";
 import { Logger } from "./logger";
-
-/**
- * Represents an argument in a compilation task.
- */
-export interface TaskArgument {
-	token: TokenArgument;
-	nested: Task[];
-}
-
-/**
- * Represents a compilation task.
- */
-export class Task {
-	public arguments: TaskArgument[] = [];
-	/**
-	 * Creates an instance of Task.
-	 * @param token The token associated with the task.
-	 * @param instruction The instruction associated with the task.
-	 * @param compiler The compiler instance.
-	 */
-	constructor(
-		public readonly token: Token,
-		public readonly instruction: Instruction,
-		public readonly compiler: Compiler
-	) {
-		for (let i = 0; i < token.arguments.length; i++) {
-			const arg = token.arguments[i];
-			if (arg) {
-				if (arg.nested.length > 0) {
-					this.arguments[i] = {
-						token: arg,
-						nested: compiler.createTasksFromTokens(arg.nested),
-					};
-				} else {
-					this.arguments[i] = {
-						token: arg,
-						nested: [],
-					};
-				}
-			}
-		}
-	}
-
-	/**
-	 * Retrieves the values of the arguments in the task.
-	 * @returns An array of argument values.
-	 */
-	public argumentValues<T extends string[]>(): T {
-		return this.arguments.map((arg) => arg.token.value) as T;
-	}
-
-	/**
-	 * Compiles the task.
-	 * @returns The compiled code for the task.
-	 */
-	public compile(): string {
-		return this.instruction.compile(this);
-	}
-}
+import { yellow } from "colors";
 
 export class Compiler {
-	private lexer = new Lexer("");
-	public busy: boolean = false;
+	public program: Nodes.Program = NodeFactory.program([]);
 	public variables = new Set<string>();
-	public imports = new Map<string, void | Set<string>>();
-	#output: string = "";
-	#input: string = "";
+	public readonly lexer: Lexer;
 
-	/**
-	 * Creates an instance of Compiler.
-	 * @param input The input code to compile.
-	 * @param instructionsManager The instructions manager instance.
-	 */
-	constructor(
-		input: string = "",
-		public instructionsManager: InstructionsManager = new InstructionsManager()
-	) {
-		this.lexer.setInput(input);
-		this.#input = input;
+	private busy = false;
+
+	constructor(public manager: Manager = new Manager()) {
+		this.lexer = new Lexer("", [], manager);
 	}
 
-	/**
-	 * Retrieves the compiled output.
-	 */
-	public get output(): string {
-		return this.#output;
-	}
-
-	/**
-	 * Retrieves the input code.
-	 */
 	public get input(): string {
-		return this.#input;
+		return this.lexer.input;
+	}
+
+	public isBusy() {
+		return this.busy;
 	}
 
 	/**
@@ -104,51 +32,19 @@ export class Compiler {
 	 * @returns The Compiler instance for method chaining.
 	 */
 	public setInput(input: string): this {
-		if (this.busy) {
-			Logger.warn("The compiler is already busy!", "Compiler.setInput");
-		} else {
-			this.lexer.setInput((this.#input = input));
-		}
+		if (this.busy) Logger.warn("The compiler is already busy!", "Compiler.setInput");
+		else this.lexer.setInput(input);
 		return this;
 	}
 
-	public createTasksFromTokens(tokens: Token[]): Task[] {
-		const tasks: Task[] = [];
-		for (const token of tokens) {
-			const instruction = this.findInstructionForToken(token);
-			if (instruction && instruction.status === InstructionStatus.Enabled) {
-				tasks.push(new Task(token, instruction, this));
-			}
-		}
-		return tasks;
-	}
-
 	public findInstructionForToken(token: Token): Instruction | undefined {
-		return this.instructionsManager.instructions.find(
-			(instruction) => instruction.id === token.name || instruction.name === token.name
-		);
+		return this.manager.instructions.find(i => i.id === token.name || i.name === token.name);
 	}
 
-	public appendToOutput(value: string): void {
-		this.#output += value;
-	}
-
-	public prependToOutput(value: string): void {
-		this.#output = value + this.#output;
-	}
-
-	public insertAtLine(lineNumber: number, value: string): void {
-		const lines = this.#output.split("\n");
-		if (lineNumber >= 0 && lineNumber < lines.length) {
-			lines[lineNumber] += value;
-			this.#output = lines.join("\n");
-		}
-	}
-
-	public insertAtPosition(position: number, value: string): void {
-		if (position >= 0 && position <= this.#output.length) {
-			this.#output = this.#output.slice(0, position) + value + this.#output.slice(position);
-		}
+	public async parseToken(token: Token): Promise<Nodes.Node> {
+		const inst = this.findInstructionForToken(token);
+		if (inst && inst.status === InstructionStatus.Enabled) return inst.parse(token);
+		return Nodes.Null;
 	}
 
 	/**
@@ -156,165 +52,278 @@ export class Compiler {
 	 * @param debug Indicates whether debug mode is enabled.
 	 * @returns The compiled code, or void if an error occurred.
 	 */
-	public async compile(debug: boolean = false): Promise<string | void> {
-		if (this.busy) {
-			Logger.warn("The compiler is already busy!", "Compiler.compile");
-			return;
-		}
-
+	public async compile(debug = false) {
+		if (this.busy) return Logger.warn("The compiler is already busy!", "Compiler.compile");
 		const start = Date.now();
 		this.busy = true;
+		if (debug) Logger.debug("Compiler set to busy.", "Compiler.compile");
+		if (debug) Logger.debug(`Compiling this input:\n${yellow(this.input)}`, "Compiler.compile");
 
-		if (debug) {
-			Logger.debug("Compiler set to busy", "Compiler");
+		this.program.body = [];
+		if (debug) Logger.debug("Program has been declared.", "Compiler.compile");
+
+		const tokens = this.lexer.tokenize();
+		if (debug)
+			Logger.debug(`Found ${tokens.length} tokens: ${tokens.map(({ name }) => yellow(name)).join(", ")}`, "Compiler.compile");
+
+		for (const token of tokens) {
+			if (debug) Logger.debug(`Compiling ${yellow(token.name)}...`, "Compiler.compile");
+			await this.parseToken(token)
+				.then(node => {
+					if (node) {
+						if (debug) Logger.debug(`Compiled token as ${yellow(node.type)} successfully!`, "Compiler.parseToken");
+						this.program.body.push(node);
+					}
+				})
+				.catch((error: Error) => {
+					Logger.warn(error.message, "Compiler.parseToken");
+					throw error;
+				});
 		}
 
-		// Create tasks from tokens
-		const tasks: Task[] = this.createTasksFromTokens(this.lexer.tokenize());
-
-		if (debug) {
-			Logger.debug(`Tasks created: ${tasks.length}`, "Compiler.compile");
-		}
-
-		// Compile tasks
-		for (let i = 0; i < tasks.length; i++) {
-			const task = tasks[i]!;
-			if (debug) {
-				Logger.debug(
-					`Compiling task ${i + 1} of ${tasks.length}: ${task.token.total}`,
-					"Compiler.compile"
-				);
-			}
-
-			try {
-				const compiled = task.compile();
-				if (debug) {
-					Logger.debug(`Task ${i + 1} compiled successfully:\n${compiled}`, "Compiler.compile");
-				}
-				if (compiled.trim() !== "") this.appendToOutput(compiled + ";\n");
-			} catch (error) {
-				Logger.error(
-					`Error compiling task ${i + 1}: ${(error as Error).message}`,
-					"Compiler.compile"
-				);
-			}
-		}
-
-		// Finalize the output
-		this.prependToOutput(this.importsToString());
-		this.prependToOutput(this.variablesToString());
-		let code = minify(
-			`"use strict";\nasync function Main() {\n\t${this.#output.replace(
-				/\n/g,
-				"\n\t"
-			)}\n}\n\nMain(this);`,
-			{ output: { beautify: true } }
-		).code;
-
-		if (debug) {
-			Logger.debug(
-				`Compilation completed in ${Date.now() - start} miliseconds.\nInput code:\n${
-					this.#input
-				}\nOutput code:\n${code}`,
-				"Compiler.compile"
-			);
-		}
-
-		// Clear data
-		this.variables.clear();
-		this.imports.clear();
-		this.#output = "";
-
-		if (debug) {
-			Logger.debug("Data was cleared", "Compiler.compile");
-		}
+		const program = this.program;
 
 		this.busy = false;
+		this.program = NodeFactory.program([]);
+		this.variables.clear();
+		if (debug) Logger.debug("Data was reset successfully.", "Compiler.compile");
+		if (debug) Logger.debug("Compiler set to idle.", "Compiler.compile");
 
-		if (debug) {
-			Logger.debug("Compiler set to idle", "Compiler.compile");
-		}
+		if (debug)
+			Logger.debug(`Compiled successfully in ${yellow((Date.now() - start).toString())} miliseconds`, "Compiler.compile");
 
-		return `// Generated by akore v${require("../../package.json").version} //\n` + code;
+		return compileNode(program).code;
 	}
 
-	/**
-	 * Sets a variable in the module's variables set.
-	 * @param name The name of the variable.
-	 */
-	public setVariable(name: string): void {
-		// Add the new variable
-		this.variables.add(toValidVarName(name));
-	}
+	public async resolveIdentifierNode(param: TokenParameter) {
+		// If there are no nested tokens, it resolves to a Identifier node with the value as is
+		if (param.nested.length === 0) return NodeFactory.identifier(toValidVarName(param.value));
 
-	/**
-	 * Converts the variables to string format.
-	 * @returns A string containing variable statements.
-	 */
-	public variablesToString() {
-		return `var ${[...this.variables].join(", ")};\n` as const;
-	}
-
-	/**
-	 * Adds import statements to the module's imports.
-	 * @param module The module path to import from.
-	 * @param keys The keys to import from the module.
-	 */
-	public setImport(module: string, ...keys: string[]): void {
-		// Check if keys are provided and the import exists
-		if (keys.length > 0)
-			if (this.imports.has(module)) keys.forEach((key) => this.imports.get(module)?.add(key));
-			else this.imports.set(module, new Set(keys));
-		// If no keys provided or import doesn't exist, set the import without keys
-		else this.imports.set(module, undefined);
-	}
-
-	/**
-	 * Converts the module's imports to string format.
-	 * @returns A string containing import statements.
-	 */
-	public importsToString(): string {
-		const imports: string[] = [];
-
-		for (const [module, keys] of this.imports.entries())
-			if (!keys) imports.push(`${toValidVarName(module)} = require("${module}")`);
-			else imports.push(`({ ${[...keys].join(", ")} } = require("${module}"))`);
-
-		return imports.join(";\n") + ";\n";
-	}
-
-	/**
-	 * Loads instructions from the specified directory.
-	 * @param path The directory path containing instruction files.
-	 * @returns True if the instructions were loaded successfully, otherwise false.
-	 */
-	public loaddir(path: string): boolean {
-		return this.instructionsManager.loaddir(path, this);
-	}
-
-	public addInstruction(...instructions: Instruction[]): void {
-		this.instructionsManager.add(...instructions);
-	}
-
-	public disableInstructions(...names: string[]) {
-		for (const name of names) {
-			const index = this.instructionsManager.instructions.findIndex(
-				(instruction) => instruction.id === name || instruction.name === name
+		// If there is a single nested token and its total value is equal to the value of the argument, that token is resolved
+		if (param.nested.length === 1 && param.nested[0]?.total === param.value)
+			return await this.parseToken(param.nested[0]).then(node =>
+				NodeFactory.identifier(node ? toValidVarName(compileNode(node).code) : ""),
 			);
-			if (index !== -1) {
-				this.instructionsManager.instructions[index]?.disable();
+
+		let name = "";
+		for (const nested of param.nested) {
+			if (param.value.indexOf(nested.total) === -1) name += nested.total;
+			else {
+				const parsed = await this.parseToken(nested);
+				if (parsed) name += compileNode(parsed).code;
 			}
 		}
+		return NodeFactory.identifier(toValidVarName(name));
 	}
 
-	public enableInstructions(...names: string[]) {
-		for (const name of names) {
-			const index = this.instructionsManager.instructions.findIndex(
-				(instruction) => instruction.id === name || instruction.name === name
-			);
-			if (index !== -1) {
-				this.instructionsManager.instructions[index]?.enable();
+	public async resolveStringLiteralNode(param: TokenParameter) {
+		// If there are no nested tokens, it resolves to a StringLiteral node with the value as is
+		if (param.nested.length === 0) return NodeFactory.stringLiteral(param.value);
+
+		// If there is a single nested token and its total value is equal to the value of the argument, that token is resolved
+		if (param.nested.length === 1 && param.nested[0]?.total === param.value)
+			return await this.parseToken(param.nested[0]).then(node => NodeFactory.stringLiteral(node ? compileNode(node).code : ""));
+
+		// If none of the above options are true, a StringLiteral is created
+		let string = "";
+		for (const nested of param.nested) {
+			if (param.value.indexOf(nested.total) === -1) string += nested.total;
+			else {
+				const parsed = await this.parseToken(nested);
+				if (parsed) string += compileNode(parsed).code;
 			}
 		}
+		return NodeFactory.stringLiteral(string);
+	}
+
+	public async resolveStringTypeNode(param: TokenParameter): Promise<Nodes.AnyString> {
+		// If there are no nested tokens, it resolves to a StringLiteral node with the value as is
+		if (param.nested.length === 0) return NodeFactory.stringLiteral(param.value);
+
+		// If there is a single nested token and its total value is equal to the value of the argument, that token is resolved
+		if (param.nested.length === 1 && param.nested[0]?.total === param.value)
+			return await this.parseToken(param.nested[0]).then(node =>
+				node ? NodeFactory.interpolatedString([node]) : NodeFactory.stringLiteral(""),
+			);
+
+		// If none of the above options are true, an InterpolatedString is created
+		const parts: Nodes.Node[] = [];
+		let current = "";
+		for (const nested of param.nested) {
+			const index = param.value.indexOf(nested.total);
+			if (index === -1) current += nested.total;
+			else {
+				if (current !== "") {
+					parts.push(NodeFactory.stringLiteral(current));
+					current = "";
+				}
+				const parsed = await this.parseToken(nested);
+				if (parsed) parts.push(parsed);
+				current = param.value.slice(index + nested.total.length);
+			}
+		}
+		if (current !== "") parts.push(NodeFactory.stringLiteral(current));
+		return NodeFactory.interpolatedString(parts);
+	}
+
+	public async resolveAnyOrStringNode(param: TokenParameter) {
+		if (!isNaN(Number(param.value))) return NodeFactory.numberLiteral(Number(param.value));
+		const node = await this.resolveStringTypeNode(param);
+		return node.type === "InterpolatedString" && node.parts.length === 1 ? node.parts[0] || Nodes.Undefined : node;
+	}
+
+	public async resolveNumberTypeNode(param: TokenParameter): Promise<Nodes.NumberLiteral> {
+		return NodeFactory.numberLiteral(Number(param.value));
+	}
+
+	public async resolveRegexpTypeNode(param: TokenParameter): Promise<Nodes.Node | null> {
+		const [expression, flags] = param.value.split("/").slice(1);
+		const expressionNode = await this.resolveStringTypeNode({ ...param, value: expression! });
+
+		const parts: Nodes.Node[] = [expressionNode!];
+		if (flags) parts.push(await this.resolveStringTypeNode({ ...param, value: flags }));
+
+		return NodeFactory.callExpression(NodeFactory.identifier("new RegExp"), parts);
+	}
+
+	/**
+	 * This doesn't works!!
+	 */
+	public resolveObjectTypeNode(_param: TokenParameter): Nodes.Object {
+		return NodeFactory.object([]);
+	}
+
+	/**
+	 * This doesn't works!!
+	 */
+	public resolveArrayTypeNode(_param: TokenParameter): Nodes.Array {
+		return NodeFactory.array([]);
+	}
+
+	public async resolveConditionTypeNode(param: TokenParameter): Promise<Nodes.Line> {
+		const condition = NodeFactory.line([]);
+		let current = "",
+			depth = 0,
+			i = 0;
+
+		while (i <= param.value.length) {
+			if (i === param.value.length) {
+				current = current.trim();
+				const nested = param.nested
+					.filter(nest => current.includes(nest.total))
+					.map(nest => ({
+						...nest,
+						start: current.indexOf(nest.total),
+						end: current.indexOf(nest.total) + nest.total.length,
+					}));
+
+				condition.parts.push(
+					await this.resolveAnyOrStringNode({
+						value: current,
+						nested,
+					}),
+				);
+				break;
+			}
+
+			const char = param.value.charAt(i);
+			const op = startsWithSome(param.value, i, Operators);
+
+			// If an operator is found, process the current string as a standalone argument
+			if (depth === 0 && op) {
+				current = current.trim();
+				const nested = param.nested
+					.filter(nest => current.includes(nest.total))
+					.map(nest => ({
+						...nest,
+						start: current.indexOf(nest.total),
+						end: current.indexOf(nest.total) + nest.total.length,
+					}));
+
+				condition.parts.push(
+					await this.resolveAnyOrStringNode({
+						value: current,
+						nested,
+					}),
+				);
+				condition.parts.push(NodeFactory.identifier(op));
+				i += op.length;
+				current = "";
+			}
+			// If it's the beginning of a nested, increment depth
+			else if (char === "[") current += (depth++, i++, char);
+			// If it's the end of a nested, decrement depth
+			else if (char === "]" && depth) current += (depth--, i++, char);
+			// If it's backslash, escapes the next character
+			else if (char === "\\") {
+				const next = param.value.charAt(i + 1);
+				if (typeof next === "string") current += ((i += 2), next);
+				else current += (i++, char);
+			} else if (depth === 0 && char.trim() === "") i++;
+			// Otherwise, accumulate characters to form the current argument
+			else current += (i++, char);
+		}
+
+		return condition;
+	}
+
+	public async resolveExpressionTypeNode(param: TokenParameter): Promise<Nodes.ExpressionStatement> {
+		return NodeFactory.expressionStatement(
+			await Promise.all(param.nested.map(async e => (await this.parseToken(e)) || Nodes.Undefined)),
+		);
+	}
+
+	public async resolveProgramTypeNode(param: TokenParameter): Promise<Nodes.Program> {
+		return NodeFactory.program(await Promise.all(param.nested.map(async e => (await this.parseToken(e)) || Nodes.Undefined)));
 	}
 }
+
+// ? TESTING
+// import $increment from "../instructions/variables/increment";
+// import $call from "../instructions/variables/call";
+// import $var from "../instructions/variables/var";
+// import $get from "../instructions/variables/get";
+// import $array from "../instructions/types/array";
+// import $print from "../instructions/print";
+// import $if from "../instructions/if";
+// import $for from "../instructions/loops/for";
+// import $modulo from "../instructions/util/modulo";
+// import $continue from "../instructions/loops/continue";
+
+// // function printf(...r: unknown[]) {
+// // 	console.log(...r.map(e => require("util").inspect(e, { depth: null, colors: true })));
+// // }
+
+// const com = new Compiler();
+
+// com.manager.add(
+// 	new $increment(com),
+// 	new $continue(com),
+// 	new $modulo(com),
+// 	new $print(com),
+// 	new $array(com),
+// 	new $call(com),
+// 	new $for(com),
+// 	new $var(com),
+// 	new $get(com),
+// 	new $if(com),
+// );
+
+// com
+// 	.setInput(
+// 		[
+// 			"$var[arr;$array]",
+// 			"$for[$var[i;0];$get[i] < 10;$increment[i];",
+// 			"	$if[$modulo[$get[i];2] === 0;",
+// 			"		$call[arr.push;$get[i]]",
+// 			"		$print[$get[arr]];",
+// 			"		$continue",
+// 			"	]",
+// 			"]",
+// 		].join("\n"),
+// 	)
+// 	.compile(true)
+// 	.then(e => {
+// 		console.log(yellow(e || ""));
+// 		eval(e || "");
+// 	});

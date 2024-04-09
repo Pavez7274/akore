@@ -1,7 +1,23 @@
+import { Token } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
-export default class BreakInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $while[some condition;
+ * 	$if[$get[some] === $get[other];
+ * 		$break
+ * 	]
+ * ]
+ *
+ * // Compiled JavaScript:
+ * while ("some condition") {
+ * 	if (some === other) {
+ * 		break;
+ * 	}
+ * }
+ */
+export default class $break extends Instruction {
     name: "$break";
     id: "$akoreBreak";
-    compile(task: Task): "break;";
+    parse({ path }: Token): Promise<import("../../classes").Nodes.Identifier<"break">>;
 }

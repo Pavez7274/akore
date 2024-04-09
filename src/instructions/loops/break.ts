@@ -1,11 +1,28 @@
+import { Logger, NodeFactory, Token } from "../../classes";
 import { Instruction } from "../../classes/instruction";
-import { Task } from "../../classes/compiler";
 
-export default class BreakInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $while[some condition;
+ * 	$if[$get[some] === $get[other];
+ * 		$break
+ * 	]
+ * ]
+ *
+ * // Compiled JavaScript:
+ * while ("some condition") {
+ * 	if (some === other) {
+ * 		break;
+ * 	}
+ * }
+ */
+export default class $break extends Instruction {
 	override name = "$break" as const;
 	override id = "$akoreBreak" as const;
-	public override compile(task: Task): "break;" {
-		this.processNestedArguments(task);
-		return "break;";
+
+	public override async parse({ path }: Token) {
+		if (!/\$while|\$for/.test(path)) Logger.error("$break only works in $while or $for!");
+		return NodeFactory.identifier("break");
 	}
 }

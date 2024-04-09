@@ -1,7 +1,15 @@
+import { Nodes, Token } from "../classes";
 import { Instruction } from "../classes/instruction";
-import { Task } from "../classes/compiler";
-export default class NewInstruction extends Instruction {
+/**
+ * @example
+ * // Akore code:
+ * $new[Set;$array[value 1;value 2;value 3]]
+ *
+ * // Compiled JavaScript:
+ * new Set(["value 1", "value 2", "value 3"]);
+ */
+export default class $new extends Instruction {
     name: "$new";
     id: "$akoreNew";
-    compile(task: Task): string;
+    parse({ parameters }: Token): Promise<Nodes.CallExpression>;
 }

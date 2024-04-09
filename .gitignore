@@ -1,4 +1,9 @@
 node_modules/
 akconfig.json
+.eslintrc.js
+.prettierrc
+.npmignore
+bun.lockb
 .history/
+.vscode/
 test/
