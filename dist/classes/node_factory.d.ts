@@ -66,7 +66,7 @@ export declare class NodeFactory {
      * @returns The created Object node.
      */
     static object(properties: {
-        key: string;
+        key: Nodes.Identifier;
         value?: Nodes.Node;
     }[]): Nodes.Object;
     /**

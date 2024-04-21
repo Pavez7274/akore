@@ -20,12 +20,12 @@ class $function extends instruction_1.Instruction {
     async parse({ parameters: [name, params, body] }) {
         if (!name || !params || !body)
             classes_1.Logger.error("At least three arguments are required!", this.name);
-        const keyword = await this.compiler.resolveIdentifierNode(name);
+        const keyword = await this.transpiler.resolveIdentifierNode(name);
         return classes_1.NodeFactory.controlFlow([
             {
                 keyword: keyword.name === "" ? "function" : `function ${keyword.name}`,
-                condition: await this.compiler.resolveExpressionTypeNode(params),
-                body: await this.compiler.resolveProgramTypeNode(body),
+                condition: await this.transpiler.resolveExpressionTypeNode(params),
+                body: await this.transpiler.resolveProgramTypeNode(body),
             },
         ]);
     }

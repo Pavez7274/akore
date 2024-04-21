@@ -3,7 +3,7 @@ import $string from "./instructions/types/string";
 import $object from "./instructions/types/object";
 import $array from "./instructions/types/array";
 import $null from "./instructions/types/null";
-import $increment from "./instructions/variables/increment";
+import $compound from "./instructions/variables/compound";
 import $call from "./instructions/variables/call";
 import $get from "./instructions/variables/get";
 import $var from "./instructions/variables/var";
@@ -20,7 +20,7 @@ import $while from "./instructions/loops/while";
 import $break from "./instructions/loops/break";
 import $for from "./instructions/loops/for";
 export declare const BasicInstructions: {
-    $increment: typeof $increment;
+    $compound: typeof $compound;
     $function: typeof $function;
     $continue: typeof $continue;
     $string: typeof $string;

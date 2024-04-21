@@ -19,7 +19,7 @@ class $null extends instruction_1.Instruction {
         if (!(0, lodash_1.isEmpty)(args)) {
             for (const { nested } of args) {
                 for (const nest of nested) {
-                    this.compiler.parseToken(nest);
+                    this.transpiler.parseToken(nest);
                 }
             }
         }

@@ -22,10 +22,10 @@ var InstructionStatus;
     InstructionStatus["Enabled"] = "ENABLED";
 })(InstructionStatus = exports.InstructionStatus || (exports.InstructionStatus = {}));
 class Instruction {
-    compiler;
+    transpiler;
     status = "ENABLED" /* InstructionStatus.Enabled */;
-    constructor(compiler) {
-        this.compiler = compiler;
+    constructor(transpiler) {
+        this.transpiler = transpiler;
     }
     /**
      * Enables the instruction

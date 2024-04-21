@@ -16,7 +16,7 @@ export default class $print extends Instruction {
 	public override async parse({ parameters }: Token): Promise<Nodes.CallExpression> {
 		return NodeFactory.callExpression(NodeFactory.identifier("console.log"), [
 			NodeFactory.expressionStatement(
-				await Promise.all(parameters.map(p => this.compiler.resolveAnyOrStringNode(p))),
+				await Promise.all(parameters.map(p => this.transpiler.resolveAnyOrStringNode(p))),
 			),
 		]);
 	}

@@ -93,7 +93,7 @@ export class NodeFactory {
 	 * @param properties The properties of the object.
 	 * @returns The created Object node.
 	 */
-	static object(properties: { key: string; value?: Nodes.Node }[]): Nodes.Object {
+	static object(properties: { key: Nodes.Identifier; value?: Nodes.Node }[]): Nodes.Object {
 		return { type: "Object", properties };
 	}
 

@@ -2,12 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BasicInstructions = void 0;
 const tslib_1 = require("tslib");
+const tsconfig_paths_1 = require("tsconfig-paths");
+(0, tsconfig_paths_1.register)();
 const function_1 = tslib_1.__importDefault(require("./instructions/types/function"));
 const string_1 = tslib_1.__importDefault(require("./instructions/types/string"));
 const object_1 = tslib_1.__importDefault(require("./instructions/types/object"));
 const array_1 = tslib_1.__importDefault(require("./instructions/types/array"));
 const null_1 = tslib_1.__importDefault(require("./instructions/types/null"));
-const increment_1 = tslib_1.__importDefault(require("./instructions/variables/increment"));
+const compound_1 = tslib_1.__importDefault(require("./instructions/variables/compound"));
 const call_1 = tslib_1.__importDefault(require("./instructions/variables/call"));
 const get_1 = tslib_1.__importDefault(require("./instructions/variables/get"));
 const var_1 = tslib_1.__importDefault(require("./instructions/variables/var"));
@@ -24,7 +26,7 @@ const while_1 = tslib_1.__importDefault(require("./instructions/loops/while"));
 const break_1 = tslib_1.__importDefault(require("./instructions/loops/break"));
 const for_1 = tslib_1.__importDefault(require("./instructions/loops/for"));
 exports.BasicInstructions = {
-    $increment: increment_1.default,
+    $compound: compound_1.default,
     $function: function_1.default,
     $continue: continue_1.default,
     $string: string_1.default,

@@ -40,7 +40,7 @@ function compileNode(node) {
         case "NumberLiteral":
             return new CompiledNode(node.value.toString());
         case "Object":
-            return new CompiledNode(`{ ${node.properties.map(({ key, value }) => (value ? `${key}: ${compileNode(value).code}` : key)).join(",")} }`);
+            return new CompiledNode(`({ ${node.properties.map(({ key, value }) => (value ? `${key.name}: ${compileNode(value).code}` : key)).join(", ")} })`);
         case "ExpressionStatement":
             return new CompiledNode(node.expressions.map(e => compileNode(e).code).join(", "));
         case "Line":

@@ -6,6 +6,6 @@ export default class NumberInstruction extends Instruction {
 	override id = "$akoreNumber" as const;
 
 	public override async parse({ parameters }: Token): Promise<Nodes.Node> {
-		return NodeFactory.numberLiteral(Number(this.compiler.resolveAnyOrStringNode(parameters[0]!)));
+		return NodeFactory.numberLiteral(Number(this.transpiler.resolveAnyOrStringNode(parameters[0]!)));
 	}
 }

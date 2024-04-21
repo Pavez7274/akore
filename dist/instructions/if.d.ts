@@ -1,26 +1,27 @@
 import { Nodes, Token } from "../classes";
 import { Instruction } from "../classes/instruction";
 /**
+ * Represents the $if instruction.
+ * This instruction is used to create an if-else statement.
  * @example
- * // Akore code:
- * $if[$get[some] === 3;
- * 		$call[doSomething;$get[some]];
- * 	$get[some] === 4;
- * 		$call[dontSomething;$get[some]];
- * 	$call[doElse;$get[some]];
+ * $if[$get[some] === 1;
+ * 	$var[other;is 1];
+ * 	$get[some] === 2;
+ * 	$var[other;is 2];
+ * 	$var[other;is unknown]
  * ]
- *
- * // Compiled JavaScript:
- * if (some === 3) {
- * 	doSomething(some);
- * } else if (some === 4) {
- * 	dontSomething(some);
- * } else {
- * 	doElse(some);
- * }
+ * // =>
+ * // var other;
+ * // if (some === 1) {
+ * //	other = "is 1";
+ * // } else if (some === 2) {
+ * //	other = "is 2";
+ * // } else {
+ * //	other = "is unknown";
+ * // }
  */
 export default class $if extends Instruction {
     name: "$if";
     id: "$akoreIf";
-    parse({ parameters }: Token): Promise<Nodes.Node>;
+    parse({ parameters: [condition, statement, ...rest] }: Token): Promise<Nodes.Node>;
 }

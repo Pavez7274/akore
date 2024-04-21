@@ -16,9 +16,9 @@ class $new extends instruction_1.Instruction {
     async parse({ parameters }) {
         return classes_1.NodeFactory.callExpression(classes_1.NodeFactory.line([
             classes_1.NodeFactory.identifier("new"),
-            await this.compiler.resolveIdentifierNode(parameters.shift()),
+            await this.transpiler.resolveIdentifierNode(parameters.shift()),
         ]), [
-            classes_1.NodeFactory.expressionStatement(await Promise.all(parameters.map(p => this.compiler.resolveAnyOrStringNode(p)))),
+            classes_1.NodeFactory.expressionStatement(await Promise.all(parameters.map(p => this.transpiler.resolveAnyOrStringNode(p)))),
         ]);
     }
 }

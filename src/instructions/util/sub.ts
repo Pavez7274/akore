@@ -7,6 +7,6 @@ export default class $sub extends Instruction {
 
 	public override async parse({ parameters, total }: Token): Promise<Nodes.Node> {
 		if (!parameters[0]) Logger.error("At least one argument is required!", total);
-		return NodeFactory.line(await Promise.all(parameters.map(node => this.compiler.resolveAnyOrStringNode(node))), " - ");
+		return NodeFactory.line(await Promise.all(parameters.map(node => this.transpiler.resolveAnyOrStringNode(node))), " - ");
 	}
 }

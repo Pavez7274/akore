@@ -50,7 +50,7 @@ export namespace Nodes {
 
 	export type Program = { type: "Program"; body: Node[] };
 
-	export type Object = { type: "Object"; properties: { key: string; value?: Node }[] };
+	export type Object = { type: "Object"; properties: { key: Identifier; value?: Node }[] };
 
 	export type Array = { type: "Array"; elements: Node[] };
 
@@ -111,7 +111,7 @@ export function compileNode(node: Nodes.Node): CompiledNode {
 
 		case "Object":
 			return new CompiledNode(
-				`{ ${node.properties.map(({ key, value }) => (value ? `${key}: ${compileNode(value).code}` : key)).join(",")} }`,
+				`({ ${node.properties.map(({ key, value }) => (value ? `${key.name}: ${compileNode(value).code}` : key)).join(", ")} })`,
 			);
 
 		case "ExpressionStatement":

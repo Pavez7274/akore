@@ -50,7 +50,7 @@ export declare namespace Nodes {
     type Object = {
         type: "Object";
         properties: {
-            key: string;
+            key: Identifier;
             value?: Node;
         }[];
     };

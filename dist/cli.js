@@ -43,7 +43,7 @@ commander_1.program
             // Create the output directory if it doesn't exist
             (0, fs_1.mkdirSync)(outDir, { recursive: true });
         }
-        const compiler = new _1.Compiler();
+        const compiler = new _1.Transpiler();
         // Add basic instructions to the compiler
         for (const i of Object.values(_1.BasicInstructions)) {
             compiler.manager.add(new i(compiler));
@@ -69,7 +69,7 @@ commander_1.program
             const start = Date.now();
             if (file.endsWith(".kita")) {
                 // If the file is a .kita file, compile it
-                const compiled = (await compiler.setInput((0, fs_1.readFileSync)(file, "utf-8")).compile(options.debug)) ?? "'COMPILATION ERROR';";
+                const compiled = (await compiler.setInput((0, fs_1.readFileSync)(file, "utf-8")).transpile(options.debug)) ?? "'COMPILATION ERROR';";
                 const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
                 const dir = (0, path_1.dirname)(destPath);
                 if (!(0, fs_1.existsSync)(dir)) {

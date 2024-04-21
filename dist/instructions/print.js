@@ -15,7 +15,7 @@ class $print extends instruction_1.Instruction {
     id = "$akorePrint";
     async parse({ parameters }) {
         return classes_1.NodeFactory.callExpression(classes_1.NodeFactory.identifier("console.log"), [
-            classes_1.NodeFactory.expressionStatement(await Promise.all(parameters.map(p => this.compiler.resolveAnyOrStringNode(p)))),
+            classes_1.NodeFactory.expressionStatement(await Promise.all(parameters.map(p => this.transpiler.resolveAnyOrStringNode(p)))),
         ]);
     }
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { BasicInstructions, Compiler, Logger } from "./";
+import { BasicInstructions, Transpiler, Logger } from "./";
 import { getFiles } from "./helpers/get_files";
 import { dirname, join } from "path";
 import { program } from "commander";
@@ -46,7 +46,7 @@ program
 				mkdirSync(outDir, { recursive: true });
 			}
 
-			const compiler = new Compiler();
+			const compiler = new Transpiler();
 			// Add basic instructions to the compiler
 			for (const i of Object.values(BasicInstructions)) {
 				compiler.manager.add(new i(compiler));
@@ -73,7 +73,7 @@ program
 				const start = Date.now();
 				if (file.endsWith(".kita")) {
 					// If the file is a .kita file, compile it
-					const compiled = (await compiler.setInput(readFileSync(file, "utf-8")).compile(options.debug)) ?? "'COMPILATION ERROR';";
+					const compiled = (await compiler.setInput(readFileSync(file, "utf-8")).transpile(options.debug)) ?? "'COMPILATION ERROR';";
 					const destPath = file.slice(0, -5).concat(".js").replace(rootDir, outDir);
 					const dir = dirname(destPath);
 					if (!existsSync(dir)) {

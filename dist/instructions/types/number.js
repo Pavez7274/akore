@@ -6,7 +6,7 @@ class NumberInstruction extends instruction_1.Instruction {
     name = "$number";
     id = "$akoreNumber";
     async parse({ parameters }) {
-        return classes_1.NodeFactory.numberLiteral(Number(this.compiler.resolveAnyOrStringNode(parameters[0])));
+        return classes_1.NodeFactory.numberLiteral(Number(this.transpiler.resolveAnyOrStringNode(parameters[0])));
     }
 }
 exports.default = NumberInstruction;

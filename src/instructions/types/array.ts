@@ -15,7 +15,7 @@ export default class $array extends Instruction {
 
 	public override async parse({ parameters }: Token): Promise<Nodes.Array> {
 		return NodeFactory.array(
-			await Promise.all(parameters.map(param => this.compiler.resolveAnyOrStringNode(param))),
+			await Promise.all(parameters.map(param => this.transpiler.resolveAnyOrStringNode(param))),
 		);
 	}
 }

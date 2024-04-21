@@ -1,6 +1,6 @@
 {
 	"name": "akore",
-	"version": "1.5.1",
+	"version": "1.5.2",
 	"description": "The core of akita.ts",
 	"bin": {
 		"akore": "./dist/cli.js"
@@ -32,6 +32,7 @@
 		"lodash": "4.17.21",
 		"module-alias": "2.2.3",
 		"ts-loader": "9.5.1",
+		"tsconfig-paths": "4.2.0",
 		"tslib": "2.6.2",
 		"uglify-js": "3.17.4"
 	}

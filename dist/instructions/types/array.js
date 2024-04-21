@@ -14,7 +14,7 @@ class $array extends instruction_1.Instruction {
     name = "$array";
     id = "$akoreArray";
     async parse({ parameters }) {
-        return classes_1.NodeFactory.array(await Promise.all(parameters.map(param => this.compiler.resolveAnyOrStringNode(param))));
+        return classes_1.NodeFactory.array(await Promise.all(parameters.map(param => this.transpiler.resolveAnyOrStringNode(param))));
     }
 }
 exports.default = $array;

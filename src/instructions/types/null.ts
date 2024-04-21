@@ -18,7 +18,7 @@ export default class $null extends Instruction {
 		if (!isEmpty(args)) {
 			for (const { nested } of args) {
 				for (const nest of nested) {
-					this.compiler.parseToken(nest);
+					this.transpiler.parseToken(nest);
 				}
 			}
 		}

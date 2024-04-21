@@ -22,7 +22,7 @@ export default class $string extends Instruction {
 		return isEmpty(parameters)
 			? NodeFactory.stringLiteral("")
 			: NodeFactory.interpolatedString(
-					await Promise.all(parameters.map(this.compiler.resolveStringTypeNode)),
+					await Promise.all(parameters.map(this.transpiler.resolveStringTypeNode)),
 				);
 	}
 }

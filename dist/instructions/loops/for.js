@@ -10,11 +10,11 @@ class $for extends instruction_1.Instruction {
             {
                 keyword: "for",
                 condition: classes_1.NodeFactory.line([
-                    await this.compiler.resolveExpressionTypeNode(parameters[0]),
-                    await this.compiler.resolveConditionTypeNode(parameters[1]),
-                    await this.compiler.resolveExpressionTypeNode(parameters[2]),
+                    await this.transpiler.resolveExpressionTypeNode(parameters[0]),
+                    await this.transpiler.resolveConditionTypeNode(parameters[1]),
+                    await this.transpiler.resolveExpressionTypeNode(parameters[2]),
                 ], "; "),
-                body: await this.compiler.resolveProgramTypeNode(parameters[3]),
+                body: await this.transpiler.resolveProgramTypeNode(parameters[3]),
             },
         ]);
     }

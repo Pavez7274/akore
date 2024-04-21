@@ -1,4 +1,4 @@
-import type { Compiler } from "./compiler";
+import type { Transpiler } from "./transpiler";
 import type { Token } from "./lexer";
 import type { Nodes } from "./nodes";
 /**
@@ -19,11 +19,11 @@ export declare const enum InstructionStatus {
     Enabled = "ENABLED"
 }
 export declare abstract class Instruction {
-    readonly compiler: Compiler;
+    readonly transpiler: Transpiler;
     abstract readonly name: string;
     abstract readonly id: string;
     status: InstructionStatus;
-    constructor(compiler: Compiler);
+    constructor(transpiler: Transpiler);
     abstract parse(token: Token): Promise<Nodes.Node>;
     /**
      * Enables the instruction
@@ -39,5 +39,5 @@ export declare class Manager {
     get instructions(): Instruction[];
     disable(...names: string[]): void;
     add(...instructions: Instruction[]): void;
-    loaddir(mod: string, compiler: Compiler): boolean;
+    loaddir(mod: string, compiler: Transpiler): boolean;
 }

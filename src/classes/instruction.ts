@@ -1,4 +1,4 @@
-import type { Compiler } from "./compiler";
+import type { Transpiler } from "./transpiler";
 import type { Token } from "./lexer";
 import type { Nodes } from "./nodes";
 import { getFiles } from "../helpers";
@@ -27,7 +27,7 @@ export abstract class Instruction {
 	abstract readonly id: string;
 	public status: InstructionStatus = InstructionStatus.Enabled;
 
-	constructor(public readonly compiler: Compiler) {}
+	constructor(public readonly transpiler: Transpiler) {}
 
 	public abstract parse(token: Token): Promise<Nodes.Node>;
 
@@ -64,7 +64,7 @@ export class Manager {
 		this.#instructions.push(...instructions);
 	}
 
-	public loaddir(mod: string, compiler: Compiler): boolean {
+	public loaddir(mod: string, compiler: Transpiler): boolean {
 		const copy = [...this.#instructions];
 		for (const file of getFiles(mod).filter(el => el.endsWith(".js"))) {
 			const imported = require(file);

@@ -1,10 +1,13 @@
+import { register } from "tsconfig-paths";
+register();
+
 import $function from "./instructions/types/function";
 import $string from "./instructions/types/string";
 import $object from "./instructions/types/object";
 import $array from "./instructions/types/array";
 import $null from "./instructions/types/null";
 
-import $increment from "./instructions/variables/increment";
+import $compound from "./instructions/variables/compound";
 import $call from "./instructions/variables/call";
 import $get from "./instructions/variables/get";
 import $var from "./instructions/variables/var";
@@ -25,7 +28,7 @@ import $break from "./instructions/loops/break";
 import $for from "./instructions/loops/for";
 
 export const BasicInstructions = {
-	$increment,
+	$compound,
 	$function,
 	$continue,
 	$string,

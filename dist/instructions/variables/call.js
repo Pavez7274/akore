@@ -3,20 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const classes_1 = require("../../classes");
 const instruction_1 = require("../../classes/instruction");
 /**
- * @example
- * // Akore code:
- * $call[procces.exit]
+ * Represents the $call instruction.
+ * This instruction is used to call a function.
  *
- * // Compiled JavaScript:
- * process.exit();
+ * @example
+ * $call[func;arg1;$get[some];1] // => func("arg1", some, 1);
+ * $call[process.exit] // => process.exit();
  */
 class $call extends instruction_1.Instruction {
     name = "$call";
     id = "$akoreCall";
-    async parse({ parameters, total }) {
-        if (!parameters[0])
-            classes_1.Logger.error("At least one argument is required!", total);
-        return classes_1.NodeFactory.callExpression(await this.compiler.resolveIdentifierNode(parameters.shift()), await Promise.all(parameters.map(node => this.compiler.resolveAnyOrStringNode(node))));
+    async parse({ parameters: [key, ...args] }) {
+        if (!key)
+            classes_1.Logger.error("Expected a key for the call!", this.name);
+        return classes_1.NodeFactory.callExpression(await this.transpiler.resolveIdentifierNode(key), await Promise.all(args.map(token => this.transpiler.resolveAnyOrStringNode(token))));
     }
 }
 exports.default = $call;

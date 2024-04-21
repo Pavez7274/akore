@@ -1,6 +1,6 @@
 # Akore
 
-Akore is a lightweight and versatile compiler utility for JavaScript. It provides a simple and efficient way to tokenize, parse, and compile code snippets, enabling developers to build custom compilers or preprocessors tailored to their specific needs.
+Akore is a lightweight and versatile transpiler utility for JavaScript. It provides a simple and efficient way to tokenize, parse, and compile code snippets, enabling developers to build custom transpilers or preprocessors tailored to their specific needs.
 
 ## Installation
 
@@ -30,7 +30,7 @@ Example `akconfig.json`:
 
 ## Usage
 
-To compile your code, use the following command:
+To transpile your code, use the following command:
 
 ```bash
 npx akore [rootDir]
@@ -38,7 +38,7 @@ npx akore [rootDir]
 
 If you have configured the `rootDir` in the `akconfig.json`, it will be used by default. Otherwise, you can specify it as an argument.
 
-## Example Compilation
+## Example Transpilation
 
 Suppose we have a source file `fib.kita` in the `src` directory:
 
@@ -57,7 +57,7 @@ $for[$var[i;1]; $get[i] < $get[number]; $increment[i];
 ]
 ```
 
-After running the compilation command, the compiled JavaScript file `fib.js` will be output in the `dist` directory:
+After running the transpilation command, the transpiled JavaScript file `fib.js` will be output in the `dist` directory:
 
 ```javascript
 var number = 30;

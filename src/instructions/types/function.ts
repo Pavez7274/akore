@@ -20,13 +20,13 @@ export default class $function extends Instruction {
 	public override async parse({ parameters: [name, params, body] }: Token): Promise<Nodes.ControlFlow> {
 		if (!name || !params || !body) Logger.error("At least three arguments are required!", this.name);
 
-		const keyword = await this.compiler.resolveIdentifierNode(name);
+		const keyword = await this.transpiler.resolveIdentifierNode(name);
 
 		return NodeFactory.controlFlow([
 			{
 				keyword: keyword.name === "" ? "function" : `function ${keyword.name}`,
-				condition: await this.compiler.resolveExpressionTypeNode(params),
-				body: await this.compiler.resolveProgramTypeNode(body),
+				condition: await this.transpiler.resolveExpressionTypeNode(params),
+				body: await this.transpiler.resolveProgramTypeNode(body),
 			},
 		]);
 	}

@@ -17,11 +17,11 @@ export default class $new extends Instruction {
 		return NodeFactory.callExpression(
 			NodeFactory.line([
 				NodeFactory.identifier("new"),
-				await this.compiler.resolveIdentifierNode(parameters.shift()!),
+				await this.transpiler.resolveIdentifierNode(parameters.shift()!),
 			]),
 			[
 				NodeFactory.expressionStatement(
-					await Promise.all(parameters.map(p => this.compiler.resolveAnyOrStringNode(p))),
+					await Promise.all(parameters.map(p => this.transpiler.resolveAnyOrStringNode(p))),
 				),
 			],
 		);
