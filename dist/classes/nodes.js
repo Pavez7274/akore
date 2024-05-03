@@ -11,7 +11,7 @@ var Nodes;
     Nodes.Var = { type: "Identifier", name: "var" };
     Nodes.Equal = { type: "Identifier", name: "=" };
     Nodes.Void = { type: "Identifier", name: "" };
-})(Nodes = exports.Nodes || (exports.Nodes = {}));
+})(Nodes || (exports.Nodes = Nodes = {}));
 /**
  * Represents a compiled node.
  */

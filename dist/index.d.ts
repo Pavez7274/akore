@@ -1,24 +1,24 @@
-import $function from "./instructions/types/function";
-import $string from "./instructions/types/string";
-import $object from "./instructions/types/object";
 import $array from "./instructions/types/array";
+import $function from "./instructions/types/function";
 import $null from "./instructions/types/null";
-import $compound from "./instructions/variables/compound";
+import $object from "./instructions/types/object";
+import $string from "./instructions/types/string";
 import $call from "./instructions/variables/call";
+import $compound from "./instructions/variables/compound";
 import $get from "./instructions/variables/get";
 import $var from "./instructions/variables/var";
 import $escape from "./instructions/escape";
-import $print from "./instructions/print";
-import $new from "./instructions/new";
 import $if from "./instructions/if";
+import $new from "./instructions/new";
+import $print from "./instructions/print";
 import $modulo from "./instructions/util/modulo";
 import $multi from "./instructions/util/multi";
-import $sum from "./instructions/util/sum";
 import $sub from "./instructions/util/sub";
-import $continue from "./instructions/loops/continue";
-import $while from "./instructions/loops/while";
+import $sum from "./instructions/util/sum";
 import $break from "./instructions/loops/break";
+import $continue from "./instructions/loops/continue";
 import $for from "./instructions/loops/for";
+import $while from "./instructions/loops/while";
 export declare const BasicInstructions: {
     $compound: typeof $compound;
     $function: typeof $function;
@@ -43,3 +43,4 @@ export declare const BasicInstructions: {
     $if: typeof $if;
 };
 export * from "./classes/";
+export { transpileFiles } from "./helpers/transpile_files";

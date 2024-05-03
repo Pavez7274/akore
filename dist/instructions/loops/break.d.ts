@@ -19,5 +19,5 @@ import { Instruction } from "../../classes/instruction";
 export default class $break extends Instruction {
     name: "$break";
     id: "$akoreBreak";
-    parse({ path }: Token): Promise<import("../../classes").Nodes.Identifier<"break">>;
+    parse({ path }: Token): Promise<import("@/classes/nodes").Nodes.Identifier<"break">>;
 }

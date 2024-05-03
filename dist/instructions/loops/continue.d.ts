@@ -17,5 +17,5 @@ import { Instruction } from "../../classes/instruction";
 export default class $continue extends Instruction {
     name: "$continue";
     id: "$akoreContinue";
-    parse({ path }: Token): Promise<import("../../classes").Nodes.Identifier<"continue">>;
+    parse({ path }: Token): Promise<import("@/classes/nodes").Nodes.Identifier<"continue">>;
 }
