@@ -15,12 +15,12 @@ var ArgumentTypes;
     ArgumentTypes[ArgumentTypes["ARRAY"] = 5] = "ARRAY";
     ArgumentTypes[ArgumentTypes["CONDITION"] = 6] = "CONDITION";
     ArgumentTypes[ArgumentTypes["NONE"] = 7] = "NONE";
-})(ArgumentTypes = exports.ArgumentTypes || (exports.ArgumentTypes = {}));
+})(ArgumentTypes || (exports.ArgumentTypes = ArgumentTypes = {}));
 var InstructionStatus;
 (function (InstructionStatus) {
     InstructionStatus["Disabled"] = "DISABLED";
     InstructionStatus["Enabled"] = "ENABLED";
-})(InstructionStatus = exports.InstructionStatus || (exports.InstructionStatus = {}));
+})(InstructionStatus || (exports.InstructionStatus = InstructionStatus = {}));
 class Instruction {
     transpiler;
     status = "ENABLED" /* InstructionStatus.Enabled */;

@@ -36,6 +36,12 @@ To transpile your code, use the following command:
 npx akore [rootDir]
 ```
 
+You also have the option to transpile using the `transpileFiles` function.
+
+```ts
+transpileFiles(rootDir?: string, options?: object)
+```
+
 If you have configured the `rootDir` in the `akconfig.json`, it will be used by default. Otherwise, you can specify it as an argument.
 
 ## Example Transpilation
