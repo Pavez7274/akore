@@ -9,7 +9,7 @@ export class PrintCompetence extends Competence<JavaScriptTranspiler> {
 	override resolve({ inside }: Token<true>) {
 		return new CallerNode({
 			callee: new EscapeNode("console.log"),
-			parameters: this.transpiler.process(inside),
+			parameters: this.transpiler.resolve(inside),
 			use_zero: true,
 		});
 	}

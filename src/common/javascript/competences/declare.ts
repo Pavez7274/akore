@@ -1,4 +1,4 @@
-import { splitInside } from "#common/splitInside";
+import { splitInside } from "#common/split_inside";
 import { Competence, type Token } from "#structures";
 import { EscapeNode, SequenceNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";

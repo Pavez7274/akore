@@ -1,4 +1,4 @@
-import { splitInside } from "#common/splitInside";
+import { splitInside } from "#common/split_inside";
 import { Competence, type Token } from "#structures";
 import { EscapeNode, SequenceNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";
@@ -14,7 +14,7 @@ export class SetCompetence extends Competence<JavaScriptTranspiler> {
 				new EscapeNode(key),
 				new EscapeNode("="),
 				new SequenceNode({
-					elements: this.transpiler.process(value),
+					elements: this.transpiler.resolve(value),
 					operator: ", ",
 				}),
 			],

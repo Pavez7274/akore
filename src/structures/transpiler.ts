@@ -1,14 +1,16 @@
+import { typeToString } from "#common";
 import type { Competence } from "./competence";
-import { Lexer } from "./lexer";
+import { Lexer, type Token } from "./lexer";
 import { Logger } from "./logger";
-import { type Node, Registry, type Schema } from "./nodes";
+import { type Node, Registry } from "./nodes";
 
 export abstract class Transpiler {
 	public readonly registry: Registry;
 	public readonly logger = new Logger();
 	public readonly lexer = new Lexer();
 
-	constructor(nodes: Record<string, Schema>) {
+	// biome-ignore lint/suspicious/noExplicitAny: As stated in schema.ts, a schema can receive any type of value
+	constructor(nodes: Record<string, any>) {
 		this.registry = new Registry(nodes);
 	}
 
@@ -24,24 +26,24 @@ export abstract class Transpiler {
 		}
 	}
 
-	public process(code: string): Node<unknown>[] {
-		// this.logger.debug(`Transpiling:\n${code}`);
-		const nodes: Node<unknown>[] = [];
+	public resolve(code: string): Node<unknown>[] {
+		return this.nodes(this.lexer.tokenize(code));
+	}
 
-		const tokens = this.lexer.tokenize(code);
-		// this.logger.debug(
-		// 	`Tokens:\n${JSON.stringify(
-		// 		tokens,
-		// 		(key, value) => (key === "competence" ? value.identifier : value),
-		// 		2,
-		// 	)}`,
-		// );
+	public nodes(tokens: Token<boolean>[]) {
+		const nodes: Node<unknown>[] = [];
 
 		for (const token of tokens) {
 			try {
 				const node = token.competence.resolve(token);
-				// this.logger.debug(`Value:\n${JSON.stringify(node.value, null, 2)}`);
-				nodes.push(node);
+				if (this.registry.validate(node)) nodes.push(node);
+				else {
+					const expected = this.registry.schemas[node.type].toString(2);
+					const received = `${node.constructor.name} {\n\t${typeToString(node.value, 2)}\n\t}`;
+					throw new Error(
+						`The Follow value does not match the expected scheme:\nExpected:\n\t${expected}\n\nReceived:\n\t${received}`,
+					);
+				}
 			} catch (error) {
 				this.logger.error(`Error compiling ${token.total}:\n${(<Error>error).message}`);
 			}

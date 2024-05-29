@@ -4,8 +4,8 @@ export class Program<T extends Node<unknown>[]> implements Node<T> {
 	public readonly type = "program" as const;
 	public value: T;
 
-	constructor(value: T) {
-		this.value = value;
+	constructor(...values: T) {
+		this.value = values;
 	}
 
 	public toCode(): string {
@@ -34,7 +34,7 @@ export class CallerNode<
 	},
 > implements Node<T>
 {
-	public type = "caller" as const;
+	public readonly type = "caller" as const;
 	public value: T;
 
 	constructor(value: T) {

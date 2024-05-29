@@ -72,7 +72,7 @@ export class Logger {
 	}
 
 	public format(text: string) {
-		return `\n\t${text.replace(/\n(\s*)/g, "\n\t$1")}`;
+		return `\n\t${text.replace(/(\n+)(\s*)/g, "$1\t$2")}`;
 	}
 
 	public info(message: string) {

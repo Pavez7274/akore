@@ -1,5 +1,4 @@
 import { Competence, type Token } from "#structures";
-import { StringNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";
 
 export class StringCompetence extends Competence<JavaScriptTranspiler> {
@@ -7,6 +6,6 @@ export class StringCompetence extends Competence<JavaScriptTranspiler> {
 	override pattern = /\$(string|text)/;
 
 	override resolve({ inside }: Token<true>) {
-		return new StringNode(...this.transpiler.process(inside));
+		return this.transpiler.string(inside);
 	}
 }

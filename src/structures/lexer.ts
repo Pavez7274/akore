@@ -4,6 +4,7 @@ export interface Token<P extends true | false> {
 	competence: Competence;
 	total: P extends true ? `${string}[${string}]` : string;
 	inside: P extends true ? string : null;
+	match: RegExpExecArray;
 	name: string;
 }
 
@@ -51,6 +52,7 @@ export class Lexer {
 	public tokenize(code: string) {
 		const tokens: Token<boolean>[] = [];
 		const regex = this.pattern;
+		let min_index = 0;
 
 		for (let match = regex.exec(code), i = 0; match !== null; match = regex.exec(code), i++) {
 			const supports = Array.from(this.index_supports(code).values()).flat();
@@ -64,32 +66,21 @@ export class Lexer {
 
 			const inside = start && end ? code.slice(start.match.index + 1, end.match.index) : null;
 			const name = match[0];
+
+			match.index += min_index;
+
 			const token = {
 				competence: [...this.competences.values()].find((c) => c.pattern.test(name)) as Competence,
 				total: inside ? `${name}[${inside}]` : name,
 				inside,
+				match,
 				name,
 			};
 			tokens.push(token);
+			min_index += token.total.length - 1;
 			code = code.replace(token.total, `<PROCESSED:${Date.now()}>`);
 		}
 
 		return tokens;
 	}
 }
-
-// ? Testing
-// const lexer = new Lexer();
-// const tokens = lexer.tokenize("$test[1;2;$fuck[deep];3;4]");
-// console.log(
-// 	JSON.stringify(
-// 		tokens.map((el) => {
-// 			return {
-// 				total: el.total,
-// 				splitted: el.inside ? splitInside(el.inside) : [],
-// 			};
-// 		}),
-// 		null,
-// 		2,
-// 	),
-// );

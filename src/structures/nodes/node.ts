@@ -6,7 +6,5 @@ export abstract class Node<T> {
 		this.value = value;
 	}
 
-	toCode(): string {
-		return `Node { type: "${this.type}", value: ${JSON.stringify(this.value)} }`;
-	}
+	abstract toCode(): string;
 }
