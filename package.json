@@ -7,6 +7,7 @@
 	"scripts": {
 		"generate-exports": "node ./scripts/generate_exports.js",
 		"build": "node ./scripts/generate_exports.js && tsc && biome check --apply src/",
+		"prepare": "npm run build",
 		"format": "biome format --apply src/",
 		"check": "biome check --apply src/",
 		"lint": "biome lint --apply src/"
