@@ -24,11 +24,12 @@ function createExports(directory) {
 		}
 	}
 
-	fs.writeFile(path.join(directory, "index.ts"), exportStatements.join("\n"), (err) => {
+	const indexPath = path.join(directory, "index.ts");
+	fs.writeFile(indexPath, exportStatements.join("\n"), (err) => {
 		if (err) {
 			return console.log(`Error writing index.ts file: ${err}`);
 		}
-		console.log("index.ts generated successfully.");
+		console.log(`${indexPath} generated successfully.`);
 	});
 }
 
