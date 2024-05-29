@@ -5,6 +5,7 @@
 	"main": "dist/index.js",
 	"files": ["./dist/**"],
 	"scripts": {
+		"publish-dev": "npm run build && npm publish --tag dev",
 		"generate-exports": "node ./scripts/generate_exports.js",
 		"build": "node ./scripts/generate_exports.js && tsc && biome check --apply src/",
 		"format": "biome format --apply src/",

@@ -1,3 +1,21 @@
+# Ignore Node.js modules
 node_modules/
-.history/
+
+# Ignore Jest coverage reports
+coverage/
+
+# Ignore TypeScript compilation output
 dist/
+
+# Ignore the .history folder
+.history/
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db

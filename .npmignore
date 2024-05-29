@@ -1,0 +1,17 @@
+# Ignore Jest configuration
+jest.config.json
+
+# Ignore TypeScript configuration
+tsconfig.json
+
+# Ignore the .history folder
+.history/
+
+# Ignore scripts folder
+scripts/
+
+# Ignore test folder
+test/
+
+# Ignore source files
+src/
