@@ -2,7 +2,10 @@
 
 akore is a powerful package designed to streamline the transpilation process by providing robust tools for managing schemas, defining custom nodes, and processing code elements efficiently.
 
-## Table of Contents
+## Table of Contents 
+<details>
+<summary>Show</summary>
+
 
 - [Installation](#installation)
 - [Transpilers](#transpilers)
@@ -47,6 +50,7 @@ akore is a powerful package designed to streamline the transpilation process by 
 
 - [Contributing](#contributing)
 - [License](#license)
+</details>
 
 ## Installation
 
