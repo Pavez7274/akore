@@ -49,8 +49,19 @@ export class JavaScriptTranspiler extends Transpiler {
 		}).toCode();
 	}
 
-	public string(code: string): StringNode<Node<unknown>[]> {
+	public string(code: string):
+		| EscapeNode<`"${string}"`>
+		| StringNode<
+				[
+					SequenceNode<{
+						elements: Node<unknown>[];
+						operator: string;
+					}>,
+				]
+		  > {
 		const tokens = this.lexer.tokenize(code);
+
+		if (!tokens) return new EscapeNode(`"${code}"`);
 
 		const parts: Node<unknown>[] = [];
 		for (let i = 0; i < tokens.length; i++) {
