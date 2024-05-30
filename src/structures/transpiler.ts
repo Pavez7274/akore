@@ -46,6 +46,7 @@ export abstract class Transpiler {
 				}
 			} catch (error) {
 				this.logger.error(`Error compiling ${token.total}:\n${(<Error>error).message}`);
+				break;
 			}
 		}
 
