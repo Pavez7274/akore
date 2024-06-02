@@ -1,5 +1,5 @@
 import { Competence, type Token } from "#structures";
-import type { JavaScriptTranspiler } from "../transpiler";
+import type { JavaScriptTranspiler } from "../../transpiler";
 
 export class StringCompetence extends Competence<JavaScriptTranspiler> {
 	override identifier = "akore:string";

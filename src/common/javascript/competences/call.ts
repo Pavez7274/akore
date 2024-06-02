@@ -1,22 +1,15 @@
-import { splitInside } from "#common/split_inside";
 import { Competence, type Token } from "#structures";
-import { CallerNode, EscapeNode, SequenceNode } from "../nodes";
+import { CallerNode, EscapeNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";
 
 export class CallCompetence extends Competence<JavaScriptTranspiler> {
 	override identifier = "akore:call";
-	override pattern = /\$call/;
+	override pattern = /\$([A-z_](\.?[A-z_])*)\*/;
 
-	override resolve({ inside }: Token<true>) {
-		const [callee, ...parameters] = splitInside(inside);
+	override resolve({ inside, match }: Token<boolean>) {
 		return new CallerNode({
-			callee: new EscapeNode(callee),
-			parameters: new SequenceNode({
-				elements: parameters.map(
-					(parameter) => new EscapeNode(this.transpiler.stringify(parameter)),
-				),
-				operator: ", ",
-			}),
+			callee: new EscapeNode(match[1]),
+			parameters: inside ? this.transpiler.sequence(inside) : [],
 			use_zero: true,
 		});
 	}

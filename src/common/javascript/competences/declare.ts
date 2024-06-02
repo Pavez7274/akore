@@ -13,10 +13,7 @@ export class DeclareCompetence extends Competence<JavaScriptTranspiler> {
 			elements: [
 				new EscapeNode(`var ${key}`),
 				new EscapeNode("="),
-				new SequenceNode({
-					elements: values.map((value) => new EscapeNode(this.transpiler.stringify(value))),
-					operator: ", ",
-				}),
+				this.transpiler.sequence(values.join(";")),
 			],
 			operator: " ",
 		});

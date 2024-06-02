@@ -28,7 +28,7 @@ export class EscapeNode<T extends string> implements Node<T> {
 
 export class CallerNode<
 	T extends {
-		parameters: Node<unknown>[] | SequenceNode<{ elements: Node<unknown>[]; operator: ", " }>;
+		parameters: Node<unknown>[] | SequenceNode<{ elements: Node<unknown>[]; operator: string }>;
 		callee: Node<unknown>;
 		use_zero: boolean;
 	},
@@ -50,20 +50,6 @@ export class CallerNode<
 			: this.value.parameters.toCode();
 
 		return `${callee}(${parameters})`;
-	}
-}
-
-export class StringNode<T extends Node<unknown>[]> implements Node<T> {
-	public readonly type = "string";
-	public value: T;
-
-	constructor(...values: T) {
-		this.value = values;
-	}
-
-	public toCode(): string {
-		if (this.value.length === 0) return '""';
-		return `String(${this.value.map((node) => node.toCode()).join(" + ")})`;
 	}
 }
 

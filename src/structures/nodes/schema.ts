@@ -1,21 +1,42 @@
 import { isClassImplementing, isSubclassOf } from "#common";
 import { Node } from "./node";
 
+/**
+ * Class representing a schema for validating and comparing values.
+ * @template T - The type of the schema.
+ */
 // biome-ignore lint/suspicious/noExplicitAny: The schema must be able to receive any type.
 export class Schema<T = any> {
+	/** The identifier for this schema. */
 	public readonly identifier: string;
+	/** The schema definition. */
 	public readonly schema: T;
 
+	/**
+	 * Creates a new Schema instance.
+	 * @param identifier - The identifier for the schema.
+	 * @param schema - The schema definition.
+	 */
 	constructor(identifier: string, schema: T) {
 		this.identifier = identifier;
 		this.schema = schema;
 	}
 
+	/**
+	 * Compares a value against the schema.
+	 * @param value - The value to compare.
+	 * @returns Whether the value matches the schema.
+	 */
 	// biome-ignore lint/suspicious/noExplicitAny: Any type must be comparable.
 	compare(value: any): boolean {
 		return this.compareTypes(value, this.schema);
 	}
 
+	/**
+	 * Returns a string representation of the schema.
+	 * @param indentLevel - The indentation level for formatting the string.
+	 * @returns A formatted string representation of the schema.
+	 */
 	toString(indentLevel = 1): string {
 		return `Schema <${this.identifier}> {\n\t${this.schemaToString(
 			this.schema,
@@ -23,6 +44,13 @@ export class Schema<T = any> {
 		)}\n${"\t".repeat(indentLevel - 1)}}`;
 	}
 
+	/**
+	 * Compares a value against a specific schema.
+	 * @param value - The value to compare.
+	 * @param schema - The schema to compare against.
+	 * @returns Whether the value matches the schema.
+	 * @private
+	 */
 	// biome-ignore lint/suspicious/noExplicitAny: It is necessary that any type be allowed to pass.
 	private compareTypes(value: any, schema: any): boolean {
 		if (typeof schema === "string") {
@@ -61,6 +89,13 @@ export class Schema<T = any> {
 		return false;
 	}
 
+	/**
+	 * Converts a schema to a string representation.
+	 * @param schema - The schema to convert.
+	 * @param indentLevel - The indentation level for formatting the string.
+	 * @returns A formatted string representation of the schema.
+	 * @private
+	 */
 	// biome-ignore lint/suspicious/noExplicitAny: It is necessary that any type be allowed to pass.
 	private schemaToString(schema: any, indentLevel: number): string {
 		const indent = "\t".repeat(indentLevel || 0);

@@ -4,13 +4,16 @@ akore is a powerful package designed to streamline the transpilation process by 
 
 ## Table of Contents
 
+<details>
+  <summary>Show</summary>
+
 - [Installation](#installation)
 - [Transpilers](#transpilers)
 
-  - [Overview](#overview)
-  - [Usage](#usage)
-  - [How it Works](#how-it-works)
-  - [Benefits](#benefits)
+- [Overview](#overview)
+- [Usage](#usage)
+- [How it Works](#how-it-works)
+- [Benefits](#benefits)
 
 - [Registries](#registries)
 
@@ -47,6 +50,7 @@ akore is a powerful package designed to streamline the transpilation process by 
 
 - [Contributing](#contributing)
 - [License](#license)
+</details>
 
 ## Installation
 
@@ -111,7 +115,7 @@ const schemas: Record<string, any> = {
 };
 
 const registry = new Registry(schemas);
-const node: Node<unknown> = // Your node here;
+const node: Node<unknown> = new CustomNode("...");
 const isValid = registry.validate(node);
 const code = registry.resolve(node);
 ```
@@ -210,8 +214,9 @@ import { CustomTranspiler, CustomNode } from "...";
 import { Competence, Token } from "akore";
 
 class CustomCompetence extends Competence<CustomTranspiler> {
-  readonly identifier = "custom";
-  readonly pattern = /custom/;
+  override readonly identifier = "custom";
+  override readonly pattern = /custom/;
+
   resolve(token: Token<boolean>): CustomNode {
     // Implement custom competence logic here
     return new CustomNode("example");
@@ -248,7 +253,7 @@ You can use the `toCode` method to transpile your custom syntax into JavaScript.
 
 ```typescript
 const code = `
-  $declare[test;$call[someFunc];$call[process.cwd]]
+  $declare[test;$someFunc*;$process.cwd*]
   $print[$string[The cwd is $get[test]]]
 `;
 
@@ -263,12 +268,7 @@ var test = (0, someFunc)(), (0, process.cwd)();
 
 ### Explanation
 
-The `JavaScriptTranspiler` class extends the abstract `Transpiler` class and provides specific implementations for the custom syntax. Here is a brief explanation of its components:
-
-- **Constructor**: Initializes the transpiler with predefined schemas and declares the competences it supports.
-- **toCode**: Transpiles the custom syntax into JavaScript code.
-- **stringify**: Converts the tokenized code into a string representation.
-- **string**: Converts the tokenized code into a `StringNode` for further processing.
+The `JavaScriptTranspiler` class extends the abstract `Transpiler` class and provides specific implementations for the custom syntax.
 
 ### Benefits
 
