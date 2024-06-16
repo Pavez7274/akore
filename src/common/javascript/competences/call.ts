@@ -4,7 +4,11 @@ import type { JavaScriptTranspiler } from "../transpiler";
 
 export class CallCompetence extends Competence<JavaScriptTranspiler> {
 	override identifier = "akore:call";
-	override pattern = /\$([A-z_](\.?[A-z_])*)\*/;
+	override patterns = {
+		foremost: /\$([A-z_](\.?[A-z_])*)\*/,
+		opener: /\[/,
+		closer: /\]/,
+	};
 
 	override resolve({ inside, match }: Token<boolean>) {
 		return new CallerNode({

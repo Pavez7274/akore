@@ -30,10 +30,12 @@ akore is a powerful package designed to streamline the transpilation process by 
   - [Benefits](#benefits-2)
 
 - [Nodes](#nodes)
+
   - [Overview](#overview-3)
   - [Usage](#usage-3)
   - [How it Works](#how-it-works-3)
   - [Benefits](#benefits-3)
+
 - [Competences](#competences)
 
   - [Overview](#overview-4)
@@ -215,7 +217,9 @@ import { Competence, Token } from "akore";
 
 class CustomCompetence extends Competence<CustomTranspiler> {
   override readonly identifier = "custom";
-  override readonly pattern = /custom/;
+  override readonly patterns = {
+    foremost: /custom/,
+  };
 
   resolve(token: Token<boolean>): CustomNode {
     // Implement custom competence logic here
@@ -242,7 +246,7 @@ The `JavaScriptTranspiler` is a pre-defined transpiler that converts a custom sy
 First, import the necessary classes and create an instance of the `JavaScriptTranspiler`:
 
 ```typescript
-import { JavaScriptTranspiler } from "akore/javascript";
+import { JavaScriptTranspiler } from "akore";
 
 const transpiler = new JavaScriptTranspiler();
 ```

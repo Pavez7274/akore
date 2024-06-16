@@ -19,16 +19,6 @@ export interface Token<P extends true | false> {
 }
 
 /**
- * Interface representing a support token used internally in the lexer.
- */
-export interface SupportToken {
-	/** The regular expression match array for the support token. */
-	match: RegExpExecArray & ["[" | "]"];
-	/** The depth level of nested brackets. */
-	depth: number;
-}
-
-/**
  * Lexer class responsible for tokenizing code into a series of tokens based on competences.
  */
 export class Lexer {
@@ -42,7 +32,10 @@ export class Lexer {
 	 * @returns The combined regular expression pattern.
 	 */
 	public get pattern(): RegExp {
-		return new RegExp([...this.competences.values()].map((c) => c.pattern.source).join("|"), "gm");
+		return new RegExp(
+			[...this.competences.values()].map((c) => c.patterns.foremost.source).join("|"),
+			"gm",
+		);
 	}
 
 	/**
@@ -56,7 +49,9 @@ export class Lexer {
 		let min_index = 0;
 
 		for (let match = regex.exec(code), i = 0; match !== null; match = regex.exec(code), i++) {
-			const competence = [...this.competences.values()].find((c) => c.pattern.test(match[0]));
+			const competence = [...this.competences.values()].find((c) =>
+				c.patterns.foremost.test(match[0]),
+			);
 
 			if (!competence) {
 				this.logger.warn("LEXER", `No competition was found for "${match[0]}".`);
@@ -71,23 +66,44 @@ export class Lexer {
 				match,
 			};
 
-			const after = code.slice(match.index + match[0].length);
-			if (after && after[0] === "[") {
-				token.inside = "";
-				let depth = 0;
-				for (const char of after.slice(1)) {
-					if (char === "]" && depth === 0) break;
-					if (char === "[") depth++;
-					if (char === "]") depth--;
-					token.inside += char;
+			let opener = "";
+			let closer = "";
+
+			if (competence.patterns.opener) {
+				const after = code.slice(match.index + match[0].length);
+				if (after && competence.patterns.opener.test(after[0])) {
+					opener = after[0];
+					token.inside = "";
+					let depth = 0;
+
+					for (let i = 1; i < after.length; i++) {
+						const char = after[i];
+						if (competence.patterns.closer?.test(char) && depth === 0) {
+							closer = char;
+							break;
+						}
+						if (competence.patterns.opener.test(char)) depth++;
+						if (competence.patterns.closer?.test(char)) depth--;
+						if (
+							competence.patterns.inside === undefined ||
+							competence.patterns.inside?.test(char)
+						) {
+							token.inside += char;
+						} else if (!competence.patterns.unstoppable) {
+							break;
+						}
+					}
 				}
 			}
 
 			token.match.index += min_index;
-			token.total += `[${token.inside}]`;
+			token.total += opener + (token.inside ?? "") + closer;
 			tokens.push(token);
 			min_index += token.total.length - 1;
-			code = code.replace(token.total, `<PROCESSED:${Date.now()}>`);
+			code = code.replace(
+				token.total,
+				`PCSTN?${(Math.random() * 10e16 + Date.now()).toString(32)}`,
+			);
 		}
 
 		return tokens;

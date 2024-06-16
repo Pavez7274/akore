@@ -1,6 +1,6 @@
 {
 	"name": "akore",
-	"version": "1.8.2",
+	"version": "1.8.3",
 	"description": "BDFD based transpiler",
 	"main": "./dist/index.js",
 	"files": ["./dist/**"],

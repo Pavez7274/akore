@@ -4,7 +4,11 @@ import type { JavaScriptTranspiler } from "../transpiler";
 
 export class PrintCompetence extends Competence<JavaScriptTranspiler> {
 	override identifier = "akore:print";
-	override pattern = /\$(printf?|(console\.)?log)/;
+	override patterns = {
+		foremost: /\$(printf?|(console\.)?log)/,
+		opener: /\[/,
+		closer: /\]/,
+	};
 
 	override resolve({ inside }: Token<true>) {
 		return new CallerNode({

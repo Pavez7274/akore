@@ -1,3 +1,26 @@
+/**
+ * Determines if a given class implements all the properties and methods of a specified base class or interface.
+ *
+ * @param target - The target class to check.
+ * @param base - The base class or interface to check against.
+ * @returns Returns true if the target class implements the base class or interface, false otherwise.
+ *
+ * @throws {Error} If the base class or interface does not have a prototype.
+ *
+ * @example
+ * class Interface {
+ *   method() {}
+ * }
+ *
+ * class Implementation implements Interface {
+ *   method() {}
+ * }
+ *
+ * class AnotherClass {}
+ *
+ * console.log(isClassImplementing(Implementation, Interface)); // true
+ * console.log(isClassImplementing(AnotherClass, Interface));   // false
+ */
 // biome-ignore lint/complexity/noBannedTypes: Function (in this case) is used to represent classes
 export function isClassImplementing(target: Function, base: Function): boolean {
 	// Check if targetClass extends baseClassOrInterface

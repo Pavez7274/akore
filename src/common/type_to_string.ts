@@ -1,3 +1,16 @@
+/**
+ * Converts a given value to its corresponding type as a string representation.
+ *
+ * @param value - The value to convert to a type string.
+ * @param indentLevel - The current level of indentation for nested structures.
+ * @returns The type of the value as a string representation.
+ *
+ * @example
+ * typeToString("hello");   // "string"
+ * typeToString(42);        // "number"
+ * typeToString([1, 2, 3]); // "number[]"
+ * typeToString({ name: "Alice", age: 30 }); // "{\n\tname: string;\n\tage: number;\n}"
+ */
 export function typeToString(value: unknown, indentLevel = 1): string {
 	const indent = "\t".repeat(indentLevel || 0);
 

@@ -1,3 +1,6 @@
+/**
+ * @deprecated use Competence.splitInside
+ */
 export function splitInside(input: string, splitter = ";") {
 	if (!input.includes(";")) return [input];
 	const parts: string[] = [];

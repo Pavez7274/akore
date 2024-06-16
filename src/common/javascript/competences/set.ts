@@ -1,14 +1,17 @@
-import { splitInside } from "#common/split_inside";
 import { Competence, type Token } from "#structures";
 import { EscapeNode, SequenceNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";
 
 export class SetCompetence extends Competence<JavaScriptTranspiler> {
 	override identifier = "akore:set";
-	override pattern = /\$set/;
+	override patterns = {
+		foremost: /\$set/,
+		opener: /\[/,
+		closer: /\]/,
+	};
 
 	override resolve({ inside }: Token<true>) {
-		const [key, value] = splitInside(inside);
+		const [key, value] = this.splitInside(inside);
 		return new SequenceNode({
 			elements: [
 				new EscapeNode(key),

@@ -1,21 +1,28 @@
-import { splitInside } from "#common/split_inside";
 import { Competence, type Token } from "#structures";
 import { CallerNode, EscapeNode } from "../../nodes";
 import { JavaScriptTranspiler } from "../../transpiler";
 
 class ObjectPropertyCompetence extends Competence<JavaScriptTranspiler> {
 	override readonly identifier = "akore:object:property";
-	override readonly pattern = /\$property?/;
+	override patterns = {
+		foremost: /\$property/,
+		opener: /\[/,
+		closer: /\]/,
+	};
 
 	public resolve({ inside }: Token<true>) {
-		const [name, value] = splitInside(inside);
+		const [name, value] = this.splitInside(inside);
 		return new EscapeNode(`${name}: ${this.transpiler.string(value).toCode()}`);
 	}
 }
 
 export class ObjectCompetence extends Competence<JavaScriptTranspiler> {
 	override readonly identifier = "akore:object";
-	override readonly pattern = /\$object/;
+	override patterns = {
+		foremost: /\$object/,
+		opener: /\[/,
+		closer: /\]/,
+	};
 
 	public resolve({ inside }: Token<boolean>) {
 		const t = new JavaScriptTranspiler();
