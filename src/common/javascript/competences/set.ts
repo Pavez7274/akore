@@ -11,7 +11,7 @@ export class SetCompetence extends Competence<JavaScriptTranspiler> {
 	};
 
 	override resolve({ inside }: Token<true>) {
-		const [key, value] = this.splitInside(inside);
+		const [key, value] = this.splitByDelimiter(inside);
 		return new SequenceNode({
 			elements: [
 				new EscapeNode(key),

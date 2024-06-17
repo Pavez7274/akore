@@ -1,4 +1,4 @@
-import { typeToString } from "#common";
+import { typify } from "#common";
 import type { Competence } from "./competence";
 import { Lexer, type Token } from "./lexer";
 import { Logger } from "./logger";
@@ -73,7 +73,7 @@ export abstract class Transpiler {
 	 * @returns An array of nodes.
 	 */
 	public resolve(code: string): Node<unknown>[] {
-		return this.nodes(this.lexer.tokenize(code));
+		return this.nodes(...this.lexer.tokenize(code));
 	}
 
 	/**
@@ -81,7 +81,7 @@ export abstract class Transpiler {
 	 * @param tokens - Tokens to convert into nodes.
 	 * @returns An array of nodes.
 	 */
-	public nodes(tokens: Token<boolean>[]): Node<unknown>[] {
+	public nodes(...tokens: Token<boolean>[]): Node<unknown>[] {
 		const nodes: Node<unknown>[] = [];
 
 		for (const token of tokens) {
@@ -90,7 +90,7 @@ export abstract class Transpiler {
 				if (this.registry.validate(node)) nodes.push(node);
 				else {
 					const expected = this.registry.schemas[node.type].toString(2);
-					const received = `${node.constructor.name} {\n\t${typeToString(node.value, 2)}\n\t}`;
+					const received = `${node.constructor.name} {\n\t${typify(node.value, 2)}\n\t}`;
 					throw new Error(
 						`The following value does not match the expected schema:\nExpected:\n\t${expected}\n\nReceived:\n\t${received}`,
 					);

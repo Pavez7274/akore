@@ -50,7 +50,7 @@ export class JavaScriptTranspiler extends Transpiler {
 	 */
 	public sequence(code: string, operator = ", ") {
 		return new SequenceNode({
-			elements: this.nodes(this.lexer.tokenize(code)),
+			elements: this.nodes(...this.lexer.tokenize(code)),
 			operator,
 		});
 	}
@@ -61,7 +61,7 @@ export class JavaScriptTranspiler extends Transpiler {
 	 * @returns A CallerNode representing the transpiled string code.
 	 */
 	public string(code: string) {
-		const tokens = this.lexer.tokenize(code);
+		const tokens = [...this.lexer.tokenize(code)];
 
 		if (tokens.length === 0) return new EscapeNode(`"${code}"`);
 
@@ -93,7 +93,7 @@ export class JavaScriptTranspiler extends Transpiler {
 	 * @returns A CallerNode representing the transpiled number code.
 	 */
 	public number(code: string) {
-		const tokens = this.lexer.tokenize(code);
+		const tokens = [...this.lexer.tokenize(code)];
 
 		if (tokens.length === 0) return new EscapeNode(Number.isNaN(code) ? "NaN" : code);
 

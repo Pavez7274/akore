@@ -11,7 +11,7 @@ export class DeclareCompetence extends Competence<JavaScriptTranspiler> {
 	};
 
 	override resolve({ inside }: Token<true>) {
-		const [key, ...values] = this.splitInside(inside);
+		const [key, ...values] = this.splitByDelimiter(inside);
 		return new SequenceNode({
 			elements: [
 				new EscapeNode(`var ${key}`),

@@ -11,7 +11,7 @@ class ObjectPropertyCompetence extends Competence<JavaScriptTranspiler> {
 	};
 
 	public resolve({ inside }: Token<true>) {
-		const [name, value] = this.splitInside(inside);
+		const [name, value] = this.splitByDelimiter(inside);
 		return new EscapeNode(`${name}: ${this.transpiler.string(value).toCode()}`);
 	}
 }

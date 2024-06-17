@@ -41,20 +41,19 @@ export class Lexer {
 	/**
 	 * Tokenizes the given code into a series of tokens based on defined competences.
 	 * @param code - The code to tokenize.
-	 * @returns An array of tokens generated from the code.
+	 * @yields An array of tokens generated from the code.
 	 */
-	public tokenize(code: string): Token<boolean>[] {
-		const tokens: Token<boolean>[] = [];
+	public *tokenize(code: string): Generator<Token<boolean>> {
 		const regex = this.pattern;
-		let min_index = 0;
+		let minIndex = 0;
 
-		for (let match = regex.exec(code), i = 0; match !== null; match = regex.exec(code), i++) {
-			const competence = [...this.competences.values()].find((c) =>
-				c.patterns.foremost.test(match[0]),
-			);
+		const competencesArray = [...this.competences.values()];
+
+		for (let match = regex.exec(code); match !== null; match = regex.exec(code)) {
+			const competence = competencesArray.find((c) => c.patterns.foremost.test(match[0]));
 
 			if (!competence) {
-				this.logger.warn("LEXER", `No competition was found for "${match[0]}".`);
+				this.logger.warn("LEXER", `No competence found for "${match[0]}".`);
 				continue;
 			}
 
@@ -96,16 +95,14 @@ export class Lexer {
 				}
 			}
 
-			token.match.index += min_index;
+			token.match.index += minIndex;
 			token.total += opener + (token.inside ?? "") + closer;
-			tokens.push(token);
-			min_index += token.total.length - 1;
+			yield token;
+			minIndex += token.total.length - 1;
 			code = code.replace(
 				token.total,
 				`PCSTN?${(Math.random() * 10e16 + Date.now()).toString(32)}`,
 			);
 		}
-
-		return tokens;
 	}
 }
