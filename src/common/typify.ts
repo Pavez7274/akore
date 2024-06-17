@@ -6,12 +6,12 @@
  * @returns The type of the value as a string representation.
  *
  * @example
- * typeToString("hello");   // "string"
- * typeToString(42);        // "number"
- * typeToString([1, 2, 3]); // "number[]"
- * typeToString({ name: "Alice", age: 30 }); // "{\n\tname: string;\n\tage: number;\n}"
+ * typify("hello");   // "string"
+ * typify(42);        // "number"
+ * typify([1, 2, 3]); // "number[]"
+ * typify({ name: "Alice", age: 30 }); // "{\n\tname: string;\n\tage: number;\n}"
  */
-export function typeToString(value: unknown, indentLevel = 1): string {
+export function typify(value: unknown, indentLevel = 1): string {
 	const indent = "\t".repeat(indentLevel || 0);
 
 	if (typeof value === "string") {
@@ -36,7 +36,7 @@ export function typeToString(value: unknown, indentLevel = 1): string {
 
 	if (Array.isArray(value)) {
 		if (value.length === 0) return "any[]";
-		const types = new Set(value.map((el) => typeToString(el, 0)));
+		const types = new Set(value.map((el) => typify(el, 0)));
 		if (types.size === 1) return `${types.values().next().value}[]`;
 		return `(${[...types].join(" | ")})[]`;
 	}
@@ -49,10 +49,7 @@ export function typeToString(value: unknown, indentLevel = 1): string {
 
 		// Handle plain objects
 		const entries = Object.entries(value)
-			.map(
-				([key, val]) =>
-					`${"\t".repeat(indentLevel + 1)}${key}: ${typeToString(val, indentLevel + 1)}`,
-			)
+			.map(([key, val]) => `${"\t".repeat(indentLevel + 1)}${key}: ${typify(val, indentLevel + 1)}`)
 			.join(";\n");
 		return `${"\t".repeat(indentLevel - 1 || 0)}{\n${entries}\n${indent}}`;
 	}
