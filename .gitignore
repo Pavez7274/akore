@@ -7,8 +7,9 @@ coverage/
 # Ignore TypeScript compilation output
 dist/
 
-# Ignore the .history folder
+# Ignore the Workflow folder
 .history/
+.github/
 
 # Ignore editor-specific files
 .vscode/

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "out": "docs",
+  "name": "AKORE",
+  "includeVersion": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "theme": "default",
+  "readme": "README.md"
+}

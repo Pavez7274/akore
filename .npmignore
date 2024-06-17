@@ -3,6 +3,7 @@ jest.config.json
 
 # Ignore TypeScript configuration
 tsconfig.json
+typedoc.json
 
 # Ignore the .history folder
 .history/
