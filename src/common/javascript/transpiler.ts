@@ -1,6 +1,6 @@
 import { Logger, Node, Transpiler } from "#structures";
 import * as competences from "./competences";
-import { CallerNode, EscapeNode, Program, SequenceNode } from "./nodes";
+import { CallerNode, EscapeNode, type JsNode, Program, SequenceNode } from "./nodes";
 
 /**
  * A transpiler for JavaScript code, extending the abstract Transpiler class.
@@ -29,6 +29,10 @@ export class JavaScriptTranspiler extends Transpiler {
 		for (const competence of Object.values(competences)) {
 			this.declare(new competence(this));
 		}
+	}
+
+	public resolve(code: string) {
+		return super.resolve(code) as JsNode<unknown>[];
 	}
 
 	/**
