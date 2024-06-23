@@ -4,3 +4,4 @@ export * from "./get";
 export * from "./primitives";
 export * from "./print";
 export * from "./set";
+export * from "./comment";

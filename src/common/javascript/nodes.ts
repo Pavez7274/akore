@@ -1,6 +1,6 @@
 import type { Node } from "#structures";
 
-abstract class JsNode<T> implements Node<T> {
+export abstract class JsNode<T> implements Node<T> {
 	public abstract readonly type: string;
 	public readonly semicolon: boolean;
 	public value: T;
