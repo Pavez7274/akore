@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Schema
+[AKORE v1.8.4](../globals.md) / Schema
 
 # Class: Schema\<T\>
 
@@ -38,7 +38,7 @@ The schema definition.
 
 #### Source
 
-[structures/nodes/schema.ts:20](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/schema.ts#L20)
+[structures/nodes/schema.ts:20](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/schema.ts#L20)
 
 ## Properties
 
@@ -50,7 +50,7 @@ The identifier for this schema.
 
 #### Source
 
-[structures/nodes/schema.ts:11](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/schema.ts#L11)
+[structures/nodes/schema.ts:11](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/schema.ts#L11)
 
 ***
 
@@ -62,7 +62,7 @@ The schema definition.
 
 #### Source
 
-[structures/nodes/schema.ts:13](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/schema.ts#L13)
+[structures/nodes/schema.ts:13](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/schema.ts#L13)
 
 ## Methods
 
@@ -86,7 +86,7 @@ Whether the value matches the schema.
 
 #### Source
 
-[structures/nodes/schema.ts:31](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/schema.ts#L31)
+[structures/nodes/schema.ts:31](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/schema.ts#L31)
 
 ***
 
@@ -114,7 +114,7 @@ Whether the value matches the schema.
 
 #### Source
 
-[structures/nodes/schema.ts:55](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/schema.ts#L55)
+[structures/nodes/schema.ts:55](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/schema.ts#L55)
 
 ***
 
@@ -142,7 +142,7 @@ A formatted string representation of the schema.
 
 #### Source
 
-[structures/nodes/schema.ts:100](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/schema.ts#L100)
+[structures/nodes/schema.ts:100](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/schema.ts#L100)
 
 ***
 
@@ -166,4 +166,4 @@ A formatted string representation of the schema.
 
 #### Source
 
-[structures/nodes/schema.ts:40](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/schema.ts#L40)
+[structures/nodes/schema.ts:40](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/schema.ts#L40)

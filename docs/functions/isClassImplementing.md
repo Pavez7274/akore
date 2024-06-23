@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / isClassImplementing
+[AKORE v1.8.4](../globals.md) / isClassImplementing
 
 # Function: isClassImplementing()
 
@@ -49,4 +49,4 @@ console.log(isClassImplementing(AnotherClass, Interface));   // false
 
 ## Source
 
-[common/is\_class\_implementing.ts:25](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/is_class_implementing.ts#L25)
+[common/is\_class\_implementing.ts:25](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/is_class_implementing.ts#L25)

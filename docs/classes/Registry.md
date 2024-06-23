@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Registry
+[AKORE v1.8.4](../globals.md) / Registry
 
 # Class: Registry
 
@@ -28,7 +28,7 @@ A record of schemas to initialize the registry.
 
 #### Source
 
-[structures/nodes/registry.ts:16](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/registry.ts#L16)
+[structures/nodes/registry.ts:16](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/registry.ts#L16)
 
 ## Properties
 
@@ -40,7 +40,7 @@ A record of schemas indexed by their type identifier.
 
 #### Source
 
-[structures/nodes/registry.ts:9](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/registry.ts#L9)
+[structures/nodes/registry.ts:9](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/registry.ts#L9)
 
 ## Methods
 
@@ -72,7 +72,7 @@ Will throw an error if the node is invalid according to its schema.
 
 #### Source
 
-[structures/nodes/registry.ts:41](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/registry.ts#L41)
+[structures/nodes/registry.ts:41](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/registry.ts#L41)
 
 ***
 
@@ -104,4 +104,4 @@ Will throw an error if the schema for the node type is not found.
 
 #### Source
 
-[structures/nodes/registry.ts:29](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/nodes/registry.ts#L29)
+[structures/nodes/registry.ts:29](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/nodes/registry.ts#L29)

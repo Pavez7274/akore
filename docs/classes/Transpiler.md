@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Transpiler
+[AKORE v1.8.4](../globals.md) / Transpiler
 
 # Class: `abstract` Transpiler
 
@@ -41,7 +41,7 @@ Instance of Logger for logging messages. Defaults to a new Logger instance.
 
 #### Source
 
-[structures/transpiler.ts:28](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L28)
+[structures/transpiler.ts:28](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L28)
 
 ## Properties
 
@@ -53,7 +53,7 @@ Lexer instance for tokenizing input code
 
 #### Source
 
-[structures/transpiler.ts:19](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L19)
+[structures/transpiler.ts:19](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L19)
 
 ***
 
@@ -65,7 +65,7 @@ Logger instance for logging messages
 
 #### Source
 
-[structures/transpiler.ts:16](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L16)
+[structures/transpiler.ts:16](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L16)
 
 ***
 
@@ -77,7 +77,7 @@ Registry for storing and validating schemas
 
 #### Source
 
-[structures/transpiler.ts:13](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L13)
+[structures/transpiler.ts:13](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L13)
 
 ## Methods
 
@@ -99,7 +99,7 @@ Competences to declare.
 
 #### Source
 
-[structures/transpiler.ts:45](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L45)
+[structures/transpiler.ts:45](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L45)
 
 ***
 
@@ -123,7 +123,7 @@ An array of nodes.
 
 #### Source
 
-[structures/transpiler.ts:84](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L84)
+[structures/transpiler.ts:84](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L84)
 
 ***
 
@@ -147,7 +147,7 @@ An array of nodes.
 
 #### Source
 
-[structures/transpiler.ts:75](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L75)
+[structures/transpiler.ts:75](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L75)
 
 ***
 
@@ -171,7 +171,7 @@ The transpiled code as a string.
 
 #### Source
 
-[structures/transpiler.ts:39](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L39)
+[structures/transpiler.ts:39](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L39)
 
 ***
 
@@ -193,4 +193,4 @@ Identifiers of the competences to undeclare.
 
 #### Source
 
-[structures/transpiler.ts:60](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L60)
+[structures/transpiler.ts:60](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L60)

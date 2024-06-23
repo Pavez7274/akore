@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / isSubclassOf
+[AKORE v1.8.4](../globals.md) / isSubclassOf
 
 # Function: isSubclassOf()
 
@@ -40,4 +40,4 @@ console.log(isSubclassOf(Dog, Cat));    // false
 
 ## Source
 
-[common/is\_subclass\_of.ts:18](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/is_subclass_of.ts#L18)
+[common/is\_subclass\_of.ts:18](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/is_subclass_of.ts#L18)

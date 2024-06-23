@@ -15,4 +15,5 @@ scripts/
 test/
 
 # Ignore source files
+docs/
 src/

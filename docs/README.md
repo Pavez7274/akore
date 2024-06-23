@@ -1,4 +1,4 @@
-**AKORE v1.8.3** • [**Docs**](globals.md)
+**AKORE v1.8.4** • [**Docs**](globals.md)
 
 ***
 

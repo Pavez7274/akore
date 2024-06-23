@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / logger
+[AKORE v1.8.4](../globals.md) / logger
 
 # Variable: logger
 
@@ -10,4 +10,4 @@
 
 ## Source
 
-[structures/logger.ts:175](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L175)
+[structures/logger.ts:175](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L175)

@@ -2,7 +2,7 @@ import { Competence, type Token } from "#structures";
 import type { JavaScriptTranspiler } from "../../transpiler";
 
 export class StringCompetence extends Competence<JavaScriptTranspiler> {
-	override identifier = "akore:string";
+	override identifier = "akore:javascript:string";
 	override patterns = {
 		foremost: /\$(string|text)/,
 		opener: /\[/,

@@ -3,7 +3,7 @@ import { EscapeNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";
 
 export class GetCompetence extends Competence<JavaScriptTranspiler> {
-	override identifier = "akore:get";
+	override identifier = "akore:javascript:get";
 	override patterns = {
 		foremost: /\$get/,
 		opener: /\[/,

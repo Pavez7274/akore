@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Token
+[AKORE v1.8.4](../globals.md) / Token
 
 # Interface: Token\<P\>
 
@@ -24,7 +24,7 @@ The competence that matched this token.
 
 #### Source
 
-[structures/lexer.ts:10](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L10)
+[structures/lexer.ts:10](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L10)
 
 ***
 
@@ -36,7 +36,7 @@ The inner content of the token if it exists, otherwise null.
 
 #### Source
 
-[structures/lexer.ts:14](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L14)
+[structures/lexer.ts:14](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L14)
 
 ***
 
@@ -48,7 +48,7 @@ The regular expression match array for this token.
 
 #### Source
 
-[structures/lexer.ts:16](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L16)
+[structures/lexer.ts:16](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L16)
 
 ***
 
@@ -60,7 +60,7 @@ The name of the token.
 
 #### Source
 
-[structures/lexer.ts:18](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L18)
+[structures/lexer.ts:18](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L18)
 
 ***
 
@@ -72,4 +72,4 @@ The full matched string.
 
 #### Source
 
-[structures/lexer.ts:12](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L12)
+[structures/lexer.ts:12](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L12)

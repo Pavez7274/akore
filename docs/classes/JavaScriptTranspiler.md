@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / JavaScriptTranspiler
+[AKORE v1.8.4](../globals.md) / JavaScriptTranspiler
 
 # Class: JavaScriptTranspiler
 
@@ -31,7 +31,7 @@ Initializes the schema for various node types and declares competences.
 
 #### Source
 
-[common/javascript/transpiler.ts:15](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/transpiler.ts#L15)
+[common/javascript/transpiler.ts:15](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/transpiler.ts#L15)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Lexer instance for tokenizing input code
 
 #### Source
 
-[structures/transpiler.ts:19](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L19)
+[structures/transpiler.ts:19](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L19)
 
 ***
 
@@ -63,7 +63,7 @@ Logger instance for logging messages
 
 #### Source
 
-[common/javascript/transpiler.ts:9](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/transpiler.ts#L9)
+[common/javascript/transpiler.ts:9](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/transpiler.ts#L9)
 
 ***
 
@@ -79,7 +79,7 @@ Registry for storing and validating schemas
 
 #### Source
 
-[structures/transpiler.ts:13](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L13)
+[structures/transpiler.ts:13](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L13)
 
 ## Methods
 
@@ -105,7 +105,7 @@ Competences to declare.
 
 #### Source
 
-[structures/transpiler.ts:45](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L45)
+[structures/transpiler.ts:45](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L45)
 
 ***
 
@@ -133,7 +133,7 @@ An array of nodes.
 
 #### Source
 
-[structures/transpiler.ts:84](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L84)
+[structures/transpiler.ts:84](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L84)
 
 ***
 
@@ -157,7 +157,7 @@ A CallerNode representing the transpiled number code.
 
 #### Source
 
-[common/javascript/transpiler.ts:95](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/transpiler.ts#L95)
+[common/javascript/transpiler.ts:95](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/transpiler.ts#L95)
 
 ***
 
@@ -185,7 +185,7 @@ An array of nodes.
 
 #### Source
 
-[structures/transpiler.ts:75](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L75)
+[structures/transpiler.ts:75](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L75)
 
 ***
 
@@ -221,7 +221,7 @@ A SequenceNode representing the transpiled code.
 
 #### Source
 
-[common/javascript/transpiler.ts:51](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/transpiler.ts#L51)
+[common/javascript/transpiler.ts:51](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/transpiler.ts#L51)
 
 ***
 
@@ -245,7 +245,7 @@ A CallerNode representing the transpiled string code.
 
 #### Source
 
-[common/javascript/transpiler.ts:63](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/transpiler.ts#L63)
+[common/javascript/transpiler.ts:63](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/transpiler.ts#L63)
 
 ***
 
@@ -273,7 +273,7 @@ The transpiled JavaScript code.
 
 #### Source
 
-[common/javascript/transpiler.ts:39](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/transpiler.ts#L39)
+[common/javascript/transpiler.ts:39](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/transpiler.ts#L39)
 
 ***
 
@@ -299,4 +299,4 @@ Identifiers of the competences to undeclare.
 
 #### Source
 
-[structures/transpiler.ts:60](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/transpiler.ts#L60)
+[structures/transpiler.ts:60](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/transpiler.ts#L60)

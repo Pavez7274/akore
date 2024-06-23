@@ -1,7 +1,20 @@
 import type { Node } from "#structures";
 
-export class Program<T extends Node<unknown>[]> implements Node<T> {
-	public readonly type = "program" as const;
+abstract class JsNode<T> implements Node<T> {
+	public abstract readonly type: string;
+	public readonly semicolon: boolean;
+	public value: T;
+
+	constructor(value: T, semicolon = true) {
+		this.semicolon = semicolon;
+		this.value = value;
+	}
+
+	abstract toCode(): string;
+}
+
+export class Program<T extends JsNode<unknown>[]> implements Node<T> {
+	public readonly type = "program";
 	public value: T;
 
 	constructor(...values: T) {
@@ -9,17 +22,18 @@ export class Program<T extends Node<unknown>[]> implements Node<T> {
 	}
 
 	public toCode(): string {
-		return this.value.map((node) => `${node.toCode()};`).join("\n");
+		return this.value
+			.map((node) => {
+				let transpiled = node.toCode();
+				if (node.semicolon) transpiled += ";";
+				return transpiled;
+			})
+			.join("\n");
 	}
 }
 
-export class EscapeNode<T extends string> implements Node<T> {
+export class EscapeNode<T extends string> extends JsNode<T> {
 	public readonly type = "escape" as const;
-	public value: T;
-
-	constructor(value: T) {
-		this.value = value;
-	}
 
 	public toCode(): T {
 		return this.value;
@@ -32,14 +46,8 @@ export class CallerNode<
 		callee: Node<unknown>;
 		use_zero: boolean;
 	},
-> implements Node<T>
-{
+> extends JsNode<T> {
 	public readonly type = "caller" as const;
-	public value: T;
-
-	constructor(value: T) {
-		this.value = value;
-	}
 
 	public toCode(): string {
 		const callee = this.value.use_zero
@@ -53,13 +61,8 @@ export class CallerNode<
 	}
 }
 
-export class NumberNode<T extends Node<unknown>[]> implements Node<T> {
+export class NumberNode<T extends Node<unknown>[]> extends JsNode<T> {
 	public readonly type = "number";
-	public value: T;
-
-	constructor(...values: T) {
-		this.value = values;
-	}
 
 	public toCode(): string {
 		if (this.value.length === 0) return "0";
@@ -67,30 +70,20 @@ export class NumberNode<T extends Node<unknown>[]> implements Node<T> {
 	}
 }
 
-export class ControlFlowNode<T extends { identifier: Node<unknown>; block: Node<unknown> }>
-	implements Node<T>
-{
+export class ControlFlowNode<
+	T extends { identifier: Node<unknown>; block: Node<unknown> },
+> extends JsNode<T> {
 	public readonly type = "control_flow";
-	public value: T;
-
-	constructor(value: T) {
-		this.value = value;
-	}
 
 	public toCode(): string {
 		return `${this.value.identifier.toCode()} ${this.value.block.toCode()}`;
 	}
 }
 
-export class SequenceNode<T extends { elements: Node<unknown>[]; operator: string }>
-	implements Node<T>
-{
+export class SequenceNode<
+	T extends { elements: Node<unknown>[]; operator: string },
+> extends JsNode<T> {
 	public readonly type = "sequence" as const;
-	public value: T;
-
-	constructor(value: T) {
-		this.value = value;
-	}
 
 	public toCode(): string {
 		return this.value.elements.map((node) => node.toCode()).join(this.value.operator);

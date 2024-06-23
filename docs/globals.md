@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](README.md) • **Docs**
+[**AKORE v1.8.4**](README.md) • **Docs**
 
 ***
 
-# AKORE v1.8.3
+# AKORE v1.8.4
 
 ## Enumerations
 

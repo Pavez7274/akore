@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / typify
+[AKORE v1.8.4](../globals.md) / typify
 
 # Function: typify()
 
@@ -37,4 +37,4 @@ typify({ name: "Alice", age: 30 }); // "{\n\tname: string;\n\tage: number;\n}"
 
 ## Source
 
-common/typify.ts:14
+[common/typify.ts:14](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/typify.ts#L14)

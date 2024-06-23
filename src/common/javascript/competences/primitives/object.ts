@@ -3,7 +3,7 @@ import { CallerNode, EscapeNode } from "../../nodes";
 import { JavaScriptTranspiler } from "../../transpiler";
 
 class ObjectPropertyCompetence extends Competence<JavaScriptTranspiler> {
-	override readonly identifier = "akore:object:property";
+	override readonly identifier = "akore:javascript:object:property";
 	override patterns = {
 		foremost: /\$property/,
 		opener: /\[/,
@@ -17,7 +17,7 @@ class ObjectPropertyCompetence extends Competence<JavaScriptTranspiler> {
 }
 
 export class ObjectCompetence extends Competence<JavaScriptTranspiler> {
-	override readonly identifier = "akore:object";
+	override readonly identifier = "akore:javascript:object";
 	override patterns = {
 		foremost: /\$object/,
 		opener: /\[/,

@@ -17,15 +17,6 @@ export interface Patterns {
 
 	/** Optional regular expression to match the closing delimiter of a nested structure. */
 	readonly closer?: RegExp;
-
-	/** Optional object defining patterns to be eaten before or after the main patterns. */
-	readonly eater?: {
-		/** Array of competences to be consumed before the main patterns. */
-		readonly before?: (typeof Competence)[];
-
-		/** Array of competences to be consumed after the main patterns. */
-		readonly after?: (typeof Competence)[];
-	};
 }
 
 /**
@@ -47,6 +38,15 @@ export abstract class Competence<T extends Transpiler = Transpiler> {
 
 	/** The regular expressions patterns that this competence matches. */
 	abstract readonly patterns: Patterns;
+
+	/** Optional object defining patterns to be eaten before or after the main patterns. */
+	readonly eaters?: {
+		/** Array of competences to be consumed before the main patterns. */
+		readonly before?: (typeof Competence)[];
+
+		/** Array of competences to be consumed after the main patterns. */
+		readonly after?: (typeof Competence)[];
+	};
 
 	/**
 	 * Creates a new competence.

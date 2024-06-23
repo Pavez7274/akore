@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / PrintCompetence
+[AKORE v1.8.4](../globals.md) / PrintCompetence
 
 # Class: PrintCompetence
 
@@ -36,13 +36,41 @@ The transpiler instance that this competence belongs to.
 
 #### Source
 
-[structures/competence.ts:55](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L55)
+[structures/competence.ts:55](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L55)
 
 ## Properties
 
+### eaters?
+
+> `optional` `readonly` **eaters**: `object`
+
+Optional object defining patterns to be eaten before or after the main patterns.
+
+#### after?
+
+> `optional` `readonly` **after**: *typeof* [`Competence`](Competence.md)[]
+
+Array of competences to be consumed after the main patterns.
+
+#### before?
+
+> `optional` `readonly` **before**: *typeof* [`Competence`](Competence.md)[]
+
+Array of competences to be consumed before the main patterns.
+
+#### Inherited from
+
+[`Competence`](Competence.md).[`eaters`](Competence.md#eaters)
+
+#### Source
+
+[structures/competence.ts:43](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L43)
+
+***
+
 ### identifier
 
-> **identifier**: `string` = `"akore:print"`
+> **identifier**: `string` = `"akore:javascript:print"`
 
 The unique identifier for this competence.
 
@@ -52,7 +80,7 @@ The unique identifier for this competence.
 
 #### Source
 
-[common/javascript/competences/print.ts:6](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/competences/print.ts#L6)
+[common/javascript/competences/print.ts:6](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/competences/print.ts#L6)
 
 ***
 
@@ -70,7 +98,7 @@ The regular expression pattern that this competence matches.
 
 #### Source
 
-[structures/competence.ts:43](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L43)
+[structures/competence.ts:34](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L34)
 
 ***
 
@@ -98,7 +126,7 @@ The regular expressions patterns that this competence matches.
 
 #### Source
 
-[common/javascript/competences/print.ts:7](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/competences/print.ts#L7)
+[common/javascript/competences/print.ts:7](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/competences/print.ts#L7)
 
 ***
 
@@ -114,7 +142,7 @@ The transpiler instance that this competence belongs to.
 
 #### Source
 
-[structures/competence.ts:46](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L46)
+[structures/competence.ts:37](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L37)
 
 ## Methods
 
@@ -154,7 +182,7 @@ The node resulting from the resolution of the token.
 
 #### Source
 
-[common/javascript/competences/print.ts:13](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/competences/print.ts#L13)
+[common/javascript/competences/print.ts:13](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/competences/print.ts#L13)
 
 ***
 
@@ -188,4 +216,4 @@ An array of substrings split by the delimiter.
 
 #### Source
 
-[structures/competence.ts:72](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L72)
+[structures/competence.ts:72](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L72)

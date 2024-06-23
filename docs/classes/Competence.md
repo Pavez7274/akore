@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Competence
+[AKORE v1.8.4](../globals.md) / Competence
 
 # Class: `abstract` Competence\<T\>
 
@@ -45,9 +45,33 @@ The transpiler instance that this competence belongs to.
 
 #### Source
 
-[structures/competence.ts:55](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L55)
+[structures/competence.ts:55](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L55)
 
 ## Properties
+
+### eaters?
+
+> `optional` `readonly` **eaters**: `object`
+
+Optional object defining patterns to be eaten before or after the main patterns.
+
+#### after?
+
+> `optional` `readonly` **after**: *typeof* [`Competence`](Competence.md)[]
+
+Array of competences to be consumed after the main patterns.
+
+#### before?
+
+> `optional` `readonly` **before**: *typeof* [`Competence`](Competence.md)[]
+
+Array of competences to be consumed before the main patterns.
+
+#### Source
+
+[structures/competence.ts:43](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L43)
+
+***
 
 ### identifier
 
@@ -57,7 +81,7 @@ The unique identifier for this competence.
 
 #### Source
 
-[structures/competence.ts:37](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L37)
+[structures/competence.ts:28](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L28)
 
 ***
 
@@ -71,7 +95,7 @@ The regular expression pattern that this competence matches.
 
 #### Source
 
-[structures/competence.ts:43](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L43)
+[structures/competence.ts:34](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L34)
 
 ***
 
@@ -83,7 +107,7 @@ The regular expressions patterns that this competence matches.
 
 #### Source
 
-[structures/competence.ts:49](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L49)
+[structures/competence.ts:40](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L40)
 
 ***
 
@@ -95,7 +119,7 @@ The transpiler instance that this competence belongs to.
 
 #### Source
 
-[structures/competence.ts:46](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L46)
+[structures/competence.ts:37](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L37)
 
 ## Methods
 
@@ -119,7 +143,7 @@ The node resulting from the resolution of the token.
 
 #### Source
 
-[structures/competence.ts:64](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L64)
+[structures/competence.ts:64](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L64)
 
 ***
 
@@ -149,4 +173,4 @@ An array of substrings split by the delimiter.
 
 #### Source
 
-[structures/competence.ts:72](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/competence.ts#L72)
+[structures/competence.ts:72](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/competence.ts#L72)

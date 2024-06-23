@@ -3,7 +3,7 @@ import { EscapeNode, SequenceNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";
 
 export class SetCompetence extends Competence<JavaScriptTranspiler> {
-	override identifier = "akore:set";
+	override identifier = "akore:javascript:set";
 	override patterns = {
 		foremost: /\$set/,
 		opener: /\[/,

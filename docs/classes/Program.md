@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Program
+[AKORE v1.8.4](../globals.md) / Program
 
 # Class: Program\<T\>
 
@@ -34,13 +34,13 @@ The type of value held by the node.
 
 #### Source
 
-[common/javascript/nodes.ts:7](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L7)
+[common/javascript/nodes.ts:20](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L20)
 
 ## Properties
 
 ### type
 
-> `readonly` **type**: `"program"`
+> `readonly` **type**: `"program"` = `"program"`
 
 The type identifier for the node.
 
@@ -50,7 +50,7 @@ The type identifier for the node.
 
 #### Source
 
-[common/javascript/nodes.ts:4](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L4)
+[common/javascript/nodes.ts:17](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L17)
 
 ***
 
@@ -66,7 +66,7 @@ The value held by the node.
 
 #### Source
 
-[common/javascript/nodes.ts:5](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L5)
+[common/javascript/nodes.ts:18](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L18)
 
 ## Methods
 
@@ -88,4 +88,4 @@ The code representation of the node as a string.
 
 #### Source
 
-[common/javascript/nodes.ts:11](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L11)
+[common/javascript/nodes.ts:24](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L24)

@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / AnsiStyle
+[AKORE v1.8.4](../globals.md) / AnsiStyle
 
 # Enumeration: AnsiStyle
 
@@ -14,7 +14,7 @@
 
 #### Source
 
-[structures/logger.ts:36](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L36)
+[structures/logger.ts:36](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L36)
 
 ***
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[structures/logger.ts:40](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L40)
+[structures/logger.ts:40](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L40)
 
 ***
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[structures/logger.ts:46](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L46)
+[structures/logger.ts:46](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L46)
 
 ***
 
@@ -44,7 +44,7 @@
 
 #### Source
 
-[structures/logger.ts:50](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L50)
+[structures/logger.ts:50](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L50)
 
 ***
 
@@ -54,7 +54,7 @@
 
 #### Source
 
-[structures/logger.ts:52](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L52)
+[structures/logger.ts:52](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L52)
 
 ***
 
@@ -64,7 +64,7 @@
 
 #### Source
 
-[structures/logger.ts:48](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L48)
+[structures/logger.ts:48](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L48)
 
 ***
 
@@ -74,7 +74,7 @@
 
 #### Source
 
-[structures/logger.ts:51](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L51)
+[structures/logger.ts:51](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L51)
 
 ***
 
@@ -84,7 +84,7 @@
 
 #### Source
 
-[structures/logger.ts:47](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L47)
+[structures/logger.ts:47](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L47)
 
 ***
 
@@ -94,7 +94,7 @@
 
 #### Source
 
-[structures/logger.ts:53](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L53)
+[structures/logger.ts:53](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L53)
 
 ***
 
@@ -104,7 +104,7 @@
 
 #### Source
 
-[structures/logger.ts:49](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L49)
+[structures/logger.ts:49](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L49)
 
 ***
 
@@ -114,7 +114,7 @@
 
 #### Source
 
-[structures/logger.ts:42](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L42)
+[structures/logger.ts:42](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L42)
 
 ***
 
@@ -124,7 +124,7 @@
 
 #### Source
 
-[structures/logger.ts:38](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L38)
+[structures/logger.ts:38](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L38)
 
 ***
 
@@ -134,7 +134,7 @@
 
 #### Source
 
-[structures/logger.ts:41](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L41)
+[structures/logger.ts:41](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L41)
 
 ***
 
@@ -144,7 +144,7 @@
 
 #### Source
 
-[structures/logger.ts:37](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L37)
+[structures/logger.ts:37](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L37)
 
 ***
 
@@ -154,7 +154,7 @@
 
 #### Source
 
-[structures/logger.ts:43](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L43)
+[structures/logger.ts:43](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L43)
 
 ***
 
@@ -164,7 +164,7 @@
 
 #### Source
 
-[structures/logger.ts:39](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L39)
+[structures/logger.ts:39](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L39)
 
 ***
 
@@ -174,7 +174,7 @@
 
 #### Source
 
-[structures/logger.ts:16](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L16)
+[structures/logger.ts:16](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L16)
 
 ***
 
@@ -184,7 +184,7 @@
 
 #### Source
 
-[structures/logger.ts:10](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L10)
+[structures/logger.ts:10](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L10)
 
 ***
 
@@ -194,7 +194,7 @@
 
 #### Source
 
-[structures/logger.ts:20](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L20)
+[structures/logger.ts:20](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L20)
 
 ***
 
@@ -204,7 +204,7 @@
 
 #### Source
 
-[structures/logger.ts:6](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L6)
+[structures/logger.ts:6](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L6)
 
 ***
 
@@ -214,7 +214,7 @@
 
 #### Source
 
-[structures/logger.ts:26](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L26)
+[structures/logger.ts:26](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L26)
 
 ***
 
@@ -224,7 +224,7 @@
 
 #### Source
 
-[structures/logger.ts:30](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L30)
+[structures/logger.ts:30](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L30)
 
 ***
 
@@ -234,7 +234,7 @@
 
 #### Source
 
-[structures/logger.ts:32](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L32)
+[structures/logger.ts:32](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L32)
 
 ***
 
@@ -244,7 +244,7 @@
 
 #### Source
 
-[structures/logger.ts:28](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L28)
+[structures/logger.ts:28](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L28)
 
 ***
 
@@ -254,7 +254,7 @@
 
 #### Source
 
-[structures/logger.ts:31](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L31)
+[structures/logger.ts:31](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L31)
 
 ***
 
@@ -264,7 +264,7 @@
 
 #### Source
 
-[structures/logger.ts:27](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L27)
+[structures/logger.ts:27](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L27)
 
 ***
 
@@ -274,7 +274,7 @@
 
 #### Source
 
-[structures/logger.ts:33](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L33)
+[structures/logger.ts:33](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L33)
 
 ***
 
@@ -284,7 +284,7 @@
 
 #### Source
 
-[structures/logger.ts:29](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L29)
+[structures/logger.ts:29](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L29)
 
 ***
 
@@ -294,7 +294,7 @@
 
 #### Source
 
-[structures/logger.ts:22](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L22)
+[structures/logger.ts:22](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L22)
 
 ***
 
@@ -304,7 +304,7 @@
 
 #### Source
 
-[structures/logger.ts:7](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L7)
+[structures/logger.ts:7](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L7)
 
 ***
 
@@ -314,7 +314,7 @@
 
 #### Source
 
-[structures/logger.ts:18](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L18)
+[structures/logger.ts:18](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L18)
 
 ***
 
@@ -324,7 +324,7 @@
 
 #### Source
 
-[structures/logger.ts:12](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L12)
+[structures/logger.ts:12](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L12)
 
 ***
 
@@ -334,7 +334,7 @@
 
 #### Source
 
-[structures/logger.ts:11](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L11)
+[structures/logger.ts:11](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L11)
 
 ***
 
@@ -344,7 +344,7 @@
 
 #### Source
 
-[structures/logger.ts:8](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L8)
+[structures/logger.ts:8](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L8)
 
 ***
 
@@ -354,7 +354,7 @@
 
 #### Source
 
-[structures/logger.ts:21](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L21)
+[structures/logger.ts:21](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L21)
 
 ***
 
@@ -364,7 +364,7 @@
 
 #### Source
 
-[structures/logger.ts:17](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L17)
+[structures/logger.ts:17](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L17)
 
 ***
 
@@ -374,7 +374,7 @@
 
 #### Source
 
-[structures/logger.ts:3](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L3)
+[structures/logger.ts:3](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L3)
 
 ***
 
@@ -384,7 +384,7 @@
 
 #### Source
 
-[structures/logger.ts:13](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L13)
+[structures/logger.ts:13](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L13)
 
 ***
 
@@ -394,7 +394,7 @@
 
 #### Source
 
-[structures/logger.ts:9](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L9)
+[structures/logger.ts:9](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L9)
 
 ***
 
@@ -404,7 +404,7 @@
 
 #### Source
 
-[structures/logger.ts:23](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L23)
+[structures/logger.ts:23](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L23)
 
 ***
 
@@ -414,4 +414,4 @@
 
 #### Source
 
-[structures/logger.ts:19](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L19)
+[structures/logger.ts:19](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L19)

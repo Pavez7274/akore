@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Logger
+[AKORE v1.8.4](../globals.md) / Logger
 
 # Class: Logger
 
@@ -28,7 +28,7 @@ Prefix for log messages with AKORE styling
 
 #### Source
 
-[structures/logger.ts:61](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L61)
+[structures/logger.ts:61](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L61)
 
 ## Accessors
 
@@ -46,7 +46,7 @@ The formatted date and time string.
 
 #### Source
 
-[structures/logger.ts:169](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L169)
+[structures/logger.ts:169](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L169)
 
 ## Methods
 
@@ -74,7 +74,7 @@ The styled text.
 
 #### Source
 
-[structures/logger.ts:92](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L92)
+[structures/logger.ts:92](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L92)
 
 ***
 
@@ -98,7 +98,7 @@ The ANSI escape code string.
 
 #### Source
 
-[structures/logger.ts:82](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L82)
+[structures/logger.ts:82](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L82)
 
 ***
 
@@ -124,7 +124,7 @@ The message to log.
 
 #### Source
 
-[structures/logger.ts:125](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L125)
+[structures/logger.ts:125](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L125)
 
 ***
 
@@ -150,7 +150,7 @@ The error message to log.
 
 #### Source
 
-[structures/logger.ts:155](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L155)
+[structures/logger.ts:155](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L155)
 
 ***
 
@@ -174,7 +174,7 @@ The formatted text.
 
 #### Source
 
-[structures/logger.ts:101](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L101)
+[structures/logger.ts:101](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L101)
 
 ***
 
@@ -200,7 +200,7 @@ The message to log.
 
 #### Source
 
-[structures/logger.ts:110](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L110)
+[structures/logger.ts:110](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L110)
 
 ***
 
@@ -232,7 +232,7 @@ The padded text.
 
 #### Source
 
-[structures/logger.ts:70](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L70)
+[structures/logger.ts:70](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L70)
 
 ***
 
@@ -258,4 +258,4 @@ The message to log.
 
 #### Source
 
-[structures/logger.ts:140](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/logger.ts#L140)
+[structures/logger.ts:140](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/logger.ts#L140)

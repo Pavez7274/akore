@@ -1,56 +1,70 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / SequenceNode
+[AKORE v1.8.4](../globals.md) / SequenceNode
 
 # Class: SequenceNode\<T\>
 
-Abstract class representing a node in the transpiler.
+## Extends
+
+- `JsNode`\<`T`\>
 
 ## Type parameters
 
 • **T** *extends* `object`
 
-The type of value held by the node.
-
-## Implements
-
-- [`Node`](Node.md)\<`T`\>
-
 ## Constructors
 
 ### new SequenceNode()
 
-> **new SequenceNode**\<`T`\>(`value`): [`SequenceNode`](SequenceNode.md)\<`T`\>
+> **new SequenceNode**\<`T`\>(`value`, `semicolon`): [`SequenceNode`](SequenceNode.md)\<`T`\>
 
 #### Parameters
 
 • **value**: `T`
 
+• **semicolon**: `boolean`= `true`
+
 #### Returns
 
 [`SequenceNode`](SequenceNode.md)\<`T`\>
 
+#### Inherited from
+
+`JsNode<T>.constructor`
+
 #### Source
 
-[common/javascript/nodes.ts:91](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L91)
+[common/javascript/nodes.ts:8](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L8)
 
 ## Properties
+
+### semicolon
+
+> `readonly` **semicolon**: `boolean`
+
+#### Inherited from
+
+`JsNode.semicolon`
+
+#### Source
+
+[common/javascript/nodes.ts:5](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L5)
+
+***
 
 ### type
 
 > `readonly` **type**: `"sequence"`
 
-The type identifier for the node.
+#### Overrides
 
-#### Implementation of
-
-[`Node`](Node.md).[`type`](Node.md#type)
+`JsNode.type`
 
 #### Source
 
-[common/javascript/nodes.ts:88](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L88)
+[common/javascript/nodes.ts:80](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L80)
 
 ***
 
@@ -58,15 +72,13 @@ The type identifier for the node.
 
 > **value**: `T`
 
-The value held by the node.
+#### Inherited from
 
-#### Implementation of
-
-[`Node`](Node.md).[`value`](Node.md#value)
+`JsNode.value`
 
 #### Source
 
-[common/javascript/nodes.ts:89](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L89)
+[common/javascript/nodes.ts:6](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L6)
 
 ## Methods
 
@@ -74,18 +86,14 @@ The value held by the node.
 
 > **toCode**(): `string`
 
-Converts the node to its code representation.
-
 #### Returns
 
 `string`
 
-The code representation of the node as a string.
+#### Overrides
 
-#### Implementation of
-
-[`Node`](Node.md).[`toCode`](Node.md#tocode)
+`JsNode.toCode`
 
 #### Source
 
-[common/javascript/nodes.ts:95](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/common/javascript/nodes.ts#L95)
+[common/javascript/nodes.ts:82](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/common/javascript/nodes.ts#L82)

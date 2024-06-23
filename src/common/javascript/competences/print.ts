@@ -3,7 +3,7 @@ import { CallerNode, EscapeNode } from "../nodes";
 import type { JavaScriptTranspiler } from "../transpiler";
 
 export class PrintCompetence extends Competence<JavaScriptTranspiler> {
-	override identifier = "akore:print";
+	override identifier = "akore:javascript:print";
 	override patterns = {
 		foremost: /\$(printf?|(console\.)?log)/,
 		opener: /\[/,

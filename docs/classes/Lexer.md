@@ -1,8 +1,8 @@
-[**AKORE v1.8.3**](../README.md) • **Docs**
+[**AKORE v1.8.4**](../README.md) • **Docs**
 
 ***
 
-[AKORE v1.8.3](../globals.md) / Lexer
+[AKORE v1.8.4](../globals.md) / Lexer
 
 # Class: Lexer
 
@@ -28,7 +28,7 @@ Map of competences used by the lexer to tokenize code.
 
 #### Source
 
-[structures/lexer.ts:28](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L28)
+[structures/lexer.ts:28](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L28)
 
 ***
 
@@ -40,7 +40,7 @@ Logger instance for logging messages.
 
 #### Source
 
-[structures/lexer.ts:26](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L26)
+[structures/lexer.ts:26](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L26)
 
 ## Accessors
 
@@ -58,7 +58,7 @@ The combined regular expression pattern.
 
 #### Source
 
-[structures/lexer.ts:34](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L34)
+[structures/lexer.ts:34](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L34)
 
 ## Methods
 
@@ -84,4 +84,4 @@ An array of tokens generated from the code.
 
 #### Source
 
-[structures/lexer.ts:46](https://github.com/Pavez7274/akore//blob/9379e12b9c8fd6ab82cc6e06af5ef6733f206841/src/structures/lexer.ts#L46)
+[structures/lexer.ts:46](https://github.com/Pavez7274/akore//blob/16b0580217e27fdbdfda0f584c9911f51b124649/src/structures/lexer.ts#L46)
